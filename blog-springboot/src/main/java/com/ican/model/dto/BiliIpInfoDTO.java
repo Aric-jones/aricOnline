@@ -42,7 +42,7 @@ public class BiliIpInfoDTO {
      * 返回数据：接口实际返回数组，改为List集合
      */
     @ApiModelProperty(value = "返回数据")
-    private List<IpInfoData> data;
+    private IpInfoData data;
 
     @Data
     @NoArgsConstructor

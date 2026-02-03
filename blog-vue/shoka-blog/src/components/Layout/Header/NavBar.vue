@@ -34,13 +34,31 @@
 				</ul>
 			</div>
 		</template>
+		<div class="menu-item">
+			<a v-if="!user.id" @click="app.loginFlag = true" class="menu-btn">
+				<svg-icon icon-class="user"></svg-icon> 登录
+			</a>
+			<template v-else>
+				<img class="user-avatar drop" :src="user.avatar" />
+				<ul class="submenu">
+					<li
+						class="subitem"
+						:class="{ active: route.meta.title === '个人中心' }"
+					>
+						<router-link to="/user" class="link">
+							<svg-icon icon-class="author"></svg-icon> 个人中心
+						</router-link>
+					</li>
+					<li class="subitem">
+						<a class="link" @click="logout"
+							><svg-icon icon-class="logout"></svg-icon> 退出
+						</a>
+					</li>
+				</ul>
+			</template>
+		</div>
 		<div class="menu-item search-item">
 			<div class="search-input-container">
-				<svg-icon
-					icon-class="search"
-					class="search-icon"
-					@click="handleIconClick"
-				></svg-icon>
 				<input
 					ref="inputRef"
 					class="search-input"
@@ -50,6 +68,11 @@
 					@focus="showHistory = true"
 					@blur="delayHideHistory"
 				/>
+				<svg-icon
+					icon-class="search"
+					class="search-icon"
+					@click="handleIconClick"
+				></svg-icon>
 				<!-- 历史记录下拉 -->
 				<ul
 					class="submenu history-list"
@@ -73,29 +96,6 @@
 					</li>
 				</ul>
 			</div>
-		</div>
-		<div class="menu-item">
-			<a v-if="!user.id" @click="app.loginFlag = true" class="menu-btn">
-				<svg-icon icon-class="user"></svg-icon> 登录
-			</a>
-			<template v-else>
-				<img class="user-avatar drop" :src="user.avatar" />
-				<ul class="submenu">
-					<li
-						class="subitem"
-						:class="{ active: route.meta.title === '个人中心' }"
-					>
-						<router-link to="/user" class="link">
-							<svg-icon icon-class="author"></svg-icon> 个人中心
-						</router-link>
-					</li>
-					<li class="subitem">
-						<a class="link" @click="logout"
-							><svg-icon icon-class="logout"></svg-icon> 退出
-						</a>
-					</li>
-				</ul>
-			</template>
 		</div>
 	</div>
 </template>
@@ -305,12 +305,15 @@ const logout = () => {
 	display: flex;
 	align-items: center;
 	position: relative;
-	border-bottom: 1px solid transparent;
+	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: 20px;
+	padding: 4px 12px;
 	transition: all 0.3s;
+	margin-left: 10px;
 
 	&:hover,
 	&:focus-within {
-		border-bottom: 1px solid currentColor;
+		background-color: rgba(255, 255, 255, 0.3);
 	}
 }
 
@@ -319,36 +322,28 @@ const logout = () => {
 	border: none;
 	outline: none;
 	color: currentColor;
-	width: 0;
-	transition: width 0.4s ease;
-	padding: 0;
-
-	&:focus {
-		width: 200px;
-		padding-left: 5px;
-	}
+	width: 250px;
+	padding: 0 5px;
+	font-size: 14px;
 
 	&::placeholder {
 		color: rgba(255, 255, 255, 0.7);
 	}
 }
 
-.search-input:not(:placeholder-shown) {
-	width: 200px;
-	padding-left: 5px;
-}
-
 .search-icon {
 	cursor: pointer;
-	font-size: 1.2rem;
+	font-size: 1.1rem;
+	margin-left: 5px;
 }
 
 .history-list {
 	display: block;
-	width: 200px;
+	width: 100%;
 	right: 0;
-	left: auto;
-	top: 100%;
+	left: 0;
+	top: 115%;
+	border-radius: 8px;
 }
 
 .history-text {

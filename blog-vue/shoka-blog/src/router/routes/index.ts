@@ -127,5 +127,12 @@ export const routes: RouteRecordRaw[] = [
 		path: "/oauth/login/qq",
 		component: () => import("@/components/Oauth/index.vue"),
 	},
+	{
+		path: "/search",
+		component: () => import("@/views/Search/index.vue"),
+		meta: {
+			title: "搜索结果",
+		},
+	},
 	{ path: "/:catchAll(.*)", redirect: "/404" },
 ];

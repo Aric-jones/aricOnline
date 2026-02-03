@@ -29,7 +29,7 @@ public class IpUtils {
             RestTemplate restTemplate = new RestTemplate();
             BiliIpInfoDTO ipInfoDTO = restTemplate.getForObject(uri, BiliIpInfoDTO.class, paraMap);
             if (ipInfoDTO != null && ipInfoDTO.getCode() == 0) {
-                BiliIpInfoDTO.IpInfoData ipInfoData = ipInfoDTO.getData().get(0);
+                BiliIpInfoDTO.IpInfoData ipInfoData = ipInfoDTO.getData();
                 if (ipInfoData != null) {
                     return ipInfoData.getCountry() + "|" + ipInfoData.getProvince() + "|" + ipInfoData.getCity() + "|" + ipInfoData.getIsp();
                 }

@@ -1,6 +1,6 @@
 <template>
   <div ref="brandRef" class="brand-container">
-		<img class="page-cover" src="https://big-event0611.oss-cn-beijing.aliyuncs.com/article/259530df534ba373663bf762e5dc3d36.jpg" alt="页面封面">
+		<img class="page-cover" src="https://big-event0611.oss-cn-beijing.aliyuncs.com/article/a2a142d5efa734e270bf022d9beda5d8.jpg" alt="页面封面">
     <div class="brand">
       <!-- 标题 -->
       <p class="artboard">{{ blog.blogInfo.siteConfig.siteName }}</p>

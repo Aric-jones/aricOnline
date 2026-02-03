@@ -169,15 +169,42 @@
         where id = #{articleId}
     </select>
 
-    <select id="searchArticle" resultType="com.ican.model.vo.response.ArticleSearchResp">
-        SELECT id,
+    <resultMap id="articleSearchVO" type="com.ican.model.vo.response.ArticleSearchResp">
+        <id column="id" property="id"/>
+        <result column="article_cover" property="articleCover"/>
+        <result column="article_title" property="articleTitle"/>
+        <result column="article_content" property="articleContent"/>
+        <result column="is_top" property="isTop"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <association property="category" javaType="com.ican.model.vo.response.CategoryOptionResp">
+            <id column="category_id" property="id"/>
+            <result column="category_name" property="categoryName"/>
+        </association>
+        <collection property="tagVOList" ofType="com.ican.model.vo.response.TagOptionResp">
+            <id column="tag_id" property="id"/>
+            <result column="tag_name" property="tagName"/>
+        </collection>
+    </resultMap>
+
+    <select id="searchArticle" resultMap="articleSearchVO">
+        SELECT a.id,
+        article_cover,
         article_title,
         article_content,
-        is_delete,
-        `status`
-        FROM t_article
+        is_top,
+        a.create_time,
+        a.status,
+        c.id AS category_id,
+        c.category_name,
+        t.id AS tag_id,
+        t.tag_name
+        FROM t_article a
+        LEFT JOIN t_category c ON a.category_id = c.id
+        LEFT JOIN t_article_tag tat ON a.id = tat.article_id
+        LEFT JOIN t_tag t ON tat.tag_id = t.id
         <where>
-            is_delete = 0 and `status` = 1
+            is_delete = 0 and a.status = 1
             <if test="keyword!=null">
                 and (article_title like concat('%',#{keyword},'%')
                 or article_content like concat('%',#{keyword},'%'))
