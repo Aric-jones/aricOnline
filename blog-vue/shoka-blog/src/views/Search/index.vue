@@ -42,7 +42,10 @@
 							</span>
 							<router-link
 								class="meta-item ml-3.75"
-								:to="`/tag/${tag.id}`"
+								:to="{
+									path: '/search',
+									query: { tagId: tag.id, tagName: tag.tagName },
+								}"
 								v-for="tag in article.tagVOList || []"
 								:key="tag.id"
 							>
@@ -86,11 +89,20 @@
 					</div>
 				</div>
 				<div v-if="articleList.length === 0 && !loading" class="no-result">
-					{{ categoryId ? "该分类暂无文章" : "没有找到相关文章" }}
+					{{
+						tagId
+							? "该标签暂无文章"
+							: categoryId
+							? "该分类暂无文章"
+							: "没有找到相关文章"
+					}}
 				</div>
-				<div class="pagination-wrap" v-if="categoryId && totalPages > 1">
+				<div
+					class="pagination-wrap"
+					v-if="(categoryId || tagId) && totalPages > 1"
+				>
 					<Pagination
-						v-model:current="categoryPage"
+						v-model:current="listPage"
 						:total="totalPages"
 					></Pagination>
 				</div>
@@ -103,6 +115,7 @@
 <script setup lang="ts">
 import { searchArticle } from "@/api/article";
 import { getCategoryList, getCategoryArticleList } from "@/api/category";
+import { getTagList, getTagArticleList } from "@/api/tag";
 import type { ArticleSearch } from "@/api/article/types";
 import type { ArticleCondition } from "@/api/article/types";
 import SideBar from "@/components/Layout/SideBar/index.vue";
@@ -125,7 +138,20 @@ const categoryId = computed(() => {
 const categoryName = computed(() => (route.query.categoryName as string) ?? "");
 const categoryNameFromApi = ref("");
 
+const tagId = computed(() => {
+	const id = route.query.tagId;
+	if (id == null || id === "") return null;
+	const n = Number(id);
+	return Number.isNaN(n) ? null : n;
+});
+const tagName = computed(() => (route.query.tagName as string) ?? "");
+const tagNameFromApi = ref("");
+
 const pageTitle = computed(() => {
+	if (tagId.value != null) {
+		const name = tagName.value || tagNameFromApi.value;
+		return name ? `标签：${name}` : "标签文章";
+	}
 	if (categoryId.value != null) {
 		const name = categoryName.value || categoryNameFromApi.value;
 		return name ? `分类：${name}` : "分类文章";
@@ -136,9 +162,22 @@ const pageTitle = computed(() => {
 const PAGE_SIZE = 5;
 const categoryPage = ref(1);
 const categoryTotal = ref(0);
-const totalPages = computed(
-	() => Math.ceil(categoryTotal.value / PAGE_SIZE) || 1
-);
+const tagPage = ref(1);
+const tagTotal = ref(0);
+
+const listTotal = computed(() => {
+	if (tagId.value != null) return tagTotal.value;
+	if (categoryId.value != null) return categoryTotal.value;
+	return 0;
+});
+const totalPages = computed(() => Math.ceil(listTotal.value / PAGE_SIZE) || 1);
+const listPage = computed({
+	get: () => (tagId.value != null ? tagPage.value : categoryPage.value),
+	set: (v: number) => {
+		if (tagId.value != null) tagPage.value = v;
+		else categoryPage.value = v;
+	},
+});
 
 function categoryLink(article: ListItem) {
 	const c = (article as any).category;
@@ -198,8 +237,40 @@ async function loadByCategory() {
 	}
 }
 
+async function loadByTag() {
+	const tid = tagId.value;
+	if (tid == null) {
+		articleList.value = [];
+		return;
+	}
+	loading.value = true;
+	try {
+		const [listRes, tagsRes] = await Promise.all([
+			getTagArticleList({
+				tagId: tid,
+				current: tagPage.value,
+				size: PAGE_SIZE,
+			}),
+			getTagList(),
+		]);
+		const resultData = listRes?.data;
+		const conditionData = resultData?.data;
+		articleList.value = (conditionData?.articleConditionVOList ??
+			[]) as ListItem[];
+		tagNameFromApi.value = conditionData?.name ?? "";
+		const tags = tagsRes?.data?.data ?? [];
+		const t = tags.find((x: { id: number }) => x.id === tid);
+		tagTotal.value = t?.articleCount ?? 0;
+		if (!tagNameFromApi.value && t?.tagName) tagNameFromApi.value = t.tagName;
+	} finally {
+		loading.value = false;
+	}
+}
+
 function handleLoad() {
-	if (categoryId.value != null) {
+	if (tagId.value != null) {
+		loadByTag();
+	} else if (categoryId.value != null) {
 		loadByCategory();
 	} else {
 		loadByKeyword();
@@ -211,15 +282,21 @@ watch(
 		() => route.query.keyword,
 		() => route.query.categoryId,
 		() => route.query.categoryName,
+		() => route.query.tagId,
+		() => route.query.tagName,
 	],
 	() => {
 		categoryPage.value = 1;
+		tagPage.value = 1;
 		handleLoad();
 	}
 );
 
 watch(categoryPage, () => {
 	if (categoryId.value != null) loadByCategory();
+});
+watch(tagPage, () => {
+	if (tagId.value != null) loadByTag();
 });
 
 onMounted(() => {

@@ -17,6 +17,7 @@
 				class="right-container"
 				:class="app.sideFlag ? 'temp' : ''"
 			></SideBar>
+
 		</div>
 	</div>
 </template>
