@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 const blog = useBlogStore();
 const runTime = ref("");
 setInterval(() => {
-  const days = dayjs().diff(blog.blogInfo.siteConfig.createSiteTime, "days");
+  const days = dayjs().diff(blog.blogInfoSafe.siteConfig.createSiteTime, "days");
   const day = new Date();
   let str = "";
   str += days + "天";
@@ -27,9 +27,9 @@ setInterval(() => {
   runTime.value = str;
 }, 1000);
 const webInfo = ref([
-  { name: "文章数目", count: blog.blogInfo.articleCount, },
+  { name: "文章数目", count: blog.blogInfoSafe.articleCount, },
   { name: "运行时长", count: runTime, },
-  { name: "总访问量", count: blog.blogInfo.viewCount, }
+  { name: "总访问量", count: blog.blogInfoSafe.viewCount, }
 ])
 </script>
 

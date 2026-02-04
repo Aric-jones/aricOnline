@@ -35,6 +35,24 @@ public class ArticleConditionResp {
     private String articleTitle;
 
     /**
+     * 文章摘要（列表预览用）
+     */
+    @ApiModelProperty(value = "文章摘要")
+    private String articleDesc;
+
+    /**
+     * 文章内容（列表预览片段，与搜索页一致）
+     */
+    @ApiModelProperty(value = "文章内容")
+    private String articleContent;
+
+    /**
+     * 是否置顶 (0否 1是)
+     */
+    @ApiModelProperty(value = "是否置顶")
+    private Integer isTop;
+
+    /**
      * 文章分类
      */
     @ApiModelProperty(value = "文章分类")

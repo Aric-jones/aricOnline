@@ -43,7 +43,7 @@ const dialogVisible = computed({
   set: (value) => (app.loginFlag = value),
 });
 const showLogin = computed(
-  () => (type: string) => blog.blogInfo.siteConfig.loginList.includes(type)
+  () => (type: string) => (blog.blogInfoSafe.siteConfig?.loginList ?? '').includes(type)
 );
 const handleRegister = () => {
   app.setLoginFlag(false);

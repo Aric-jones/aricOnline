@@ -1,20 +1,29 @@
 <template>
-  <div ref="brandRef" class="brand-container">
-		<img class="page-cover" src="https://big-event0611.oss-cn-beijing.aliyuncs.com/article/a2a142d5efa734e270bf022d9beda5d8.jpg" alt="页面封面">
-    <div class="brand">
-      <!-- 标题 -->
-      <p class="artboard">{{ blog.blogInfo.siteConfig.siteName }}</p>
-      <!-- 打字机 -->
-      <div class="title">
-        {{ obj.output }}
-        <span class="easy-typed-cursor">|</span>
-      </div>
-    </div>
-    <!-- 波浪 -->
-    <Waves></Waves>
-    <!-- 向下按钮 -->
-    <svg-icon class="arrow-down" icon-class="down" size="32px" @click="scrollDown"></svg-icon>
-  </div>
+	<div ref="brandRef" class="brand-container">
+		<img
+			class="page-cover"
+			src="https://big-event0611.oss-cn-beijing.aliyuncs.com/article/a2a142d5efa734e270bf022d9beda5d8.jpg"
+			alt="页面封面"
+		/>
+		<div class="brand">
+			<!-- 标题 -->
+			<p class="artboard">{{ blog.blogInfoSafe.siteConfig.siteName }}</p>
+			<!-- 打字机 -->
+			<div class="title">
+				{{ obj.output }}
+				<span class="easy-typed-cursor">|</span>
+			</div>
+		</div>
+		<!-- 波浪 -->
+		<Waves></Waves>
+		<!-- 向下按钮 -->
+		<svg-icon
+			class="arrow-down"
+			icon-class="down"
+			size="32px"
+			@click="scrollDown"
+		></svg-icon>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -22,23 +31,23 @@ import { useBlogStore } from "@/store";
 import EasyTyper from "easy-typer-js";
 const blog = useBlogStore();
 const obj = reactive({
-  output: "",
-  isEnd: false,
-  speed: 100,
-  singleBack: false,
-  sleep: 0,
-  type: "normal",
-  backSpeed: 100,
-  sentencePause: false,
+	output: "",
+	isEnd: false,
+	speed: 100,
+	singleBack: false,
+	sleep: 0,
+	type: "normal",
+	backSpeed: 100,
+	sentencePause: false,
 });
 const brandRef = ref<HTMLElement>();
 const scrollDown = () => {
-  nextTick(() => {
-    window.scrollTo({
-      behavior: "smooth",
-      top: brandRef.value?.clientHeight,
-    });
-  });
+	nextTick(() => {
+		window.scrollTo({
+			behavior: "smooth",
+			top: brandRef.value?.clientHeight,
+		});
+	});
 };
 // 定义定时器变量，用于后续销毁
 let hitokotoTimer: NodeJS.Timeout | null = null;
@@ -57,7 +66,12 @@ const fetchData = async () => {
 
 		const { hitokoto } = await res.json();
 		// 3. 触发打字机效果（原有逻辑不变）
-		new EasyTyper(obj, hitokoto, () => {}, () => {});
+		new EasyTyper(
+			obj,
+			hitokoto,
+			() => {},
+			() => {}
+		);
 	} catch (err) {
 		// 异常处理：请求失败时显示兜底文案
 		console.error("一言接口请求失败：", err);
@@ -85,13 +99,13 @@ onUnmounted(() => {
 @import "@/assets/styles/mixin.scss";
 
 .brand-container {
-  @include flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-  height: 70vh;
-  min-height: 10rem;
-  color: var(--header-text-color);
+	@include flex;
+	flex-direction: column;
+	position: relative;
+	width: 100%;
+	height: 70vh;
+	min-height: 10rem;
+	color: var(--header-text-color);
 }
 
 .brand {
@@ -104,34 +118,34 @@ onUnmounted(() => {
 	transform: translate(-50%, -50%); // 左移50%+上移50%，实现水平+垂直居中
 	z-index: -1; // 层级在背景图上方，不遮挡按钮/波浪
 
-  .artboard {
-    font-family: "Fredericka the Great", Mulish, -apple-system, "PingFang SC", "Microsoft YaHei",
-      sans-serif;
-    font-size: 3.5em;
-    line-height: 1.2;
-    animation: titleScale 1s;
-  }
+	.artboard {
+		font-family: "Fredericka the Great", Mulish, -apple-system, "PingFang SC",
+			"Microsoft YaHei", sans-serif;
+		font-size: 3.5em;
+		line-height: 1.2;
+		animation: titleScale 1s;
+	}
 
-  .title {
-    letter-spacing: 0.1em;
-  }
+	.title {
+		letter-spacing: 0.1em;
+	}
 }
 
 .easy-typed-cursor {
-  margin-left: 0.625rem;
-  opacity: 1;
-  -webkit-animation: blink 0.7s infinite;
-  -moz-animation: blink 0.7s infinite;
-  animation: blink 0.7s infinite;
+	margin-left: 0.625rem;
+	opacity: 1;
+	-webkit-animation: blink 0.7s infinite;
+	-moz-animation: blink 0.7s infinite;
+	animation: blink 0.7s infinite;
 }
 
 .arrow-down {
-  position: absolute;
-  bottom: 70px;
-  -webkit-animation: arrow-shake 1.5s ease-out infinite;
-  animation: arrow-shake 1.5s ease-out infinite;
-  cursor: pointer;
-  z-index: 8;
+	position: absolute;
+	bottom: 70px;
+	-webkit-animation: arrow-shake 1.5s ease-out infinite;
+	animation: arrow-shake 1.5s ease-out infinite;
+	cursor: pointer;
+	z-index: 8;
 }
 
 .page-cover {
@@ -151,41 +165,41 @@ onUnmounted(() => {
 }
 
 @media (max-width: 767px) {
-  .brand-container {
-    padding: 3rem 0.5rem 0;
-  }
+	.brand-container {
+		padding: 3rem 0.5rem 0;
+	}
 }
 
 @media (min-width: 760px) {
-  .title {
-    font-size: 1.5rem;
-  }
+	.title {
+		font-size: 1.5rem;
+	}
 }
 
 @keyframes arrow-shake {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	0% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 
-  30% {
-    opacity: 0.5;
-    transform: translateY(25px);
-  }
+	30% {
+		opacity: 0.5;
+		transform: translateY(25px);
+	}
 
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes blink {
-  0% {
-    opacity: 0;
-  }
+	0% {
+		opacity: 0;
+	}
 
-  100% {
-    opacity: 1;
-  }
+	100% {
+		opacity: 1;
+	}
 }
 </style>

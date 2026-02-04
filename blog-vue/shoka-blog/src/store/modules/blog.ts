@@ -16,11 +16,22 @@ export const useBlogStore = defineStore("useBlogStore", {
 		} as BlogInfo,
 	}),
 	actions: {
-		setBlogInfo(blogInfo: BlogInfo) {
-			this.blogInfo = blogInfo;
+		setBlogInfo(blogInfo: BlogInfo | null) {
+			if (blogInfo != null) {
+				this.blogInfo = blogInfo;
+			}
 		},
 	},
-	getters: {},
+	getters: {
+		/** 保证不为 null，避免 persist 还原后或首屏未请求前报错 */
+		blogInfoSafe(state): BlogInfo {
+			const info = state.blogInfo;
+			if (info == null || info.siteConfig == null) {
+				return { siteConfig: {} as SiteConfig } as BlogInfo;
+			}
+			return info;
+		},
+	},
 	persist: {
 		key: "blog",
 		storage: sessionStorage,

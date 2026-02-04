@@ -51,7 +51,7 @@
                 <svg-icon icon-class="like" size="0.9rem"></svg-icon> 点赞
                 <span>{{ article.likeCount }}</span>
               </button>
-              <n-popover trigger="click" v-if="blog.blogInfo.siteConfig.isReward">
+              <n-popover trigger="click" v-if="blog.blogInfoSafe.siteConfig.isReward">
                 <template #trigger>
                   <button class="btn reward-btn">
                     <svg-icon icon-class="qr_code" size="0.9rem"></svg-icon>
@@ -60,22 +60,22 @@
                 </template>
                 <div class="reward-all">
                   <span>
-                    <img class="reward-img" v-lazy="blog.blogInfo.siteConfig.weiXinCode" />
+                    <img class="reward-img" v-lazy="blog.blogInfoSafe.siteConfig.weiXinCode" />
                     <div class="reward-desc">微信</div>
                   </span>
                   <span style="margin-left: 0.3rem;">
-                    <img class="reward-img" v-lazy="blog.blogInfo.siteConfig.aliCode" />
+                    <img class="reward-img" v-lazy="blog.blogInfoSafe.siteConfig.aliCode" />
                     <div class="reward-desc">支付宝</div>
                   </span>
                 </div>
               </n-popover>
-              <p class="tea" v-if="blog.blogInfo.siteConfig.isReward">请我喝[茶]~(￣▽￣)~*</p>
+              <p class="tea" v-if="blog.blogInfoSafe.siteConfig.isReward">请我喝[茶]~(￣▽￣)~*</p>
             </div>
             <div class="copyright">
               <ul>
                 <li class="author">
                   <svg-icon icon-class="author" size="0.9rem" style="margin-right:0.3rem"></svg-icon>
-                  <strong>本文作者： </strong>{{ blog.blogInfo.siteConfig.siteAuthor }}
+                  <strong>本文作者： </strong>{{ blog.blogInfoSafe.siteConfig.siteAuthor }}
                 </li>
                 <li class="link">
                   <svg-icon icon-class="article_link" size="0.9rem" style="margin-right:0.3rem"></svg-icon>

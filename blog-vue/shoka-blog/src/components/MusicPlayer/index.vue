@@ -1,7 +1,13 @@
 <template>
-	<!-- <meting-js v-if="blog.blogInfo.siteConfig.isMusic" server="netease" type="playlist"
-		:id="blog.blogInfo.siteConfig.musicId" fixed="true" theme="#e9546b"></meting-js> -->
-	<aplayer server="netease" type="playlist" :id="blog.blogInfo.siteConfig.musicId" :fixed=true theme="#e9546b">
+	<!-- <meting-js v-if="blog.blogInfoSafe.siteConfig.isMusic" server="netease" type="playlist"
+		:id="blog.blogInfoSafe.siteConfig.musicId" fixed="true" theme="#e9546b"></meting-js> -->
+	<aplayer
+		server="netease"
+		type="playlist"
+		:id="blog.blogInfoSafe.siteConfig.musicId"
+		:fixed="true"
+		theme="#e9546b"
+	>
 	</aplayer>
 </template>
 

@@ -45,7 +45,7 @@ const send = () => {
     window.$message?.warning("留言内容不能为空");
     return false;
   }
-  const userAvatar = user.avatar ? user.avatar : blog.blogInfo.siteConfig.touristAvatar;
+  const userAvatar = user.avatar ? user.avatar : blog.blogInfoSafe.siteConfig.touristAvatar;
   const userNickname = user.nickname ? user.nickname : "游客";
   let message = {
     avatar: userAvatar,
@@ -54,7 +54,7 @@ const send = () => {
   };
   addMessage(message).then(({ data }) => {
     if (data.flag) {
-      if (blog.blogInfo.siteConfig.messageCheck) {
+      if (blog.blogInfoSafe.siteConfig.messageCheck) {
         window.$message?.warning("留言成功，正在审核中");
       } else {
         danmaku.value.push(message);

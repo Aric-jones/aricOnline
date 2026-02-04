@@ -14,7 +14,7 @@ const { baseURL } = getServiceBaseURL(import.meta.env, isHttpProxy);
 
 const requests = axios.create({
 	baseURL,
-	timeout: 10000,
+	timeout: 20000,
 	// 请求头
 	headers: {
 		"Content-Type": "application/json;charset=UTF-8",

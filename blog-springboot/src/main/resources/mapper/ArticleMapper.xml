@@ -59,6 +59,9 @@
         <id column="id" property="id"/>
         <result column="article_cover" property="articleCover"/>
         <result column="article_title" property="articleTitle"/>
+        <result column="article_desc" property="articleDesc"/>
+        <result column="article_content" property="articleContent"/>
+        <result column="is_top" property="isTop"/>
         <result column="create_time" property="createTime"/>
         <association property="category" javaType="com.ican.model.vo.response.CategoryOptionResp">
             <id column="category_id" property="id"/>
@@ -313,13 +316,16 @@
 
     <select id="selectArticleListByCondition" resultMap="articleConditionVO">
         SELECT a.id,
-        article_cover,
-        article_title,
+        a.article_cover,
+        a.article_title,
+        a.article_desc,
+        a.article_content,
+        a.is_top,
         a.create_time,
         c.id AS category_id,
         c.category_name,
         t.id AS tag_id,
-        tag_name
+        t.tag_name
         FROM t_article a
         INNER JOIN t_category c ON a.category_id = c.id
         INNER JOIN t_article_tag tat ON a.id = tat.article_id

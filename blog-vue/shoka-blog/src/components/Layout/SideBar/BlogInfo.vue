@@ -14,9 +14,9 @@
 import { useBlogStore } from "@/store";
 const blog = useBlogStore();
 const blogInfo = [
-  { path: "/archive", count: blog.blogInfo.articleCount, name: "文章" },
-  { path: "/category", count: blog.blogInfo.categoryCount, name: "分类" },
-  { path: "/tag", count: blog.blogInfo.tagCount, name: "标签" },
+  { path: "/archive", count: blog.blogInfoSafe.articleCount, name: "文章" },
+  { path: "/category", count: blog.blogInfoSafe.categoryCount, name: "分类" },
+  { path: "/tag", count: blog.blogInfoSafe.tagCount, name: "标签" },
 ];
 </script>
 

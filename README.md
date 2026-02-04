@@ -1,136 +1,109 @@
-## 博客介绍
+# 博客项目
 
-<p align="center">
-  <a href="https://www.ttkwsd.top">
-    <img src="https://foruda.gitee.com/avatar/1662735858745624876/7774198_wu_shengdong_1662735858.png" alt="阿冬的个人博客" style="border-radius: 50%;">
-  </a>
-</p>
+基于 **Spring Boot** 与 **Vue 3** 的前后端分离博客系统，前台参考 Hexo Shoka 主题风格，后台基于若依改造。
 
-<p align="center">
-   基于Springboot + Vue3 开发的前后端分离博客
-</p>
+## 项目结构
 
-<p align="center">
-   <a target="_blank" href="https://github.com/ttkican/Blog">
-      <img src="https://img.shields.io/badge/JDK-11-green"/>
-      <img src="https://img.shields.io/badge/springboot-2.6.14-green"/>
-      <img src="https://img.shields.io/badge/saToken-1.34.0-green"/>
-      <img src="https://img.shields.io/badge/vue-3.x-green"/>
-      <img src="https://img.shields.io/badge/mysql-8.0.27-green"/>
-      <img src="https://img.shields.io/badge/mybatis--plus-3.5.2-green"/>
-      <img src="https://img.shields.io/badge/redis-6.2.6-green"/>
-      <img src="https://img.shields.io/badge/elasticsearch-7.17.3-green"/>
-      <img src="https://img.shields.io/badge/rabbitmq-3.9.11-green"/>
-   </a>
-</p>
+```
+blog/
+├── blog-springboot/     # 后端：Spring Boot + MyBatis-Plus + Redis + Sa-Token 等
+├── blog-vue/
+│   ├── shoka-blog/      # 前台：Vue3 + Pinia + TypeScript + Vite
+│   └── shoka-admin/     # 后台管理：Vue3 + Element Plus + Vite
+├── deploy/              # Docker / 部署相关
+├── blog.sql             # 数据库初始化脚本
+└── README.md
+```
 
-## 在线地址
+## 技术栈
 
-**项目链接：** [www.ttkwsd.top](https://www.ttkwsd.top)
+| 端   | 技术 |
+|------|------|
+| 前台 | Vue 3、Pinia、Vue Router、TypeScript、Vite、Naive UI、ECharts、Swiper |
+| 后台 | Vue 3、Element Plus、Vite、TypeScript |
+| 后端 | Spring Boot 2.6、MySQL 8、Redis、MyBatis-Plus、Sa-Token、Swagger、Elasticsearch、RabbitMQ 等 |
 
-**后台链接：** [admin.ttkwsd.top](https://admin.ttkwsd.top)
+## 环境要求
 
-**测试账号：** test@qq.com，**密码**：123456
-
-**Github 地址：** [https://github.com/ttkican/Blog](https://github.com/ttkican/Blog)
-
-**Gitee 地址：** [https://gitee.com/wu_shengdong/blog](https://gitee.com/wu_shengdong/blog)
-
-**接口文档：** https://www.ttkwsd.top/api/doc.html
-
- **欢迎大家提交pr，一起改进项目** 
+- **JDK** 11+
+- **Node.js** 16+（推荐 18+）
+- **MySQL** 8.0+
+- **Redis** 6+
+- 可选：Elasticsearch 7.x、RabbitMQ（搜索与消息队列）
 
 ## 本地运行
 
-1. MySQL版本为`8.0.27`，npm版本为`9.4.0`，node版本为`v16.18.0`
-2. SQL 文件位于根目录下的`blog.sql`，将其中的数据导入到自己本地数据库中
-3. ES 映射文件位于`deploy`文件夹下
-4. 修改后端配置文件中的数据库等连接信息，项目中使用到的关于阿里云、腾讯云功能和第三方授权登录等需要自行开通
-5. 一定要将前端`shoka-admin`和`shoka-blog`的 utils 下的 token.ts 中的`{ domain: domain }`给删除，然后再`npm install`、`npm run dev`
-6. 项目启动后，使用`admin@qq.com`管理员账号登录后台，密码为`123456`
+### 1. 数据库
 
-## 项目特点
+- 创建数据库，执行根目录下 `blog.sql` 导入表结构与初始数据。
+- 在后端配置中填写数据库连接（见 `blog-springboot` 配置文件）。
 
-- 前台界面参考 Hexo 的 Shoka 和 Butterfly 设计，页面美观，响应式布局
-- 后台管理基于若依二次开发，含有侧边栏，历史标签，面包屑等
-- 前后端分离，Docker Compose 一键部署
-- 采用 RABC 权限模型，使用 Sa-Token 进行权限管理
-- 支持动态权限修改、动态菜单和路由
-- 说说、友链、相册、留言弹幕墙、音乐播放器、聊天室
-- 支持代码高亮、图片预览、黑夜模式、点赞、取消点赞等功能
-- 发布评论、回复评论、表情包
-- 发送 HTML 邮件评论回复提醒，内容详细
-- 接入第三方登录，减少注册成本
-- 文章搜索支持关键字高亮分词
-- 文章编辑使用 Markdown 编辑器
-- 含有最新评论、文章目录、文章推荐和文章置顶功能
-- 实现日志管理、定时任务管理、在线用户和下线用户
-- 代码支持多种搜索模式（Elasticsearch 或 MYSQL），支持多种文件上传模式（OSS、COS、本地）
-- 采用 Restful 风格的 API，注释完善，代码遵循阿里巴巴开发规范，有利于开发者学习
+### 2. 后端
 
-## 技术介绍
+```bash
+cd blog-springboot
+# 修改 application*.yml 中数据库、Redis 等配置
+mvn spring-boot:run
+```
 
-**前端：** Vue3 + Pinia + Vue Router + TypeScript + Axios + Element Plus + Naive UI + Echarts + Swiper
+默认会提供接口（如 `http://localhost:8080`），Swagger 文档一般为 `/api/doc.html`（以实际配置为准）。
 
-**后端：** SpringBoot + Mysql + Redis + Quartz + Thymeleaf + Nginx + Docker + Sa-Token + Swagger2 + MyBatisPlus +
-ElasticSearch + RabbitMQ + Canal
+### 3. 前台（博客）
 
-**其他：** 接入 QQ、Gitee、Github 第三方登录
+```bash
+cd blog-vue/shoka-blog
+npm install   # 或 pnpm install
+npm run dev
+```
 
-## 运行环境
+在 `src/utils/request.ts` 或环境变量中配置后端接口地址（如 `VITE_APP_BASE_API`）。
 
-**服务器：** 腾讯云 2 核 4G CentOS7.6
+### 4. 后台管理
 
-**对象存储：** 阿里云 OSS、腾讯云 COS
+```bash
+cd blog-vue/shoka-admin
+npm install
+npm run dev
+```
 
-**最低配置：** 2 核 2G 服务器（关闭 ElasticSearch）
+同样需配置后端接口地址；本地运行时可使用管理员账号登录（账号见数据库或默认说明）。
 
-## 开发环境
+### 5. 注意事项
 
-|          开发工具           |          说明          |
-|:-----------------------:|:--------------------:|
-|          IDEA           |    Java 开发工具 IDE     |
-|         VSCode          |     Vue 开发工具 IDE     |
-|         Navicat         |     MySQL 远程连接工具     |
-|  Redis Desktop Manager  |     Redis 远程连接工具     |
-|         Xshell          |     Linux 远程连接工具     |
-|          Xftp           |     Linux 文件上传工具     |
+- 若使用 `utils/token.ts` 等处的 `domain` 配置，本地开发时可去掉或改为当前域名，避免 Cookie 等问题。
+- 第三方登录（QQ、Gitee、GitHub）、OSS/COS 等需在后台或配置中自行填写并开通。
 
-|   开发环境    |  版本  |
-|:-------------:|:------:|
-|    OpenJDK    |   11   |
-|     MySQL     | 8.0.27 |
-|     Redis     | 6.2.6  |
-| Elasticsearch | 7.17.3 |
-|   RabbitMQ    | 3.9.11 |
+## 主要功能
 
-## 项目截图
+- **前台**：首页按分类展示文章、归档、分类/标签、说说、相册、友链、留言板、关于、搜索、评论、音乐播放器、聊天室等。
+- **后台**：文章/分类/标签/友链管理、评论与留言审核、用户与权限、系统配置、日志与定时任务等。
+- **部署**：支持 Docker Compose 一键部署（见 `deploy/` 目录）。
 
-![](https://static.ttkwsd.top/article/29ebbffccbe4367b8c113f9dee9184fc.png)
-![](https://static.ttkwsd.top/article/14f21792d32ceac730dad62798ac353c.png)
-![](https://static.ttkwsd.top/article/d4efdf65ea8a393693e317cdebdb6b43.png)
+## 首页展示说明
 
-## 后续计划
+首页按**分类**分组展示文章：
 
-- [ ] 整合 EasyExcel 导出 Excel
-- [ ] 第三方登录使用 JustAuth
-- [ ] 博客文章导入导出
-- [ ] 移动端文章目录
-- [x] 图片瀑布流布局
-- [ ] B 站追番页
-- [x] B 站图床
-- [x] 聊天室
+- 每个分类一块区域，左上为分类名称，右上为「更多」链接到该分类列表页。
+- 每个分类最多展示 6 篇文章；点击「更多」进入该分类的分页列表。
 
-## 项目总结
+## 构建与部署
 
-整个项目花费了大量的心血，开发过程中参考了很多优秀的开源项目，在这里感谢大家的开源项目，收获了很多，希望我的项目能给你带来收获。
+**前台构建：**
 
-鸣谢项目：
+```bash
+cd blog-vue/shoka-blog
+npm run build
+```
 
-- [ 风丶宇 ](https://github.com/X1192176811/blog)
-- **[hexo-theme-shoka](https://github.com/amehime/hexo-theme-shoka)**
-- [A Hexo Theme: Butterfly](https://github.com/jerryc127/hexo-theme-butterfly)
-- [RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue)
-- [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin)
-- [基于 Vue.js 的弹幕交互组件](https://github.com/hellodigua/vue-danmaku)
-- ...
+**后台构建：**
+
+```bash
+cd blog-vue/shoka-admin
+npm run build
+```
+
+构建产物一般在各项目的 `dist` 目录，可交由 Nginx 或其他 Web 服务器托管；后端可打为 jar 运行或放入 Docker（参考 `deploy/`）。
+
+## License
+
+见项目根目录 `LICENSE` 文件。

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="blog.blogInfo.siteConfig.isChat">
+  <div v-if="blog.blogInfoSafe.siteConfig.isChat">
     <div class="chat-container" v-show="show">
       <div class="chat-header">
         <img width="32" height="32" src="https://big-event0611.oss-cn-beijing.aliyuncs.com/article/a66b83711614a5fe7786079e3fb7f45a.png" />
@@ -83,10 +83,10 @@ const timeout = ref<NodeJS.Timeout>();
 const serverTimeout = ref<NodeJS.Timeout>();
 const isMy = computed(() => (chat: Record) => chat.ipAddress == ipAddress.value || (chat.userId !== undefined && chat.userId === user.id));
 const userNickname = computed(() => user.nickname ? user.nickname : ipAddress.value);
-const userAvatar = computed(() => user.avatar ? user.avatar : blog.blogInfo.siteConfig.touristAvatar);
+const userAvatar = computed(() => user.avatar ? user.avatar : blog.blogInfoSafe.siteConfig.touristAvatar);
 const handleOpen = () => {
   if (websocket.value === undefined) {
-    websocket.value = new WebSocket(blog.blogInfo.siteConfig.websocketUrl);
+    websocket.value = new WebSocket(blog.blogInfoSafe.siteConfig.websocketUrl);
     websocket.value.onopen = () => {
       webSocketState.value = true;
       startHeart();

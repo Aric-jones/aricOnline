@@ -3,7 +3,7 @@
     <div class="box-normal">
       <div class="reply-box-avatar">
         <img class="shoka-avatar" v-if="user.avatar" :src="user.avatar" alt="" />
-        <img class="shoka-avatar" v-else :src="blog.blogInfo.siteConfig.touristAvatar" alt="" />
+        <img class="shoka-avatar" v-else :src="blog.blogInfoSafe.siteConfig.touristAvatar" alt="" />
       </div>
       <div class="reply-box-warp">
         <textarea class="reply-box-textarea" v-model="commentContent" :style="sendActive ? lineStyle : ''"
@@ -116,7 +116,7 @@ const handleAdd = () => {
     if (data.flag) {
       sendActive.value = false;
       commentContent.value = "";
-      if (blog.blogInfo.siteConfig.commentCheck) {
+      if (blog.blogInfoSafe.siteConfig.commentCheck) {
         window.$message?.warning("评论成功，正在审核中");
       } else {
         window.$message?.success("评论成功");

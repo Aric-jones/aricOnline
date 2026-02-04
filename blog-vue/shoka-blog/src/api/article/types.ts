@@ -139,7 +139,7 @@ export interface ArticleRecommend {
 }
 
 /**
- * 文章分类、标签
+ * 文章分类、标签（与后端 ArticleConditionResp 一致，含预览字段）
  */
 export interface ArticleCondition {
   /**
@@ -154,6 +154,18 @@ export interface ArticleCondition {
    * 文章标题
    */
   articleTitle: string;
+  /**
+   * 文章摘要（列表预览）
+   */
+  articleDesc?: string;
+  /**
+   * 文章内容（列表预览片段）
+   */
+  articleContent?: string;
+  /**
+   * 是否置顶 (0否 1是)
+   */
+  isTop?: number;
   /**
    * 文章分类
    */

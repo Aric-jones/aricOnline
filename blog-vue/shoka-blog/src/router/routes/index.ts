@@ -24,7 +24,10 @@ export const routes: RouteRecordRaw[] = [
 	},
 	{
 		path: "/category/:categoryId",
-		component: () => import("@/views/Category/ArticleList.vue"),
+		redirect: (to) => ({
+			path: "/search",
+			query: { categoryId: to.params.categoryId },
+		}),
 	},
 	{
 		path: "/tag/:tagId",

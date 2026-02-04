@@ -1,12 +1,12 @@
 <template>
   <footer class="footer-wrapper" v-if="!isMessage">
     <p>
-      © {{ formatDate(blog.blogInfo.siteConfig.createSiteTime, "YYYY") }} -
+      © {{ formatDate(blog.blogInfoSafe.siteConfig.createSiteTime, "YYYY") }} -
       {{ new Date().getFullYear() }} By
-      {{ blog.blogInfo.siteConfig.siteAuthor }}
+      {{ blog.blogInfoSafe.siteConfig.siteAuthor }}
     </p>
     <a href="https://beian.miit.gov.cn/" target="_blank">
-      {{ blog.blogInfo.siteConfig.recordNumber }}
+      {{ blog.blogInfoSafe.siteConfig.recordNumber }}
     </a>
   </footer>
 </template>
