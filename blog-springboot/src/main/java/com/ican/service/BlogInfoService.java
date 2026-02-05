@@ -165,6 +165,7 @@ public class BlogInfoService {
                 .in(Article::getId, articleIdList));
         return articleList.stream()
                 .map(article -> ArticleRankResp.builder()
+                        .id(article.getId())
                         .articleTitle(article.getArticleTitle())
                         .viewCount(articleMap.get(article.getId()).intValue())
                         .build())

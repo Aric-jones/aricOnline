@@ -1,7 +1,7 @@
 import { PageQuery, PageResult, Result } from "@/model";
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
-import { Article, ArticleInfo, ArticleRecommend, ArticleSearch } from "./types";
+import { Article, ArticleInfo, ArticleRank, ArticleRecommend, ArticleSearch } from "./types";
 
 /**
  * 查看文章列表
@@ -34,6 +34,17 @@ export function getArticle(articleId: number): AxiosPromise<Result<ArticleInfo>>
 export function getArticleRecommend(): AxiosPromise<Result<ArticleRecommend[]>> {
   return request({
     url: "/article/recommend",
+    method: "get",
+  });
+}
+
+/**
+ * 查看文章浏览量排行（前5篇）
+ * @returns 文章排行
+ */
+export function getArticleRank(): AxiosPromise<Result<ArticleRank[]>> {
+  return request({
+    url: "/article/rank",
     method: "get",
   });
 }

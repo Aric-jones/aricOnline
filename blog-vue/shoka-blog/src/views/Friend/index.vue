@@ -15,7 +15,7 @@
       <blockquote class="block">
         <p>名称：{{ blog.blogInfoSafe.siteConfig.siteName }}</p>
         <p>简介：{{ blog.blogInfoSafe.siteConfig.siteIntro }}</p>
-        <p>头像：{{ blog.blogInfoSafe.siteConfig.authorAvatar }}</p>
+<!--        <p>头像：{{ blog.blogInfoSafe.siteConfig.authorAvatar }}</p>-->
       </blockquote>
       <h2>
         <svg-icon class="flower" icon-class="flower" size="1.25rem" color="pink"></svg-icon>

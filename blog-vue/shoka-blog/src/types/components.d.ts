@@ -53,6 +53,8 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     Search: typeof import('./../components/Dialog/Search.vue')['default']
     SideBar: typeof import('./../components/Layout/SideBar/index.vue')['default']
+    SideBarLatestArticles: typeof import('./../components/Layout/SideBar/SideBarLatestArticles.vue')['default']
+    SideBarPopularArticles: typeof import('./../components/Layout/SideBar/SideBarPopularArticles.vue')['default']
     SideBarTagCloud: typeof import('./../components/Layout/SideBar/SideBarTagCloud.vue')['default']
     SocialList: typeof import('./../components/Layout/SideBar/SocialList.vue')['default']
     SvgIcon: typeof import('./../components/SvgIcon/index.vue')['default']

@@ -10,14 +10,17 @@
 				<TalkSwiper></TalkSwiper>
 				<!-- 推荐文章 -->
 				<Recommend></Recommend>
-				<!-- 按分类展示文章 -->
-				<CategorySections></CategorySections>
+				<!-- 最新 6 篇文章（样式同分类预览） -->
+				<div class="home-sections-wrap">
+					<LatestArticlesSection></LatestArticlesSection>
+					<!-- 按分类展示文章 -->
+					<CategorySections></CategorySections>
+				</div>
 			</div>
 			<SideBar
 				class="right-container"
 				:class="app.sideFlag ? 'temp' : ''"
 			></SideBar>
-
 		</div>
 	</div>
 </template>
@@ -26,6 +29,7 @@
 import { getBlogInfo, report } from "@/api/blogInfo";
 import { useAppStore, useBlogStore } from "@/store";
 import CategorySections from "./CategorySections.vue";
+import LatestArticlesSection from "./LatestArticlesSection.vue";
 import Brand from "./Brand/index.vue";
 import Images from "./Swiper/Images.vue";
 import Recommend from "./Swiper/Recommend.vue";

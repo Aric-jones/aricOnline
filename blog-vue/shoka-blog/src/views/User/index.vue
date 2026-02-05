@@ -1,6 +1,6 @@
 <template>
   <div class="page-header">
-    <h1 class="page-title">说说</h1>
+    <h1 class="page-title">个人中心</h1>
     <img class="page-cover" src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
       alt="">
     <Waves></Waves>

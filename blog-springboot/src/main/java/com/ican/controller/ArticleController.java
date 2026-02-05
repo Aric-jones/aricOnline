@@ -240,6 +240,17 @@ public class ArticleController {
     }
 
     /**
+     * 查看文章浏览量排行（前5篇）
+     *
+     * @return {@link Result< ArticleRankResp >} 文章排行
+     */
+    @ApiOperation(value = "查看文章浏览量排行")
+    @GetMapping("/article/rank")
+    public Result<List<ArticleRankResp>> listArticleRankVO() {
+        return Result.success(articleService.listArticleRankVO());
+    }
+
+    /**
      * 查看文章归档
      *
      * @param pageQuery 分页条件

@@ -28,6 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -234,6 +236,33 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
 
     public List<ArticleRecommendResp> listArticleRecommendVO() {
         return articleMapper.selectArticleRecommend();
+    }
+
+    /**
+     * 查询文章浏览量排行（前5篇）
+     *
+     * @return 文章排行列表
+     */
+    public List<ArticleRankResp> listArticleRankVO() {
+        Map<Object, Double> articleMap = redisService.zReverseRangeWithScore(RedisConstant.ARTICLE_VIEW_COUNT, 0, 4);
+        if (CollectionUtils.isEmpty(articleMap)) {
+            return new ArrayList<>();
+        }
+        List<Integer> articleIdList = new ArrayList<>(articleMap.size());
+        articleMap.forEach((key, value) -> articleIdList.add((Integer) key));
+        List<Article> articleList = articleMapper.selectList(new LambdaQueryWrapper<Article>()
+                .select(Article::getId, Article::getArticleTitle)
+                .in(Article::getId, articleIdList)
+                .eq(Article::getIsDelete, CommonConstant.FALSE)
+                .eq(Article::getStatus, ArticleStatusEnum.PUBLIC.getStatus()));
+        return articleList.stream()
+                .map(article -> ArticleRankResp.builder()
+                        .id(article.getId())
+                        .articleTitle(article.getArticleTitle())
+                        .viewCount(articleMap.get(article.getId()).intValue())
+                        .build())
+                .sorted(Comparator.comparingInt(ArticleRankResp::getViewCount).reversed())
+                .collect(Collectors.toList());
     }
 
     public String saveArticleImages(MultipartFile file) {

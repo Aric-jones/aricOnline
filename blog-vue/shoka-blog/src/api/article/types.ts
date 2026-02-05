@@ -139,6 +139,15 @@ export interface ArticleRecommend {
 }
 
 /**
+ * 文章浏览量排行（热门文章）
+ */
+export interface ArticleRank {
+  id: number;
+  articleTitle: string;
+  viewCount: number;
+}
+
+/**
  * 文章分类、标签（与后端 ArticleConditionResp 一致，含预览字段）
  */
 export interface ArticleCondition {

@@ -16,6 +16,12 @@ import lombok.Data;
 public class ArticleRankResp {
 
     /**
+     * 文章id
+     */
+    @ApiModelProperty(value = "文章id")
+    private Integer id;
+
+    /**
      * 标题
      */
     @ApiModelProperty(value = "标题")
