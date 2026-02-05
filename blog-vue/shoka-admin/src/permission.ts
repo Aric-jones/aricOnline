@@ -18,7 +18,8 @@ const whiteList = ["/login"];
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  const { user, permission } = useStore();
+  const { user, permission, app } = useStore();
+  app.setRouteLoading(true);
   // 判断是否有token
   if (getToken()) {
     if (to.path === "/login") {
@@ -61,5 +62,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach(() => {
+  const { app } = useStore();
+  app.setRouteLoading(false);
   NProgress.done();
 });

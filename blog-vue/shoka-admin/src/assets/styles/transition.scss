@@ -11,10 +11,10 @@
   opacity: 0;
 }
 
-/* fade-transform */
+/* fade-transform：缩短时长，减少点击标签后“卡一下”的感觉 */
 .fade-transform-leave-active,
 .fade-transform-enter-active {
-  transition: all 0.5s;
+  transition: all 0.2s;
 }
 
 .fade-transform-enter {

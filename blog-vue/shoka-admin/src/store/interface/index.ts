@@ -24,6 +24,10 @@ export interface AppState {
    * 大小
    */
   size: string;
+  /**
+   * 路由切换中（懒加载 chunk 未就绪时为 true，用于内容区 loading）
+   */
+  routeLoading: boolean;
 }
 
 /**

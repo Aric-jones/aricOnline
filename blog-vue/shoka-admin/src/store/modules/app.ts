@@ -6,8 +6,12 @@ const useAppStore = defineStore("useAppStore", {
     isCollapse: false,
     device: "desktop",
     size: "default",
+    routeLoading: false,
   }),
   actions: {
+    setRouteLoading(loading: boolean) {
+      this.routeLoading = loading;
+    },
     toggle() {
       this.isCollapse = !this.isCollapse;
     },
@@ -24,6 +28,7 @@ const useAppStore = defineStore("useAppStore", {
   getters: {},
   persist: {
     storage: localStorage,
+    pick: ["isCollapse", "device", "size"],
   },
 });
 
