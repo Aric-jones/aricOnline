@@ -194,7 +194,6 @@
 				</div>
 				<SideBarLatestArticles class="side-card"></SideBarLatestArticles>
 				<SideBarPopularArticles class="side-card"></SideBarPopularArticles>
-
 			</div>
 		</div>
 	</div>
@@ -276,7 +275,10 @@ const like = () => {
 onMounted(() => {
 	getArticle(Number(route.params.id)).then(({ data }) => {
 		article.value = data.data;
-		document.title = article.value.articleTitle;
+		const siteName = blog.blogInfoSafe?.siteConfig?.siteName;
+		document.title = siteName
+			? `${article.value.articleTitle} - ${siteName}`
+			: article.value.articleTitle;
 		wordNum.value = deleteHTMLTag(article.value.articleContent).length;
 		readTime.value = Math.round(wordNum.value / 400);
 		articleLoaded.value = true;

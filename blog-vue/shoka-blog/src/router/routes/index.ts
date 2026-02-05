@@ -32,6 +32,7 @@ export const routes: RouteRecordRaw[] = [
 	{
 		path: "/tag/:tagId",
 		component: () => import("@/views/Tag/ArticleList.vue"),
+		meta: { title: "标签" },
 	},
 	{
 		name: "friend",
@@ -86,6 +87,7 @@ export const routes: RouteRecordRaw[] = [
 	{
 		path: "/album/:albumId",
 		component: () => import("@/views/Album/Photo.vue"),
+		meta: { title: "相册" },
 	},
 	{
 		name: "talk",

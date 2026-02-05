@@ -1,5 +1,5 @@
 import { router } from "@/router";
-import { useUserStore } from "@/store";
+import { useBlogStore, useUserStore } from "@/store";
 import { getToken } from "@/utils/token";
 import NProgress from "nprogress";
 
@@ -11,11 +11,16 @@ NProgress.configure({
   minimum: 0.3,
 });
 
+const defaultTitle = "博客";
+
 router.beforeEach((to, from, next) => {
   NProgress.start();
   const user = useUserStore();
   if (to.meta.title) {
     document.title = to.meta.title as string;
+  } else {
+    const siteName = useBlogStore().blogInfoSafe?.siteConfig?.siteName;
+    document.title = siteName || defaultTitle;
   }
   if (getToken()) {
     if (user.id === undefined) {

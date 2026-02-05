@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 
-const TokenKey: string = "Token";
+// 与后台管理区分，同浏览器同时登录时互不覆盖
+const TokenKey: string = "BlogToken";
 
 // 我网站的域名是www.ttkwsd.top，去前面的www，改成自己的域名
 const domain: string = ".ttkwsd.top";
