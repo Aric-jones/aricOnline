@@ -233,7 +233,8 @@ const handleReply = (index: number, target: Comment | Reply) => {
 	currentReply.setReply(true);
 };
 const getList = () => {
-	if (typeId.value == null) return;
+	// 友链页 (commentType=2) 无 typeId，仍可拉取评论列表
+	if (typeId.value == null && props.commentType !== 2) return;
 	queryParams.value.typeId = typeId.value;
 	getCommentList(queryParams.value).then(({ data }) => {
 		const recordList = data?.data?.recordList ?? [];
@@ -301,7 +302,8 @@ const analyzeEmoji = (cont: string) => {
 	return str; // 返回处理后的文本（替换了表情占位符的）
 };
 onMounted(() => {
-	if (typeId.value != null) getList();
+	// 友链页 (commentType=2) 无路由 id，仅按 commentType 拉取评论；文章/说说需 typeId
+	if (props.commentType === 2 || typeId.value != null) getList();
 });
 </script>
 

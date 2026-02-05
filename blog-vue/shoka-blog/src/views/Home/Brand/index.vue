@@ -14,6 +14,7 @@
 				<span class="easy-typed-cursor">|</span>
 			</div>
 		</div>
+		<Bubble />
 		<!-- 波浪 -->
 		<Waves></Waves>
 		<!-- 向下按钮 -->
@@ -106,6 +107,8 @@ onUnmounted(() => {
 	height: 70vh;
 	min-height: 10rem;
 	color: var(--header-text-color);
+	/* 裁剪底部外的泡泡，让泡泡从“背景下方”升起后再露出，与其他页一致 */
+	overflow: hidden;
 }
 
 .brand {
