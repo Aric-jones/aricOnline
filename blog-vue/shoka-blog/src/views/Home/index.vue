@@ -1,6 +1,6 @@
 <template>
 	<!--背景轮播-->
-	<Images></Images>
+<!--	<Images></Images>-->
 	<!-- 品牌 -->
 	<Brand></Brand>
 	<div class="bg">
@@ -31,7 +31,7 @@ import { useAppStore, useBlogStore } from "@/store";
 import CategorySections from "./CategorySections.vue";
 import LatestArticlesSection from "./LatestArticlesSection.vue";
 import Brand from "./Brand/index.vue";
-import Images from "./Swiper/Images.vue";
+// import Images from "./Swiper/Images.vue";
 import Recommend from "./Swiper/Recommend.vue";
 import TalkSwiper from "./Swiper/TalkSwiper.vue";
 const app = useAppStore();

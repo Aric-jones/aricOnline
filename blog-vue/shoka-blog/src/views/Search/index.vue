@@ -315,13 +315,13 @@ onMounted(() => {
 	height: 14rem;
 	margin: 1.25rem 0.5rem 0;
 	border-radius: 0.5rem;
-	box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow);
+	box-shadow: var(--card-shadow);
 	animation-duration: 0.5s;
 	transition: all 0.2s ease-in-out 0s;
 	visibility: hidden;
 
 	&:hover {
-		box-shadow: 0 0 1.5rem var(--box-bg-shadow);
+		box-shadow: var(--card-shadow-hover);
 		.cover {
 			transform: scale(1.05) rotate(1deg);
 		}

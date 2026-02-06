@@ -37,6 +37,9 @@
 	--color-pink-light-a7: rgba(255, 230, 250, 0.7);
 	--body-bg-shadow: var(--grey-2);
 	--box-bg-shadow: var(--grey-9-a1);
+	/* 统一加重阴影（所有主题共用变量，此处为 light） */
+	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.12), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.16), 0 0.75rem 2rem rgba(0, 0, 0, 0.1);
 	--text-color: var(--grey-7);
 	--header-text-color: var(--grey-0);
 	--primary-color: var(--color-red);
@@ -82,6 +85,9 @@
 	--color-grey: #c3c8ca;
 	--body-bg-shadow: #000;
 	--box-bg-shadow: #000;
+	/* 统一加重阴影（dark 主题） */
+	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.35), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.45), 0 0.75rem 2rem rgba(0, 0, 0, 0.25);
 	--text-color: var(--grey-5);
 	--header-text-color: var(--grey-9);
 	--note-bg: rgba(48, 49, 50, 0.8);
@@ -92,6 +98,145 @@
 	img {
 		filter: brightness(0.8);
 	}
+}
+
+/* RGB 渐变主题：与底部同款动态渐变，整页统一 */
+[theme="gradient"]:root {
+	--comment-color: rgba(255, 255, 255, 0.85);
+	--grey-0: rgba(255, 255, 255, 0.88);
+	--grey-1: rgba(255, 255, 255, 0.82);
+	--grey-2: rgba(255, 255, 255, 0.75);
+	--grey-3: #eff2f3;
+	--grey-4: #ccc;
+	--grey-5: #555;
+	--grey-6: #444;
+	--grey-7: #333;
+	--grey-8: #222;
+	--grey-9: #000;
+	--grey-1-a0: rgba(255, 255, 255, 0);
+	--grey-1-a7: rgba(255, 255, 255, 0.7);
+	--grey-1-a5: rgba(255, 255, 255, 0.5);
+	--grey-1-a3: rgba(255, 255, 255, 0.3);
+	--grey-9-a1: rgba(0, 0, 0, 0.12);
+	--grey-9-a5: rgba(0, 0, 0, 0.4);
+	--grey-2-a0: rgba(255, 255, 255, 0);
+	--color-pink-light: #fad4d9;
+	--color-cyan-light: #e0f0f8;
+	--color-red: #e9546b;
+	--color-pink: #ed6ea0;
+	--color-orange: #ec8c69;
+	--color-yellow: #eab700;
+	--color-green: #0a7426;
+	--color-aqua: #3e999f;
+	--color-blue: #49b1f5;
+	--color-purple: #9d5b8b;
+	--color-grey: #869194;
+	--body-bg-shadow: rgba(0, 0, 0, 0.15);
+	--box-bg-shadow: rgba(0, 0, 0, 0.1);
+	/* 统一加重阴影（gradient 主题） */
+	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.18), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
+	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.22), 0 0.75rem 2rem rgba(0, 0, 0, 0.14);
+	--text-color: var(--grey-7);
+	--header-text-color: #fff;
+	--primary-color: var(--color-red);
+	--nav-bg: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+	--footer-bg: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+	--note-border: #cda0c7;
+	--note-bg: rgba(255, 255, 255, 0.9);
+	--note-text: #8a51c0;
+	--note-hover: #f14668;
+	--comment-btn: #ed9abb;
+	--chat-bg: rgba(255, 255, 255, 0.9);
+}
+
+/* 整页与底部同款动态渐变（与 footer 同方向、同色、同动画） */
+[theme="gradient"] body {
+	position: relative;
+	min-height: 100vh;
+	background: linear-gradient(-90deg, #db8262, #eb7d8f, #51acdf, #44d4b2);
+	background-size: 300% 300%;
+	animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+	0% { background-position: 0 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0 50%; }
+}
+
+/* 全站：所有页面的 .bg 统一为与底部同款动态渐变 */
+[theme="gradient"] .bg {
+	background: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+	background-size: 300% 300%;
+	animation: gradientBG 10s ease infinite;
+}
+
+[theme="gradient"] .page-container {
+	background-color: transparent;
+}
+
+[theme="gradient"] .side-bg {
+	background: rgba(255, 255, 255, 0.5);
+}
+
+/* 全站 markdown 正文（关于页、文章详情等）：半透明以透出渐变 */
+[theme="gradient"] .bg .vuepress-markdown-body {
+	background: rgba(255, 255, 255, 0.12) !important;
+	box-shadow: var(--card-shadow);
+}
+[theme="gradient"] .bg .vuepress-markdown-body tr:nth-child(2n) {
+	background-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* 文章详情：侧栏与正文区单独微调 */
+
+/* 文章详情侧边栏：透出渐变，阴影用全局 --card-shadow */
+[theme="gradient"] .bg:has(.article-container) .side-card {
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 文章主题：阴影用全局 --card-shadow */
+[theme="gradient"] .bg:has(.article-container) .article-container {
+	box-shadow: var(--card-shadow);
+}
+
+/* gradient 主题下滚动条 */
+[theme="gradient"] ::-webkit-scrollbar-thumb {
+	background: linear-gradient(180deg, #fad4d9 0%, #e8f4fc 50%, #dff7f2 100%);
+	border-radius: 2em;
+}
+
+/* 导航栏：与底部同款动态渐变 */
+[theme="gradient"] .header-wrapper {
+	background: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+	background-size: 300% 300%;
+	animation: gradientBG 10s ease infinite;
+}
+[theme="gradient"] .header-wrapper.show {
+	background: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+	background-size: 300% 300%;
+	animation: gradientBG 10s ease infinite;
+}
+
+/* 波浪：与底部一致的同款 RGB 色（还原为渐变前的样式） */
+[theme="gradient"] .waves .parallax .use {
+	&:nth-child(1) { fill: rgba(236, 140, 105, 0.5); }
+	&:nth-child(2) { fill: rgba(233, 84, 107, 0.45); }
+	&:nth-child(3) { fill: rgba(56, 161, 219, 0.4); }
+	&:nth-child(4) { fill: rgba(35, 213, 171, 0.55); }
+}
+
+/* RGB 主题 WavesPlus */
+[theme="gradient"] .cyber-wave {
+	background: linear-gradient(90deg,
+		rgba(236, 140, 105, 0.35),
+		rgba(233, 84, 107, 0.4),
+		rgba(56, 161, 219, 0.35),
+		rgba(35, 213, 171, 0.4),
+		rgba(236, 140, 105, 0.35)
+	);
+	box-shadow: 0 -5px 20px rgba(56, 161, 219, 0.5), 0 -2px 25px rgba(233, 84, 107, 0.4);
+	border-top-color: rgba(255, 255, 255, 0.5);
 }
 
 /* 滚动条*/

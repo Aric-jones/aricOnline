@@ -1,7 +1,7 @@
 <template>
 	<div ref="brandRef" class="brand-container">
 		<img
-			class="page-cover"
+			class="brand-cover"
 			src="https://big-event0611.oss-cn-beijing.aliyuncs.com/article/a2a142d5efa734e270bf022d9beda5d8.jpg"
 			alt="页面封面"
 		/>
@@ -85,7 +85,7 @@ const startHitokotoTimer = () => {
 	// 初始化立即执行一次，避免页面加载后空白10秒
 	fetchData();
 	// 设置10秒定时器（10000毫秒 = 10秒），每隔10秒调用一次fetchData
-	hitokotoTimer = setInterval(fetchData, 10000);
+	hitokotoTimer = setInterval(fetchData, 20000);
 };
 onMounted(() => {
 	startHitokotoTimer();
@@ -107,7 +107,6 @@ onUnmounted(() => {
 	height: 70vh;
 	min-height: 10rem;
 	color: var(--header-text-color);
-	/* 裁剪底部外的泡泡，让泡泡从“背景下方”升起后再露出，与其他页一致 */
 	overflow: hidden;
 }
 
@@ -151,19 +150,15 @@ onUnmounted(() => {
 	z-index: 8;
 }
 
-.page-cover {
-	// 绝对定位：基于父容器.brand-container定位，脱离文档流不影响其他元素
+/* 仅铺满本块、随页滚动，不用全局 .page-cover，避免被 common 里 position:fixed 固定导致与下方渐变断层 */
+.brand-cover {
 	position: absolute;
 	top: 0;
 	left: 0;
-	// 铺满容器：宽度和高度100%，覆盖整个品牌容器
 	width: 100%;
 	height: 100%;
-	// 图片适配：保持比例铺满容器，裁剪多余部分（不拉伸）
 	object-fit: cover;
-	// 层级控制：-2低于brand的-1，确保文字/波浪/按钮都在图片上方
 	z-index: -2;
-	// 可选：加轻微遮罩，让文字更清晰（根据需求调整透明度）
 	filter: brightness(0.7);
 }
 

@@ -194,12 +194,12 @@ onMounted(async () => {
 	flex-direction: column;
 	border-radius: 0.75rem;
 	overflow: hidden;
-	box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow);
+	box-shadow: var(--card-shadow);
 	transition: all 0.2s ease-in-out;
 	background: var(--card-bg);
 
 	&:hover {
-		box-shadow: 0 0 2rem var(--box-bg-shadow);
+		box-shadow: var(--card-shadow-hover);
 
 		.cover {
 			transform: scale(1.05);

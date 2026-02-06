@@ -292,7 +292,7 @@ onMounted(() => {
 .article-container {
 	border-radius: 0.5rem;
 	overflow: hidden;
-	box-shadow: 0 0 1rem var(--box-bg-shadow);
+	box-shadow: var(--card-shadow);
 }
 
 .article-post {

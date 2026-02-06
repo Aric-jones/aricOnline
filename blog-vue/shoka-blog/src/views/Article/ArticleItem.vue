@@ -1,5 +1,10 @@
 <template>
-	<div class="article-item" v-animate="['slideUpBigIn']" v-for="article of articleList" :key="article.id">
+	<div
+		class="article-item"
+		v-animate="['slideUpBigIn']"
+		v-for="article of articleList"
+		:key="article.id"
+	>
 		<!-- 文章缩略图 -->
 		<div class="article-cover">
 			<router-link :to="`/article/${article.id}`" href="">
@@ -11,15 +16,35 @@
 			<div class="article-meta">
 				<!-- 置顶 -->
 				<span class="top" v-if="article.isTop == 1">
-					<svg-icon icon-class="top" size="0.85rem" style="margin-right: 0.15rem"></svg-icon>置顶</span>
+					<svg-icon
+						icon-class="top"
+						size="0.85rem"
+						style="margin-right: 0.15rem"
+					></svg-icon
+					>置顶</span
+				>
 				<!-- 发表时间 -->
 				<span class="meta-item ml-3.75">
-					<svg-icon icon-class="calendar" size="0.9rem" style="margin-right: 0.15rem"></svg-icon>{{
-					formatDate(article.createTime) }}
+					<svg-icon
+						icon-class="calendar"
+						size="0.9rem"
+						style="margin-right: 0.15rem"
+					></svg-icon
+					>{{ formatDate(article.createTime) }}
 				</span>
 				<!-- 文章标签 -->
-				<router-link class="meta-item ml-3.75" :to="`/tag/${tag.id}`" v-for="tag in article.tagVOList" :key="tag.id">
-					<svg-icon icon-class="tag" size="0.9rem" style="margin-right: 0.15rem"></svg-icon>{{ tag.tagName }}
+				<router-link
+					class="meta-item ml-3.75"
+					:to="`/tag/${tag.id}`"
+					v-for="tag in article.tagVOList"
+					:key="tag.id"
+				>
+					<svg-icon
+						icon-class="tag"
+						size="0.9rem"
+						style="margin-right: 0.15rem"
+					></svg-icon
+					>{{ tag.tagName }}
 				</router-link>
 			</div>
 			<!-- 文章标题 -->
@@ -32,16 +57,26 @@
 			<div class="article-content">{{ article.articleDesc }}</div>
 			<!-- 文章分类 -->
 			<div class="article-category">
-				<svg-icon icon-class="qizhi" size="0.85rem" style="margin-right: 0.15rem"></svg-icon>
+				<svg-icon
+					icon-class="qizhi"
+					size="0.85rem"
+					style="margin-right: 0.15rem"
+				></svg-icon>
 				<router-link :to="`/category/${article.category.id}`">{{
 					article.category.categoryName
-					}}</router-link>
+				}}</router-link>
 			</div>
 			<!-- 阅读按钮 -->
-			<router-link class="article-btn" :to="`/article/${article.id}`">more...</router-link>
+			<router-link class="article-btn" :to="`/article/${article.id}`"
+				>more...</router-link
+			>
 		</div>
 	</div>
-	<Pagination v-if="count > 5" v-model:current="queryParams.current" :total="Math.ceil(count / 5)"></Pagination>
+	<Pagination
+		v-if="count > 5"
+		v-model:current="queryParams.current"
+		:total="Math.ceil(count / 5)"
+	></Pagination>
 </template>
 
 <script setup lang="ts">
@@ -50,28 +85,28 @@ import { Article } from "@/api/article/types";
 import { PageQuery } from "@/model";
 import { formatDate } from "@/utils/date";
 const data = reactive({
-  count: 0,
-  queryParams: {
-    current: 1,
-    size: 5,
-  } as PageQuery,
-  articleList: [] as Article[],
+	count: 0,
+	queryParams: {
+		current: 1,
+		size: 5,
+	} as PageQuery,
+	articleList: [] as Article[],
 });
 const { count, queryParams, articleList } = toRefs(data);
 watch(
-  () => queryParams.value.current,
-  () => {
-    getArticleList(queryParams.value).then(({ data }) => {
-      articleList.value = data.data.recordList;
-      count.value = data.data.count;
-    });
-  }
+	() => queryParams.value.current,
+	() => {
+		getArticleList(queryParams.value).then(({ data }) => {
+			articleList.value = data.data.recordList;
+			count.value = data.data.count;
+		});
+	}
 );
 onMounted(() => {
-  getArticleList(queryParams.value).then(({ data }) => {
-    articleList.value = data.data.recordList;
-    count.value = data.data.count;
-  });
+	getArticleList(queryParams.value).then(({ data }) => {
+		articleList.value = data.data.recordList;
+		count.value = data.data.count;
+	});
 });
 </script>
 
@@ -81,13 +116,13 @@ onMounted(() => {
 	height: 14rem;
 	margin: 1.25rem 0.5rem 0;
 	border-radius: 0.5rem;
-	box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow);
+	box-shadow: var(--card-shadow);
 	animation-duration: 0.5s;
 	transition: all 0.2s ease-in-out 0s;
 	visibility: hidden;
 
 	&:hover {
-		box-shadow: 0 0 1.5rem var(--box-bg-shadow);
+		box-shadow: var(--card-shadow-hover);
 
 		.cover {
 			transform: scale(1.05) rotate(1deg);
@@ -117,7 +152,11 @@ onMounted(() => {
 			left: 0;
 			right: auto;
 			border-radius: 0 1rem;
-			background-image: linear-gradient(to right, var(--color-orange) 0, var(--color-pink) 100%);
+			background-image: linear-gradient(
+				to right,
+				var(--color-orange) 0,
+				var(--color-pink) 100%
+			);
 
 			&:hover {
 				transform: translateZ(2rem);
@@ -206,7 +245,11 @@ onMounted(() => {
 	padding: 0.3rem 1rem;
 	border-radius: 1rem 0;
 	color: var(--grey-0);
-	background-image: linear-gradient(to right, var(--color-pink) 0, var(--color-orange) 100%);
+	background-image: linear-gradient(
+		to right,
+		var(--color-pink) 0,
+		var(--color-orange) 100%
+	);
 
 	&:hover {
 		transform: translateZ(2rem);
