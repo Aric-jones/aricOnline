@@ -133,7 +133,6 @@
 	--color-grey: #869194;
 	--body-bg-shadow: rgba(0, 0, 0, 0.15);
 	--box-bg-shadow: rgba(0, 0, 0, 0.1);
-	/* 统一加重阴影（gradient 主题） */
 	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.18), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
 	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.22), 0 0.75rem 2rem rgba(0, 0, 0, 0.14);
 	--text-color: var(--grey-7);
@@ -149,15 +148,6 @@
 	--chat-bg: rgba(255, 255, 255, 0.9);
 }
 
-/* 整页与底部同款动态渐变（与 footer 同方向、同色、同动画） */
-[theme="gradient"] body {
-	position: relative;
-	min-height: 100vh;
-	background: linear-gradient(-90deg, #db8262, #eb7d8f, #51acdf, #44d4b2);
-	background-size: 300% 300%;
-	animation: gradientBG 10s ease infinite;
-}
-
 @keyframes gradientBG {
 	0% { background-position: 0 50%; }
 	50% { background-position: 100% 50%; }
@@ -171,14 +161,6 @@
 	animation: gradientBG 10s ease infinite;
 }
 
-[theme="gradient"] .page-container {
-	background-color: transparent;
-}
-
-[theme="gradient"] .side-bg {
-	background: rgba(255, 255, 255, 0.5);
-}
-
 /* 全站 markdown 正文（关于页、文章详情等）：半透明以透出渐变 */
 [theme="gradient"] .bg .vuepress-markdown-body {
 	background: rgba(255, 255, 255, 0.12) !important;
@@ -188,6 +170,15 @@
 	background-color: rgba(255, 255, 255, 0.18) !important;
 }
 
+/* 文章预览的标签：与底部同款渐变 */
+[theme="gradient"] .article-tag {
+	background: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab) !important;
+	color: #fff !important;
+}
+[theme="gradient"] .article-tag:hover {
+	color: rgba(255, 255, 255, 0.95) !important;
+}
+
 /* 文章详情：侧栏与正文区单独微调 */
 
 /* 文章详情侧边栏：透出渐变，阴影用全局 --card-shadow */
@@ -195,9 +186,47 @@
 	background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* 文章主题：阴影用全局 --card-shadow */
-[theme="gradient"] .bg:has(.article-container) .article-container {
-	box-shadow: var(--card-shadow);
+/* 文章列表、统计图区域、标签：随主题使用合适字体颜色 */
+[theme="dark"] .article-meta,
+[theme="dark"] .article-category,
+[theme="dark"] .meta-item,
+[theme="dark"] .article-content,
+[theme="dark"] .no-result,
+[theme="dark"] .category-count {
+	color: var(--text-color);
+}
+[theme="dark"] .article-title a {
+	color: var(--grey-7);
+}
+[theme="dark"] .article-title a:hover {
+	color: var(--color-blue);
+}
+[theme="dark"] .category-item a {
+	color: var(--text-color);
+}
+[theme="dark"] .category-item a:hover {
+	color: var(--color-blue);
+}
+
+[theme="gradient"] .article-meta,
+[theme="gradient"] .article-category,
+[theme="gradient"] .meta-item,
+[theme="gradient"] .article-content,
+[theme="gradient"] .no-result,
+[theme="gradient"] .category-count {
+	color: var(--text-color);
+}
+[theme="gradient"] .article-title a {
+	color: var(--text-color);
+}
+[theme="gradient"] .article-title a:hover {
+	color: var(--color-blue);
+}
+[theme="gradient"] .category-item a {
+	color: var(--text-color);
+}
+[theme="gradient"] .category-item a:hover {
+	color: var(--color-blue);
 }
 
 /* gradient 主题下滚动条 */
@@ -226,19 +255,6 @@
 	&:nth-child(4) { fill: rgba(35, 213, 171, 0.55); }
 }
 
-/* RGB 主题 WavesPlus */
-[theme="gradient"] .cyber-wave {
-	background: linear-gradient(90deg,
-		rgba(236, 140, 105, 0.35),
-		rgba(233, 84, 107, 0.4),
-		rgba(56, 161, 219, 0.35),
-		rgba(35, 213, 171, 0.4),
-		rgba(236, 140, 105, 0.35)
-	);
-	box-shadow: 0 -5px 20px rgba(56, 161, 219, 0.5), 0 -2px 25px rgba(233, 84, 107, 0.4);
-	border-top-color: rgba(255, 255, 255, 0.5);
-}
-
 /* 滚动条*/
 ::-webkit-scrollbar {
 	width: 0.5rem;
@@ -265,8 +281,6 @@
 ::-webkit-scrollbar-corner {
 	background-color: transparent;
 }
-
-
 
 /* 加载进度条 */
 #nprogress .bar {

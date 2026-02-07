@@ -378,11 +378,11 @@ onMounted(() => {
 	display: flex;
 	justify-content: flex-end;
 	font-size: 0.8rem;
-	color: #888;
+	color: var(--grey-6);
 }
 
 .top {
-	color: #ff7242;
+	color: var(--color-orange);
 	margin-left: 0.625rem;
 }
 
@@ -406,10 +406,11 @@ onMounted(() => {
 	display: -webkit-box;
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
+	color: var(--text-color);
 	a {
 		transition: all 0.2s ease-in-out 0s;
 		&:hover {
-			color: #49b1f5;
+			color: var(--color-blue);
 		}
 	}
 }
@@ -430,10 +431,10 @@ onMounted(() => {
 	align-items: center;
 	bottom: 0.5rem;
 	font-size: 0.85rem;
-	color: #858585;
+	color: var(--grey-6);
 	transition: all 0.2s ease-in-out 0s;
 	&:hover {
-		color: #49b1f5;
+		color: var(--color-blue);
 	}
 }
 
@@ -443,8 +444,12 @@ onMounted(() => {
 	right: 0;
 	padding: 0 0.8rem;
 	border-radius: 1rem;
-	color: #fff;
-	background-image: linear-gradient(to right, #ed6ea0 0, #ec8c69 100%);
+	color: var(--grey-0);
+	background-image: linear-gradient(
+		to right,
+		var(--color-pink) 0,
+		var(--color-orange) 100%
+	);
 	z-index: 1;
 	&:hover {
 		transform: translateZ(2.5rem);
@@ -455,7 +460,7 @@ onMounted(() => {
 	text-align: center;
 	margin-top: 2rem;
 	font-size: 1.2rem;
-	color: #666;
+	color: var(--grey-6);
 }
 
 .pagination-wrap {

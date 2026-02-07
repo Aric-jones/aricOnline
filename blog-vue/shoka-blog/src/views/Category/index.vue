@@ -12,26 +12,26 @@
 	</div>
 	<div class="bg">
 		<div class="page-container">
-			<Echarts :options="categoryOption"></Echarts>
-			<ul class="category-list">
-				<li
-					class="category-item"
-					v-for="category in categoryList"
-					:key="category.id"
-				>
-					<router-link
-						:to="{
-							path: '/search',
-							query: {
-								categoryId: category.id,
-								categoryName: category.categoryName,
-							},
-						}"
-						>{{ category.categoryName }}</router-link
-					>
-					<span class="category-count">({{ category.articleCount }})</span>
-				</li>
-			</ul>
+			<Echarts :key="theme" :options="categoryOption"></Echarts>
+			<!--			<ul class="category-list">-->
+			<!--				<li-->
+			<!--					class="category-item"-->
+			<!--					v-for="category in categoryList"-->
+			<!--					:key="category.id"-->
+			<!--				>-->
+			<!--					<router-link-->
+			<!--						:to="{-->
+			<!--							path: '/search',-->
+			<!--							query: {-->
+			<!--								categoryId: category.id,-->
+			<!--								categoryName: category.categoryName,-->
+			<!--							},-->
+			<!--						}"-->
+			<!--						>{{ category.categoryName }}</router-link-->
+			<!--					>-->
+			<!--					<span class="category-count">({{ category.articleCount }})</span>-->
+			<!--				</li>-->
+			<!--			</ul>-->
 		</div>
 	</div>
 </template>
@@ -39,8 +39,20 @@
 <script setup lang="ts">
 import { getCategoryList } from "@/api/category";
 import { Category } from "@/api/category/types";
+import { useTheme } from "@/composables/useTheme";
 import Echarts from "@/components/Echarts/index.vue";
-let categoryOption = reactive({
+
+const { theme } = useTheme();
+const chartTextColor = computed(() => {
+	if (theme.value === "dark") return "#ffffff";
+	if (theme.value === "gradient") return "#333";
+	return "#000000";
+});
+
+const seriesData = ref<{ value: number; name: string }[]>([]);
+const categoryList = ref<Category[]>([]);
+
+const categoryOption = computed(() => ({
 	tooltip: {
 		trigger: "item",
 		formatter: "{a} <br/>{b} : {c} ({d}%)",
@@ -48,9 +60,11 @@ let categoryOption = reactive({
 	title: {
 		text: "文章分类统计图🎉",
 		x: "center",
+		textStyle: { color: chartTextColor.value },
 	},
 	legend: {
 		top: "bottom",
+		textStyle: { color: chartTextColor.value },
 	},
 	series: [
 		{
@@ -62,25 +76,29 @@ let categoryOption = reactive({
 			itemStyle: {
 				borderRadius: 6,
 			},
-			data: [] as {
-				value: number;
-				name: string;
-			}[],
+			label: {
+				color: chartTextColor.value,
+				fontSize: 12,
+			},
+			labelLine: {
+				lineStyle: {
+					color: chartTextColor.value,
+					opacity: 0.8,
+				},
+			},
+			data: seriesData.value,
 		},
 	],
-});
-const categoryList = ref<Category[]>([]);
+}));
+
 onMounted(() => {
 	getCategoryList().then(({ data }) => {
-		categoryList.value = data.data;
-		if (data.data != null) {
-			data.data.forEach((item) => {
-				categoryOption.series[0].data.push({
-					value: item.articleCount,
-					name: item.categoryName,
-				});
-			});
-		}
+		categoryList.value = data.data ?? [];
+		seriesData.value =
+			data.data?.map((item) => ({
+				value: item.articleCount,
+				name: item.categoryName,
+			})) ?? [];
 	});
 });
 </script>
@@ -117,7 +135,7 @@ onMounted(() => {
 
 .category-item a:hover {
 	transition: all 0.3s;
-	color: #8e8cd8;
+	color: var(--color-blue);
 }
 
 .category-item a:not(:hover) {

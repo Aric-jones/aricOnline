@@ -1,3 +1,5 @@
+import { ref, watch, onMounted } from 'vue';
+
 export type ThemeMode = 'light' | 'dark' | 'gradient';
 
 const THEME_KEY = 'theme';
@@ -14,8 +16,17 @@ function applyTheme(mode: ThemeMode) {
   document.documentElement.setAttribute('theme', mode);
 }
 
+// 全站共用同一个 theme ref，切换主题时所有使用 useTheme() 的组件都会更新
+let themeRef: ReturnType<typeof ref<ThemeMode>> | null = null;
+
 export function useTheme() {
-  const theme = ref<ThemeMode>(getStoredTheme());
+  if (!themeRef) {
+    themeRef = ref<ThemeMode>(getStoredTheme());
+    watch(themeRef, (val) => {
+      applyTheme(val);
+    }, { immediate: true });
+  }
+  const theme: ReturnType<typeof ref<ThemeMode>> = themeRef;
 
   function cycleTheme() {
     const next: Record<ThemeMode, ThemeMode> = {
@@ -28,19 +39,10 @@ export function useTheme() {
     applyTheme(theme.value);
   }
 
-  function setTheme(mode: ThemeMode) {
-    theme.value = mode;
-    localStorage.setItem(THEME_KEY, mode);
-    applyTheme(mode);
-  }
 
   onMounted(() => {
     applyTheme(theme.value);
   });
 
-  watch(theme, (val) => {
-    applyTheme(val);
-  }, { immediate: true });
-
-  return { theme, cycleTheme, setTheme };
+  return { theme, cycleTheme};
 }
