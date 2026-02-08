@@ -41,6 +41,14 @@
 					</div>
 					<div class="article-info">
 						<h3 class="article-title">
+							<span class="top-badge" v-if="article.isTop == 1">
+								<svg-icon
+									icon-class="top"
+									size="0.75rem"
+									style="margin-right: 0.2rem"
+								></svg-icon>
+								置顶
+							</span>
 							<router-link :to="`/article/${article.id}`">
 								{{ article.articleTitle }}
 							</router-link>
@@ -165,7 +173,7 @@ onMounted(async () => {
 	margin: 0;
 	font-size: 1.25rem;
 	font-weight: 600;
-	color: var(--primary-color);
+	color: var(--category-section-title);
 }
 
 .section-more {
@@ -250,20 +258,35 @@ onMounted(async () => {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	flex-wrap: wrap;
 
 	a {
-		color: var(--primary-color);
+		color: var(--article-title-color);
+		flex: 1;
+		min-width: 0;
 
 		&:hover {
-			color: var(--color-blue);
+			color: var(--article-title-hover);
 		}
 	}
+}
+
+.top-badge {
+	display: inline-flex;
+	align-items: center;
+	font-size: 0.75rem;
+	color: var(--color-orange);
+	font-weight: 500;
+	flex-shrink: 0;
 }
 
 .article-meta {
 	margin-top: auto;
 	font-size: 0.8125rem;
-	color: var(--grey-5);
+	color: var(--article-meta-color);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -275,10 +298,10 @@ onMounted(async () => {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.2rem;
-	color: var(--grey-7);
+	color: var(--category-link-color);
 
 	&:hover {
-		color: var(--color-blue);
+		color: var(--category-link-hover);
 	}
 }
 
@@ -290,10 +313,11 @@ onMounted(async () => {
 
 .article-tag {
 	font-size: 0.75rem;
-	color: var(--grey-5);
+	background: var(--article-tag-bg);
+	color: var(--article-tag-color);
 
 	&:hover {
-		color: var(--color-blue);
+		color: var(--article-tag-hover);
 	}
 }
 

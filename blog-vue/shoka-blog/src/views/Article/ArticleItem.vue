@@ -215,7 +215,7 @@ onMounted(() => {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		margin: 0.625rem 0;
-		color: var(--primary-color);
+		color: var(--article-title-color);
 		overflow: hidden;
 	}
 

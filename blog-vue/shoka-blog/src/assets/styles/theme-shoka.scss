@@ -1,6 +1,6 @@
-/* 白天颜色 */
+/* ===================== 白天 (light) ===================== */
 :root {
-	--comment-color: #f1f2f3;
+	/* --- 基础灰阶 --- */
 	--grey-0: #fff;
 	--grey-1: #fdfdfd;
 	--grey-2: #f7f7f7;
@@ -18,6 +18,8 @@
 	--grey-9-a1: rgba(0, 0, 0, 0.1);
 	--grey-9-a5: rgba(0, 0, 0, 0.5);
 	--grey-2-a0: rgba(247, 247, 247, 0);
+
+	/* --- 调色板 --- */
 	--color-pink-light: #ffe6fa;
 	--color-cyan-light: #e3fdf5;
 	--color-red: #e9546b;
@@ -35,16 +37,36 @@
 	--color-pink-light-a3: rgba(255, 230, 250, 0.3);
 	--color-pink-light-a5: rgba(255, 230, 250, 0.5);
 	--color-pink-light-a7: rgba(255, 230, 250, 0.7);
-	--body-bg-shadow: var(--grey-2);
-	--box-bg-shadow: var(--grey-9-a1);
-	/* 统一加重阴影（所有主题共用变量，此处为 light） */
-	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.12), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
-	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.16), 0 0.75rem 2rem rgba(0, 0, 0, 0.1);
+
+	/* --- 全局语义变量 --- */
 	--text-color: var(--grey-7);
 	--header-text-color: var(--grey-0);
-	--primary-color: var(--color-red);
+	--primary-color: var(--color-red);          /* 强调色：按钮/链接/进度条等 */
+	--body-bg-shadow: var(--grey-2);
+	--box-bg-shadow: var(--grey-9-a1);
+	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.12), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.16), 0 0.75rem 2rem rgba(0, 0, 0, 0.1);
+	--card-bg: var(--grey-0);
 	--nav-bg: linear-gradient(-225deg, var(--color-cyan-light) 0, var(--color-pink-light) 100%);
 	--footer-bg: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+
+	/* --- 文章语义变量（组件直接引用，切换主题自动生效） --- */
+	--article-title-color: var(--color-red);    /* 文章标题 */
+	--article-title-hover: var(--color-blue);   /* 文章标题 hover */
+	--article-meta-color: var(--grey-5);        /* 日期/标签等元信息 */
+	--category-link-color: var(--grey-7);       /* 分类链接 */
+	--category-link-hover: var(--color-blue);   /* 分类链接 hover */
+	--article-tag-bg: transparent;              /* 文章标签背景 */
+	--article-tag-color: var(--grey-5);         /* 文章标签文字 */
+	--article-tag-hover: var(--color-blue);     /* 文章标签 hover */
+	--sidebar-card-bg: var(--grey-0);           /* 侧边栏卡片 */
+	--markdown-body-bg: transparent;            /* Markdown 正文背景 */
+	--article-container-bg: transparent;        /* 文章容器背景 */
+	--table-stripe-bg: rgba(0, 0, 0, 0.03);    /* 表格斑马纹 */
+	--category-section-title: var(--primary-color);
+
+	/* --- 其他 --- */
+	--comment-color: #f1f2f3;
 	--note-border: #cda0c7;
 	--note-bg: #fdf8ff;
 	--note-text: #8a51c0;
@@ -55,9 +77,9 @@
 	--user-name-color: #eb697e;
 }
 
-/* 黑夜颜色 */
+/* ===================== 黑夜 (dark) ===================== */
 [theme="dark"]:root {
-	--comment-color: var(--grey-1);
+	/* --- 基础灰阶（反转） --- */
 	--grey-0: #222;
 	--grey-1: #21252b;
 	--grey-2: #363636;
@@ -74,6 +96,8 @@
 	--grey-1-a0: rgba(34, 34, 34, 0);
 	--grey-9-a1: rgba(51, 51, 51, 0.1);
 	--grey-2-a0: rgba(54, 54, 54, 0);
+
+	/* --- 调色板 --- */
 	--color-pink-light: #322d31;
 	--color-cyan-light: #2d3230;
 	--color-red: rgba(237, 118, 137, 0.9);
@@ -85,13 +109,30 @@
 	--color-blue: #9cd0ed;
 	--color-purple: #cfacc5;
 	--color-grey: #c3c8ca;
-	--body-bg-shadow: #000;
-	--box-bg-shadow: #000;
-	/* 统一加重阴影（dark 主题） */
-	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.35), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
-	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.45), 0 0.75rem 2rem rgba(0, 0, 0, 0.25);
+
+	/* --- 全局语义变量 --- */
 	--text-color: var(--grey-5);
 	--header-text-color: var(--grey-9);
+	--body-bg-shadow: #000;
+	--box-bg-shadow: #000;
+	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.35), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.45), 0 0.75rem 2rem rgba(0, 0, 0, 0.25);
+	--card-bg: var(--grey-0);
+
+	/* --- 文章语义变量 --- */
+	--article-title-color: var(--color-red);
+	--article-title-hover: var(--color-blue);
+	--article-meta-color: var(--text-color);
+	--category-link-color: var(--text-color);
+	--category-link-hover: var(--color-blue);
+	--article-tag-bg: transparent;
+	--article-tag-color: var(--grey-5);
+	--article-tag-hover: var(--color-blue);
+	--sidebar-card-bg: var(--grey-0);
+	--category-section-title: var(--primary-color);
+
+	/* --- 其他 --- */
+	--comment-color: var(--grey-1);
 	--note-bg: rgba(48, 49, 50, 0.8);
 	--note-text: rgba(109, 164, 219, 0.8);
 	--note-hover: rgba(168, 49, 72, 0.8);
@@ -103,9 +144,9 @@
 	}
 }
 
-/* RGB 渐变主题：与底部同款动态渐变，整页统一 */
+/* ===================== 渐变 (gradient) ===================== */
 [theme="gradient"]:root {
-	--comment-color: rgba(241, 171, 171, 0.2);
+	/* --- 基础灰阶（半透明白底） --- */
 	--grey-0: rgba(255, 255, 255, 0.88);
 	--grey-1: rgba(255, 255, 255, 0.82);
 	--grey-2: rgba(255, 255, 255, 0.75);
@@ -123,6 +164,8 @@
 	--grey-9-a1: rgba(0, 0, 0, 0.12);
 	--grey-9-a5: rgba(0, 0, 0, 0.4);
 	--grey-2-a0: rgba(255, 255, 255, 0);
+
+	/* --- 调色板 --- */
 	--color-pink-light: #fad4d9;
 	--color-cyan-light: #e0f0f8;
 	--color-red: #e9546b;
@@ -134,15 +177,36 @@
 	--color-blue: #49b1f5;
 	--color-purple: #9d5b8b;
 	--color-grey: #869194;
+
+	/* --- 全局语义变量 --- */
+	--text-color: var(--grey-7);
+	--header-text-color: #fff;
+	--primary-color: var(--color-red);
 	--body-bg-shadow: rgba(0, 0, 0, 0.15);
 	--box-bg-shadow: rgba(0, 0, 0, 0.1);
 	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.18), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
 	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.22), 0 0.75rem 2rem rgba(0, 0, 0, 0.14);
-	--text-color: var(--grey-7);
-	--header-text-color: #fff;
-	--primary-color: var(--color-red);
+	--card-bg: rgba(255, 255, 255, 0.2);
 	--nav-bg: linear-gradient(-45deg, #dd9a83, #d27886, #5aacda, #23d5ab);
 	--footer-bg: linear-gradient(-45deg, #dd9a83, #d27886, #5aacda, #23d5ab);
+
+	/* --- 文章语义变量（gradient 下标题用深色，提升可读性） --- */
+	--article-title-color: var(--grey-8);
+	--article-title-hover: var(--grey-9);
+	--article-meta-color: var(--grey-5);
+	--category-link-color: var(--grey-7);
+	--category-link-hover: var(--grey-8);
+	--article-tag-bg: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+	--article-tag-color: #fff;
+	--article-tag-hover: rgba(255, 255, 255, 0.95);
+	--sidebar-card-bg: rgba(255, 255, 255, 0.2);
+	--markdown-body-bg: rgba(255, 255, 255, 0.05);
+	--article-container-bg: rgba(255, 255, 255, 0.2);
+	--table-stripe-bg: rgba(255, 255, 255, 0.18);
+	--category-section-title: var(--grey-9);
+
+	/* --- 其他 --- */
+	--comment-color: rgba(241, 171, 171, 0.2);
 	--note-border: #cda0c7;
 	--note-bg: rgba(255, 255, 255, 0.9);
 	--note-text: #8a51c0;
@@ -158,82 +222,30 @@
 	100% { background-position: 0 50%; }
 }
 
-/* 全站：所有页面的 .bg 统一为与底部同款动态渐变 */
+/*
+ * ============================================================
+ * 以下为「结构性覆盖」——涉及动画、多属性联动、伪元素 nth-child、
+ * 或第三方组件内部样式，无法仅靠变量解决，必须使用选择器覆盖。
+ * 纯颜色差异已统一到上方变量，无需再写 [theme] 选择器。
+ * ============================================================
+ */
+
+/* gradient：页面 .bg 动态渐变（background + background-size + animation 联动） */
 [theme="gradient"] .bg {
 	background: linear-gradient(-45deg, #dd9a83, #d65367, #4aa6da, #23d5ab);
 	background-size: 300% 300%;
 	animation: gradientBG 10s ease infinite;
 }
 
-/* 全站 markdown 正文（关于页、文章详情等）：半透明以透出渐变 */
+/* gradient：第三方 markdown 组件内部背景，只能用 !important 覆盖 */
 [theme="gradient"] .bg .vuepress-markdown-body {
-	background: rgba(255, 255, 255, 0.05) !important;
+	background: var(--markdown-body-bg) !important;
 }
-
 [theme="gradient"] .bg .article-container {
-	background: rgba(255, 255, 255, 0.2) !important;
+	background: var(--article-container-bg) !important;
 }
 [theme="gradient"] .bg .vuepress-markdown-body tr:nth-child(2n) {
-	background-color: rgba(255, 255, 255, 0.18) !important;
-}
-
-/* 文章预览的标签：与底部同款渐变 */
-[theme="gradient"] .article-tag {
-	background: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab) !important;
-	color: #fff !important;
-}
-[theme="gradient"] .article-tag:hover {
-	color: rgba(255, 255, 255, 0.95) !important;
-}
-
-/* 文章详情：侧栏与正文区单独微调 */
-
-/* 文章详情侧边栏：透出渐变，阴影用全局 --card-shadow */
-[theme="gradient"] .bg:has(.article-container) .side-card {
-	background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* 文章列表、统计图区域、标签：随主题使用合适字体颜色 */
-[theme="dark"] .article-meta,
-[theme="dark"] .article-category,
-[theme="dark"] .meta-item,
-[theme="dark"] .article-content,
-[theme="dark"] .no-result,
-[theme="dark"] .category-count {
-	color: var(--text-color);
-}
-[theme="dark"] .article-title a {
-	color: var(--grey-7);
-}
-[theme="dark"] .article-title a:hover {
-	color: var(--color-blue);
-}
-[theme="dark"] .category-item a {
-	color: var(--text-color);
-}
-[theme="dark"] .category-item a:hover {
-	color: var(--color-blue);
-}
-
-[theme="gradient"] .article-meta,
-[theme="gradient"] .article-category,
-[theme="gradient"] .meta-item,
-[theme="gradient"] .article-content,
-[theme="gradient"] .no-result,
-[theme="gradient"] .category-count {
-	color: var(--text-color);
-}
-[theme="gradient"] .article-title a {
-	color: var(--text-color);
-}
-[theme="gradient"] .article-title a:hover {
-	color: var(--color-blue);
-}
-[theme="gradient"] .category-item a {
-	color: var(--text-color);
-}
-[theme="gradient"] .category-item a:hover {
-	color: var(--color-blue);
+	background-color: var(--table-stripe-bg) !important;
 }
 
 /* gradient 主题下滚动条 */
