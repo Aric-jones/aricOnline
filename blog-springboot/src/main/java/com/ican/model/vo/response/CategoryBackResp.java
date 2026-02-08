@@ -28,6 +28,12 @@ public class CategoryBackResp extends CategoryResp {
     private Integer parentId;
 
     /**
+     * 排序值
+     */
+    @ApiModelProperty(value = "排序值")
+    private Integer orderNum;
+
+    /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")

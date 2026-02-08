@@ -40,6 +40,11 @@ public class Category {
     private Integer parentId;
 
     /**
+     * 排序值（越小越靠前）
+     */
+    private Integer orderNum;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)

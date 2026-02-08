@@ -17,6 +17,10 @@ export interface Category {
    */
   articleCount: number;
   /**
+   * 排序值
+   */
+  orderNum: number;
+  /**
    * 创建时间
    */
   createTime: string;
@@ -44,4 +48,8 @@ export interface CategoryForm {
    * 分类名
    */
   categoryName: string;
+  /**
+   * 排序值
+   */
+  orderNum: number;
 }

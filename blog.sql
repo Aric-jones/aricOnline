@@ -184,6 +184,7 @@ CREATE TABLE `t_category`
     `id`            int                                                          NOT NULL AUTO_INCREMENT COMMENT '分类id',
     `parent_id`     int                                                          NOT NULL DEFAULT '0' COMMENT '父级id',
     `category_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '分类名',
+    `order_num`     int                                                          NOT NULL DEFAULT '0' COMMENT '排序值（越小越靠前）',
     `create_time`   datetime                                                     NOT NULL COMMENT '创建时间',
     `update_time`   datetime NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE

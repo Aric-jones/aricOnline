@@ -81,6 +81,7 @@ public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
         // 添加新分类
         Category newCategory = Category.builder()
                 .categoryName(category.getCategoryName())
+                .orderNum(category.getOrderNum() != null ? category.getOrderNum() : 0)
                 .build();
         baseMapper.insert(newCategory);
     }
@@ -105,13 +106,15 @@ public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
         Category newCategory = Category.builder()
                 .id(category.getId())
                 .categoryName(category.getCategoryName())
+                .orderNum(category.getOrderNum())
                 .build();
         baseMapper.updateById(newCategory);
     }
 
     public List<CategoryOptionResp> listCategoryOption() {
-        // 查询分类
+        // 查询分类（按排序值升序）
         List<Category> categoryList = categoryMapper.selectList(new LambdaQueryWrapper<Category>()
+                .orderByAsc(Category::getOrderNum)
                 .orderByDesc(Category::getId));
         return BeanCopyUtils.copyBeanList(categoryList, CategoryOptionResp.class);
     }

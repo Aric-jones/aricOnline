@@ -28,4 +28,10 @@ public class CategoryReq {
     @ApiModelProperty(value = "分类名", required = true)
     private String categoryName;
 
+    /**
+     * 排序值（越小越靠前）
+     */
+    @ApiModelProperty(value = "排序值")
+    private Integer orderNum;
+
 }

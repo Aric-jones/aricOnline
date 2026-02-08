@@ -14,6 +14,10 @@ export interface Category {
    * 文章数量
    */
   articleCount: number;
+  /**
+   * 排序值
+   */
+  orderNum: number;
 }
 
 /**

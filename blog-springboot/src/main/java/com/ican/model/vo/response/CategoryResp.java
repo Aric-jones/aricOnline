@@ -31,4 +31,10 @@ public class CategoryResp {
     @ApiModelProperty(value = "文章数量")
     private Integer articleCount;
 
+    /**
+     * 排序值
+     */
+    @ApiModelProperty(value = "排序值")
+    private Integer orderNum;
+
 }
