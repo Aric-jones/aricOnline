@@ -313,7 +313,7 @@ onMounted(() => {
 .article-item {
 	display: flex;
 	height: 14rem;
-	margin: 1.25rem 0.5rem 0;
+	margin-bottom:  1.5rem;
 	border-radius: 0.5rem;
 	box-shadow: var(--card-shadow);
 	animation-duration: 0.5s;
@@ -331,7 +331,7 @@ onMounted(() => {
 		flex-direction: row-reverse;
 		.article-cover {
 			margin-right: auto;
-			margin-left: 1.5rem;
+			margin-left: 2.5rem;
 			-webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%);
 			clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%);
 			border-radius: 0 0.625rem 0.625rem 0;
@@ -344,7 +344,6 @@ onMounted(() => {
 			.article-category {
 				justify-content: flex-start;
 				right: auto;
-				left: 0;
 			}
 		}
 	}
