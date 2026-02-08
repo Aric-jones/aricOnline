@@ -1,0 +1,36 @@
+# ============================================================
+#  博客前端 Dockerfile — 多阶段构建
+#  Stage 1: Node 构建博客前台 + 后台
+#  Stage 2: Nginx 托管静态文件
+# ============================================================
+
+# ---- 构建博客前台 ----
+FROM node:18-alpine AS blog-builder
+WORKDIR /build/blog
+COPY blog-vue/shoka-blog/package.json blog-vue/shoka-blog/package-lock.json* ./
+RUN npm install --registry=https://registry.npmmirror.com
+COPY blog-vue/shoka-blog/ .
+RUN npm run build
+
+# ---- 构建后台管理 ----
+FROM node:18-alpine AS admin-builder
+WORKDIR /build/admin
+COPY blog-vue/shoka-admin/package.json blog-vue/shoka-admin/package-lock.json* ./
+RUN npm install --registry=https://registry.npmmirror.com
+COPY blog-vue/shoka-admin/ .
+RUN npm run build
+
+# ---- Nginx 运行阶段 ----
+FROM nginx:1.25-alpine
+# 时区
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    apk del tzdata
+# 拷贝构建产物
+COPY --from=blog-builder /build/blog/blog /usr/share/nginx/blog
+COPY --from=admin-builder /build/admin/dist /usr/share/nginx/admin
+# 拷贝 nginx 配置
+COPY deploy/nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80 443
+CMD ["nginx", "-g", "daemon off;"]
