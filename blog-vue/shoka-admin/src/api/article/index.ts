@@ -142,3 +142,17 @@ export function uploadArticleCover(data: FormData): AxiosPromise<Result<string>>
     data,
   });
 }
+
+/**
+ * AI 生成文章摘要
+ * @param content 文章内容
+ * @returns 摘要文本
+ */
+export function generateAiSummary(content: string): AxiosPromise<Result<string>> {
+  return request({
+    url: "/admin/ai/summary",
+    method: "post",
+    timeout: 60000,
+    data: { content },
+  });
+}

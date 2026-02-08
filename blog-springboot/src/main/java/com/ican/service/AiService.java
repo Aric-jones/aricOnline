@@ -39,6 +39,73 @@ public class AiService {
             .build();
 
     /**
+     * 生成文章摘要（非流式，同步调用）
+     *
+     * @param content 文章内容
+     * @return 100字左右的摘要
+     */
+    public String generateSummary(String content) {
+        // 截取前 3000 字，避免 token 过长
+        String truncated = content.length() > 3000 ? content.substring(0, 3000) : content;
+
+        JSONArray messagesArray = new JSONArray();
+
+        JSONObject systemMsg = new JSONObject();
+        systemMsg.put("role", "system");
+        systemMsg.put("content", "你是一个文章摘要生成助手。请根据用户提供的文章内容，生成一段100字左右的中文摘要。" +
+                "要求：简洁明了，提炼核心内容，不要使用 Markdown 格式，不要加任何前缀（如'摘要：'），直接输出摘要文本。");
+        messagesArray.add(systemMsg);
+
+        JSONObject userMsg = new JSONObject();
+        userMsg.put("role", "user");
+        userMsg.put("content", "请为以下文章生成100字左右的摘要：\n\n" + truncated);
+        messagesArray.add(userMsg);
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("model", deepSeekProperties.getModel());
+        requestBody.put("messages", messagesArray);
+        requestBody.put("stream", false);
+        requestBody.put("temperature", 0.3);
+        requestBody.put("max_tokens", 200);
+
+        Request request = new Request.Builder()
+                .url(deepSeekProperties.getApiUrl())
+                .addHeader("Authorization", "Bearer " + deepSeekProperties.getApiKey())
+                .addHeader("Content-Type", "application/json")
+                .post(RequestBody.create(requestBody.toJSONString(), MediaType.parse("application/json")))
+                .build();
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                String body = response.body() != null ? response.body().string() : "";
+                log.error("AI 摘要生成失败: {} {}", response.code(), body);
+                throw new RuntimeException("AI 摘要生成失败: " + response.code());
+            }
+            String responseBody = response.body().string();
+            JSONObject jsonResponse = JSON.parseObject(responseBody);
+            JSONArray choices = jsonResponse.getJSONArray("choices");
+            if (choices != null && !choices.isEmpty()) {
+                JSONObject message = choices.getJSONObject(0).getJSONObject("message");
+                if (message != null) {
+                    String summary = message.getString("content");
+                    // 去除首尾空白，截取前 100 字
+                    if (summary != null) {
+                        summary = summary.trim();
+                        if (summary.length() > 100) {
+                            summary = summary.substring(0, 100);
+                        }
+                        return summary;
+                    }
+                }
+            }
+            return "";
+        } catch (IOException e) {
+            log.error("AI 摘要生成异常", e);
+            throw new RuntimeException("AI 摘要生成异常: " + e.getMessage());
+        }
+    }
+
+    /**
      * 流式对话
      *
      * @param messages 对话消息列表，每条包含 role 和 content

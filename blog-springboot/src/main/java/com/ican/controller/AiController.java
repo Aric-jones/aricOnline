@@ -1,5 +1,6 @@
 package com.ican.controller;
 
+import com.ican.model.vo.Result;
 import com.ican.service.AiService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,5 +33,22 @@ public class AiController {
     @PostMapping(value = "/ai/chat", produces = "text/event-stream;charset=UTF-8")
     public SseEmitter chat(@RequestBody List<Map<String, String>> messages) {
         return aiService.chatStream(messages);
+    }
+
+    /**
+     * AI 生成文章摘要
+     *
+     * @param body 请求体，包含 content 字段（文章内容）
+     * @return 100字左右的摘要
+     */
+    @ApiOperation(value = "AI 生成文章摘要")
+    @PostMapping("/admin/ai/summary")
+    public Result<String> generateSummary(@RequestBody Map<String, String> body) {
+        String content = body.get("content");
+        if (content == null || content.trim().isEmpty()) {
+            return Result.fail("文章内容不能为空");
+        }
+        String summary = aiService.generateSummary(content);
+        return Result.success(summary);
     }
 }
