@@ -1,23 +1,56 @@
 #!/bin/bash
-# 打包之后上传的jar包路径
-SOURCE_PATH=/usr/local/docker
-# docker的镜像和容器名称都命名为这个
-SERVER_NAME=blog-springboot
-TAG=latest
-# 容器id
-CID=$(docker ps | grep "$SERVER_NAME" | awk '{print $1}')
-# 镜像id
-IID=$(docker images | grep "$SERVER_NAME" | awk '{print $3}')
-if [ -n "$CID" ]; then
-  echo "存在容器$SERVER_NAME, CID-$CID"
-  docker stop $CID
-  docker rm $CID
+# ============================================================
+#  博客一键部署脚本
+#  用法: sh blog-start.sh [up|down|restart|logs]
+# ============================================================
+
+set -e
+cd "$(dirname "$0")"
+
+# 检查 .env 文件
+if [ ! -f .env ]; then
+    echo "❌ 未找到 .env 文件，请先执行: cp .env.example .env"
+    echo "   然后编辑 .env 填入真实的密码和密钥"
+    exit 1
 fi
-# 构建docker镜像
-if [ -n "$IID" ]; then
-  echo "存在$SERVER_NAME:$TAG镜像，IID=$IID"
-  docker rmi $IID
-fi
-# 重新构建镜像并运行
-docker-compose up -d --build
-echo "$SERVER_NAME容器创建完成"
+
+ACTION=${1:-up}
+
+case $ACTION in
+    up)
+        echo "🚀 启动博客服务..."
+        docker-compose up -d --build
+        echo ""
+        echo "✅ 部署完成！"
+        echo "   博客前台：http://localhost"
+        echo "   后台管理：http://localhost/admin"
+        echo "   后端 API：http://localhost:8080"
+        echo ""
+        echo "📋 查看日志: sh blog-start.sh logs"
+        ;;
+    down)
+        echo "⏹️  停止博客服务..."
+        docker-compose down
+        echo "✅ 已停止"
+        ;;
+    restart)
+        echo "🔄 重启博客服务..."
+        docker-compose down
+        docker-compose up -d --build
+        echo "✅ 重启完成"
+        ;;
+    logs)
+        docker-compose logs -f --tail=100
+        ;;
+    status)
+        docker-compose ps
+        ;;
+    *)
+        echo "用法: sh blog-start.sh [up|down|restart|logs|status]"
+        echo "  up      - 构建并启动所有服务（默认）"
+        echo "  down    - 停止并移除所有容器"
+        echo "  restart - 重启所有服务"
+        echo "  logs    - 查看实时日志"
+        echo "  status  - 查看容器状态"
+        ;;
+esac

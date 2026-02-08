@@ -1,18 +1,12 @@
-# ===================== 通用忽略规则（所有项目）=====================
-# 操作系统临时文件
+# ===================== 操作系统 =====================
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 desktop.ini
 *.tmp
 *.swp
-*.swo
 *~
-# 编辑器/IDE配置文件（适配VSCode/IDEA/Eclipse）
+
+# ===================== 编辑器 / IDE =====================
 .idea/
 .vs/
 .vscode/
@@ -22,99 +16,45 @@ desktop.ini
 *.sln
 *.sw?
 .metadata/
-bin/
-tmp/
-build/
-.settings/
 .classpath
 .project
-# Git本身的忽略
-.gitignore.local
-.git/
+.settings/
 
-# ===================== 后端（SpringBoot + Maven/Gradle）=====================
-# Maven依赖/编译产物
+# ===================== 后端（Spring Boot + Maven）=====================
 target/
+*.jar
+*.class
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
 release.properties
 dependency-reduced-pom.xml
-buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
-# Gradle（如果用Gradle构建加这个，Maven可保留）
-.gradle/
-build/
-gradle-app.setting
-!gradle-wrapper.jar
-# SpringBoot 运行/配置文件（核心：保留主配置，忽略环境配置/日志/临时文件）
-# 忽略多环境配置（dev/test/prod），保留application.yml/application.properties
-**/src/main/resources/application-*.yml
-**/src/main/resources/application-*.yaml
-**/src/main/resources/application-*.properties
-# 忽略日志文件
-**/src/main/resources/log/
-**/src/main/resources/*.log
-**/logs/
+logs/
 *.log
-log/
-# 忽略本地配置/临时配置
-**/src/main/resources/application-local.*
-**/src/main/resources/custom.*
-# 忽略编译后的class文件
-**/src/main/java/**/*.class
-**/src/test/java/**/*.class
-# 忽略jar包/本地依赖
-**/lib/
-**/libs/
-*.jar
 
-# ===================== 前端（Vue + Node.js）=====================
-# Node.js依赖包（核心，不要提交node_modules）
+# ===================== 前端（Vue + Vite + Node.js）=====================
 node_modules/
-# 编译/打包产物（Vue打包后的dist）
 dist/
 dist-ssr/
-# 环境变量配置（前端本地环境变量，保留模板.env.example）
-.env
-.env.development
-.env.production
-.env.test
-!.env.example
-# 前端构建/缓存文件
-**/node_modules/
-**/dist/
-**/build/
-**/coverage/
-**/tmp/
-**/temp/
-# Vue CLI/ Vite 缓存
-.npm/
+blog/
+admin/
 .eslintcache
-.pnp/
-.pnp.js
-# 包管理锁文件（可选忽略，建议保留：package-lock.json/yarn.lock/pnpm-lock.yaml，此处注释掉，如需忽略解开注释）
-# package-lock.json
-# yarn.lock
-# pnpm-lock.yaml
-# 前端日志/临时文件
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
-# 本地开发调试文件
-**/mock/
-**/public/static/temp/
-**/src/assets/temp/
-# TypeScript 编译产物
-**/src/**/*.js
-**/src/**/*.d.ts.bak
-!**/src/**/*.d.ts
-# Vite 配置缓存
+stats.html
 vite.config.js.timestamp-*
-vite/dist/
 
-blog-springboot/src/main/resources/application-dev.yml
-blog-springboot/src/main/resources/application.yml
+# ===================== 敏感文件（密码/密钥通过 .env 注入）=====================
+# 真实环境变量文件（包含密码），不上传
+.env
+deploy/.env
+# 保留 .env.example 模板
+!.env.example
+!deploy/.env.example
+
+# ===================== 构建/部署产物 =====================
+*.tar.gz

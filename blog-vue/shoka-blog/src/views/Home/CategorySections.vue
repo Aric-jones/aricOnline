@@ -4,7 +4,7 @@
 			<p>分类加载失败，请检查网络或稍后重试</p>
 		</div>
 		<section
-			v-for="section in categorySections"
+			v-for="section in displayedSections"
 			:key="section.id"
 			class="category-section"
 			v-animate="['slideUpBigIn']"
@@ -77,6 +77,18 @@
 				</div>
 			</div>
 		</section>
+		<!-- 加载更多按钮 -->
+		<div v-if="hasMore" class="load-more-wrapper">
+			<button class="load-more-btn" @click="loadMore">
+				<span v-if="loading">加载中...</span>
+				<span v-else>加载更多分类</span>
+				<svg-icon
+					icon-class="arrow-down"
+					size="0.9rem"
+					style="margin-left: 0.25rem"
+				></svg-icon>
+			</button>
+		</div>
 	</div>
 </template>
 
@@ -88,6 +100,7 @@ import type { ArticleCondition } from "@/api/article/types";
 import { formatDate } from "@/utils/date";
 
 const HOME_PAGE_SIZE = 6;
+const CATEGORY_PER_PAGE = 5; // 每页显示分类数量
 
 interface CategorySection {
 	id: number;
@@ -97,6 +110,9 @@ interface CategorySection {
 }
 
 const categorySections = ref<CategorySection[]>([]);
+const displayedSections = ref<CategorySection[]>([]);
+const currentPage = ref(1);
+const loading = ref(false);
 const loadError = ref(false);
 
 onMounted(async () => {
@@ -107,6 +123,7 @@ onMounted(async () => {
 		);
 		if (categories.length === 0) {
 			categorySections.value = [];
+			displayedSections.value = [];
 			return;
 		}
 		// 并行请求各分类文章，减少首屏等待时间
@@ -134,11 +151,38 @@ onMounted(async () => {
 			};
 		});
 		categorySections.value = sections;
+		// 初始化显示第一页的分类
+		updateDisplayedSections();
 	} catch (_) {
 		loadError.value = true;
 		categorySections.value = [];
+		displayedSections.value = [];
 	}
 });
+
+// 计算是否还有更多分类
+const hasMore = computed(() => {
+	return categorySections.value.length > displayedSections.value.length;
+});
+
+// 更新显示的分类列表
+const updateDisplayedSections = () => {
+	const startIndex = 0;
+	const endIndex = currentPage.value * CATEGORY_PER_PAGE;
+	displayedSections.value = categorySections.value.slice(startIndex, endIndex);
+};
+
+// 加载更多分类
+const loadMore = () => {
+	if (loading.value || !hasMore.value) return;
+	loading.value = true;
+	// 模拟加载延迟，让用户看到加载状态
+	setTimeout(() => {
+		currentPage.value++;
+		updateDisplayedSections();
+		loading.value = false;
+	}, 300);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -326,6 +370,44 @@ onMounted(async () => {
 	text-align: center;
 	color: var(--grey-5);
 	font-size: 0.95rem;
+}
+
+.load-more-wrapper {
+	display: flex;
+	justify-content: center;
+	margin-top: 2rem;
+	padding: 1rem 0;
+}
+
+.load-more-btn {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.75rem 1.5rem;
+	font-size: 0.95rem;
+	color: var(--grey-9);
+	background: var(--card-bg);
+	border: 1px solid var(--grey-4);
+	border-radius: 0.5rem;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	box-shadow: var(--card-shadow);
+
+	&:hover {
+		color: var(--primary-color);
+		border-color: var(--primary-color);
+		box-shadow: var(--card-shadow-hover);
+		transform: translateY(-2px);
+	}
+
+	&:active {
+		transform: translateY(0);
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+		transform: none;
+	}
 }
 
 @media (max-width: 900px) {
