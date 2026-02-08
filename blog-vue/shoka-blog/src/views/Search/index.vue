@@ -11,6 +11,8 @@
 	<div class="bg">
 		<div class="main-container mt">
 			<div class="left-container">
+				<!-- AI 对话框（仅关键词搜索时显示） -->
+				<AiChat v-if="keyword" :keyword="keyword" />
 				<div
 					class="article-item"
 					v-animate="['slideUpBigIn']"
@@ -120,6 +122,7 @@ import type { ArticleSearch } from "@/api/article/types";
 import type { ArticleCondition } from "@/api/article/types";
 import SideBar from "@/components/Layout/SideBar/index.vue";
 import Pagination from "@/components/Pagination/index.vue";
+import AiChat from "./AiChat.vue";
 import { formatDate } from "@/utils/date";
 
 const route = useRoute();
@@ -313,7 +316,7 @@ onMounted(() => {
 .article-item {
 	display: flex;
 	height: 14rem;
-	margin-bottom:  1.5rem;
+	margin-bottom: 1.5rem;
 	border-radius: 0.5rem;
 	box-shadow: var(--card-shadow);
 	animation-duration: 0.5s;
