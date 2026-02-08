@@ -30,8 +30,8 @@ const blog = useBlogStore();
 const app = useAppStore();
 const lineStyle = {
   lineHeight: "normal",
-  borderColor: "#ed6ea0",
-  backgroundColor: "var(--grey-0)",
+	border: "1px solid var(--grey-3)",
+  backgroundColor: "var(--comment-color)",
 };
 const emit = defineEmits(["reload"]);
 const props = defineProps({

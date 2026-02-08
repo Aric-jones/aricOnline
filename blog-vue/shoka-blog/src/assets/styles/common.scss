@@ -302,13 +302,13 @@
 .reply-box-textarea {
 	width: 100%;
 	height: 100%;
-	padding: 5px 10px;
-	border: 1px solid var(--grey-3);
+	padding: 6px 10px;
+	//border: 1px solid var(--grey-3);
 	border-radius: 6px;
 	background-color: var(--comment-color);
-	font-size: 12px;
+	font-size: 0.8rem;
 	line-height: 38px;
-	color: var(--text-color);
+	color: var(--white-black-text);
 	resize: none;
 	outline: none;
 }

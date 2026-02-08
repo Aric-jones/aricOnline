@@ -51,6 +51,8 @@
 	--note-hover: #f14668;
 	--comment-btn: #ed9abb;
 	--chat-bg: #f4f6fb;
+	--white-black-text: #000;
+	--user-name-color: #eb697e;
 }
 
 /* 黑夜颜色 */
@@ -94,6 +96,7 @@
 	--note-text: rgba(109, 164, 219, 0.8);
 	--note-hover: rgba(168, 49, 72, 0.8);
 	--chat-bg: var(--grey-1);
+	--white-black-text: #b2b2b2;
 
 	img {
 		filter: brightness(0.8);
@@ -102,7 +105,7 @@
 
 /* RGB 渐变主题：与底部同款动态渐变，整页统一 */
 [theme="gradient"]:root {
-	--comment-color: rgba(255, 255, 255, 0.85);
+	--comment-color: rgba(241, 171, 171, 0.2);
 	--grey-0: rgba(255, 255, 255, 0.88);
 	--grey-1: rgba(255, 255, 255, 0.82);
 	--grey-2: rgba(255, 255, 255, 0.75);
@@ -138,14 +141,15 @@
 	--text-color: var(--grey-7);
 	--header-text-color: #fff;
 	--primary-color: var(--color-red);
-	--nav-bg: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
-	--footer-bg: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+	--nav-bg: linear-gradient(-45deg, #dd9a83, #d27886, #5aacda, #23d5ab);
+	--footer-bg: linear-gradient(-45deg, #dd9a83, #d27886, #5aacda, #23d5ab);
 	--note-border: #cda0c7;
 	--note-bg: rgba(255, 255, 255, 0.9);
 	--note-text: #8a51c0;
 	--note-hover: #f14668;
 	--comment-btn: #ed9abb;
 	--chat-bg: rgba(255, 255, 255, 0.9);
+	--user-name-color: #562fbb;
 }
 
 @keyframes gradientBG {
@@ -156,15 +160,18 @@
 
 /* 全站：所有页面的 .bg 统一为与底部同款动态渐变 */
 [theme="gradient"] .bg {
-	background: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+	background: linear-gradient(-45deg, #dd9a83, #d65367, #4aa6da, #23d5ab);
 	background-size: 300% 300%;
 	animation: gradientBG 10s ease infinite;
 }
 
 /* 全站 markdown 正文（关于页、文章详情等）：半透明以透出渐变 */
 [theme="gradient"] .bg .vuepress-markdown-body {
-	background: rgba(255, 255, 255, 0.12) !important;
-	box-shadow: var(--card-shadow);
+	background: rgba(255, 255, 255, 0.05) !important;
+}
+
+[theme="gradient"] .bg .article-container {
+	background: rgba(255, 255, 255, 0.2) !important;
 }
 [theme="gradient"] .bg .vuepress-markdown-body tr:nth-child(2n) {
 	background-color: rgba(255, 255, 255, 0.18) !important;

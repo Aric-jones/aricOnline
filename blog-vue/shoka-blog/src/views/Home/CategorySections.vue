@@ -275,7 +275,7 @@ onMounted(async () => {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.2rem;
-	color: var(--grey-5);
+	color: var(--grey-7);
 
 	&:hover {
 		color: var(--color-blue);
