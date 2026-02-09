@@ -1,5 +1,6 @@
 package com.ican.controller;
 
+import com.ican.exception.ServiceException;
 import com.ican.model.vo.Result;
 import com.ican.service.AiService;
 import io.swagger.annotations.Api;
@@ -101,11 +102,24 @@ public class AiController {
 
     /**
      * AI 一键优化文章（流式）
+     * <p>
+     * 输入限制：最多 8000 字符（约 5300 tokens），超出将拒绝请求。
+     * 输出限制：AI 单次最大输出 8192 tokens。
      */
     @ApiOperation(value = "AI 一键优化文章")
     @PostMapping(value = "/admin/ai/optimize", produces = "text/event-stream;charset=UTF-8")
     public SseEmitter optimizeArticle(@RequestBody Map<String, String> body) {
         String content = body.get("content");
+        if (content == null || content.trim().isEmpty()) {
+            throw new ServiceException("文章内容不能为空");
+        }
+        int maxInputChars = 8000;
+        int maxOutputTokens = 8192;
+        if (content.length() > maxInputChars) {
+            throw new ServiceException("文章内容过长（当前 " + content.length() + " 字符），"
+                    + "最多支持 " + maxInputChars + " 字符（约 " + (maxInputChars * 2 / 3) + " tokens），"
+                    + "AI 单次最大输出 " + maxOutputTokens + " tokens。请精简文章后重试。");
+        }
         return aiService.optimizeArticle(content);
     }
 }

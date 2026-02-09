@@ -238,12 +238,12 @@
               FROM t_article
               WHERE is_delete = 0
                 AND `status` = 1
-              ORDER BY is_top DESC,
+              ORDER BY create_time DESC,
                        id DESC LIMIT #{param.current}, #{param.size}) a
                  INNER JOIN t_category c ON a.category_id = c.id
                  INNER JOIN t_article_tag tat ON a.id = tat.article_id
                  INNER JOIN t_tag t ON t.id = tat.tag_id
-        ORDER BY a.is_top DESC,
+        ORDER BY a.create_time DESC,
                  a.id DESC
     </select>
 

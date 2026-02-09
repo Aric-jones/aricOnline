@@ -129,7 +129,7 @@ public class AiService {
      * 一键优化文章（流式输出）
      */
     public SseEmitter optimizeArticle(String content) {
-        String truncated = content != null && content.length() > 5000 ? content.substring(0, 5000) : content;
+        String truncated = content != null && content.length() > 8000 ? content.substring(0, 8000) : content;
         JSONArray messagesArray = new JSONArray();
         JSONObject systemMsg = new JSONObject();
         systemMsg.put("role", "system");
@@ -150,7 +150,7 @@ public class AiService {
         requestBody.put("messages", messagesArray);
         requestBody.put("stream", true);
         requestBody.put("temperature", 0.5);
-        requestBody.put("max_tokens", 4096);
+        requestBody.put("max_tokens", 8192);
 
         return doStreamCall(requestBody);
     }
@@ -212,7 +212,7 @@ public class AiService {
      * 通用流式 AI 调用
      */
     private SseEmitter doStreamCall(JSONObject requestBody) {
-        SseEmitter emitter = new SseEmitter(180_000L);
+        SseEmitter emitter = new SseEmitter(300_000L);
 
         Request request = new Request.Builder()
                 .url(deepSeekProperties.getApiUrl())

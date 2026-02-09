@@ -4,7 +4,7 @@
     <div class="operation-container">
       <el-input v-model="articleForm.articleTitle" placeholder="请输入文章标题">
         <template #append>
-          <el-button :loading="aiTitleLoading" @click="handleAiTitle" title="AI 生成标题">
+          <el-button type="primary" :loading="aiTitleLoading" @click="handleAiTitle" title="AI 生成标题">
             <el-icon><MagicStick /></el-icon>
           </el-button>
         </template>
@@ -29,35 +29,88 @@
       </template>
     </md-editor>
     <!-- AI 优化对话框 -->
-    <el-dialog title="AI 一键优化文章" v-model="optimizeVisible" width="800px" top="2vh" append-to-body destroy-on-close>
+    <el-dialog
+      title="AI 一键优化文章"
+      v-model="optimizeVisible"
+      :width="optimizeLoading ? '500px' : '92vw'"
+      top="2vh"
+      append-to-body
+      destroy-on-close
+      class="optimize-dialog"
+    >
       <div class="optimize-container">
+        <!-- Loading 状态 -->
         <div class="optimize-status" v-if="optimizeLoading">
           <el-icon class="is-loading"><Loading /></el-icon>
           <span>AI 正在优化文章，请稍候...</span>
+          <span v-if="optimizedContent" class="optimize-progress">（已接收 {{ optimizedContent.length }} 字符）</span>
         </div>
-        <div class="optimize-status optimize-done" v-else-if="optimizedContent">
-          <el-icon><CircleCheckFilled /></el-icon>
-          <span>优化完成！请选择替换方式</span>
-        </div>
-        <div class="optimize-preview" v-if="optimizedContent">
-          <el-tabs v-model="optimizeTab">
-            <el-tab-pane label="优化后内容" name="optimized">
-              <div class="preview-scroll">
-                <md-editor v-model="optimizedContent" :theme="isDark ? 'dark' : 'light'" preview-only />
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="原始内容" name="original">
-              <div class="preview-scroll">
-                <md-editor v-model="articleForm.articleContent" :theme="isDark ? 'dark' : 'light'" preview-only />
-              </div>
-            </el-tab-pane>
-          </el-tabs>
+        <!-- Diff 对比视图 -->
+        <div v-else-if="diffBlocks.length > 0" class="diff-viewer">
+          <div class="diff-stats">
+            <span class="diff-stats-item">
+              <span class="diff-stats-dot diff-stats-dot-change"></span>
+              {{ changeCount }} 处修改
+            </span>
+            <span class="diff-stats-item">
+              <span class="diff-stats-dot diff-stats-dot-accept"></span>
+              已接受 {{ acceptedCount }} 处
+            </span>
+          </div>
+          <div class="diff-panel">
+            <div class="diff-header-row">
+              <div class="diff-col diff-col-left">原始内容</div>
+              <div class="diff-col-gutter"></div>
+              <div class="diff-col diff-col-right">优化后内容</div>
+            </div>
+            <div class="diff-body">
+              <template v-for="block in diffBlocks" :key="block.id">
+                <!-- 相同内容块 -->
+                <div v-if="block.type === 'equal'" class="diff-block diff-block-equal">
+                  <div class="diff-col diff-col-left">
+                    <div v-for="(line, i) in getDisplayLines(block.original)" :key="i" class="diff-line">{{ line }}</div>
+                  </div>
+                  <div class="diff-col-gutter"></div>
+                  <div class="diff-col diff-col-right">
+                    <div v-for="(line, i) in getDisplayLines(block.optimized)" :key="i" class="diff-line">{{ line }}</div>
+                  </div>
+                </div>
+                <!-- 修改块 -->
+                <div v-else class="diff-block diff-block-change" :class="{ 'diff-block-accepted': block.accepted }">
+                  <div class="diff-col diff-col-left diff-col-removed" :class="{ 'diff-col-accepted-left': block.accepted }">
+                    <div v-for="(line, i) in getDisplayLines(block.original)" :key="i" class="diff-line">{{ line }}</div>
+                    <div v-if="!block.original" class="diff-line diff-line-empty">（无内容）</div>
+                  </div>
+                  <div class="diff-col-gutter">
+                    <button
+                      class="diff-accept-btn"
+                      :class="{ 'diff-accept-btn-active': block.accepted }"
+                      @click="toggleBlock(block.id)"
+                      :title="block.accepted ? '撤销接受' : '接受此修改'"
+                    >
+                      <span v-if="block.accepted">✓</span>
+                      <span v-else>»</span>
+                    </button>
+                  </div>
+                  <div class="diff-col diff-col-right diff-col-added" :class="{ 'diff-col-accepted-right': block.accepted }">
+                    <div v-for="(line, i) in getDisplayLines(block.optimized)" :key="i" class="diff-line">{{ line }}</div>
+                    <div v-if="!block.optimized" class="diff-line diff-line-empty">（无内容）</div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
         </div>
       </div>
       <template #footer>
-        <el-button @click="optimizeVisible = false">取消</el-button>
-        <el-button type="primary" :disabled="!optimizedContent || optimizeLoading" @click="handleReplaceAll"> 全部替换 </el-button>
-        <el-button type="success" :disabled="!optimizedContent || optimizeLoading" @click="handleAppendOptimized"> 追加到末尾（对比） </el-button>
+        <div class="optimize-footer">
+          <el-button @click="optimizeVisible = false">取消</el-button>
+          <el-button type="warning" :disabled="optimizeLoading || changeCount === 0" @click="acceptAllBlocks"> 全部接受 </el-button>
+          <el-button type="primary" :disabled="optimizeLoading || acceptedCount === 0" @click="applySelectedBlocks">
+            应用修改（{{ acceptedCount }}/{{ changeCount }}）
+          </el-button>
+          <el-button type="success" :disabled="optimizeLoading || !optimizedContent" @click="handleReplaceAll"> 全部替换 </el-button>
+        </div>
       </template>
     </el-dialog>
     <!-- 发布或修改对话框 -->
@@ -268,7 +321,8 @@ import { getToken, token_prefix } from "@/utils/token"
 import { useDark, useDateFormat } from "@vueuse/core"
 import { AxiosError, AxiosResponse } from "axios"
 import { ElMessage, FormInstance, FormRules, UploadRawFile } from "element-plus"
-import { MagicStick, Loading, CircleCheckFilled } from "@element-plus/icons-vue"
+import { MagicStick, Loading, CircleCheckFilled, Check } from "@element-plus/icons-vue"
+import { diffLines } from "diff"
 import * as imageConversion from "image-conversion"
 import type { ExposeParam, InsertContentGenerator } from "md-editor-v3"
 import MdEditor from "md-editor-v3"
@@ -353,10 +407,138 @@ const handleAiTitle = async () => {
 }
 
 // ======================== AI 优化文章 ========================
+const MAX_OPTIMIZE_CHARS = 8000
+const MAX_OUTPUT_TOKENS = 8192
+
 const optimizeVisible = ref(false)
 const optimizeLoading = ref(false)
 const optimizedContent = ref("")
-const optimizeTab = ref("optimized")
+
+// Diff 对比相关
+interface DiffBlock {
+  id: number
+  type: "equal" | "change"
+  original: string // 原始文本（含换行）
+  optimized: string // 优化后文本（含换行）
+  accepted: boolean
+}
+
+const diffBlocks = ref<DiffBlock[]>([])
+
+// 获取显示行
+const getDisplayLines = (text: string): string[] => {
+  if (!text) return []
+  const lines = text.split("\n")
+  // 移除尾部空行（diffLines 产生的尾部 \n）
+  if (lines.length > 0 && lines[lines.length - 1] === "") {
+    lines.pop()
+  }
+  // 空行显示为不间断空格（保持行高）
+  return lines.map((l) => (l === "" ? "\u00A0" : l))
+}
+
+// 计算 diff 块
+const computeDiffBlocks = (original: string, optimized: string) => {
+  const changes = diffLines(original, optimized)
+  const blocks: DiffBlock[] = []
+  let blockId = 0
+  let i = 0
+
+  while (i < changes.length) {
+    const change = changes[i]
+
+    if (!change.added && !change.removed) {
+      // 相同内容
+      blocks.push({
+        id: blockId++,
+        type: "equal",
+        original: change.value,
+        optimized: change.value,
+        accepted: false,
+      })
+      i++
+    } else if (change.removed && i + 1 < changes.length && changes[i + 1].added) {
+      // 删除 + 新增 = 修改
+      blocks.push({
+        id: blockId++,
+        type: "change",
+        original: change.value,
+        optimized: changes[i + 1].value,
+        accepted: false,
+      })
+      i += 2
+    } else if (change.removed) {
+      // 仅删除
+      blocks.push({
+        id: blockId++,
+        type: "change",
+        original: change.value,
+        optimized: "",
+        accepted: false,
+      })
+      i++
+    } else if (change.added) {
+      // 仅新增
+      blocks.push({
+        id: blockId++,
+        type: "change",
+        original: "",
+        optimized: change.value,
+        accepted: false,
+      })
+      i++
+    } else {
+      i++
+    }
+  }
+
+  diffBlocks.value = blocks
+}
+
+// 统计
+const changeCount = computed(() => diffBlocks.value.filter((b) => b.type === "change").length)
+const acceptedCount = computed(() => diffBlocks.value.filter((b) => b.type === "change" && b.accepted).length)
+
+// 切换单个块的接受状态
+const toggleBlock = (blockId: number) => {
+  const block = diffBlocks.value.find((b) => b.id === blockId)
+  if (block) {
+    block.accepted = !block.accepted
+  }
+}
+
+// 全部接受
+const acceptAllBlocks = () => {
+  diffBlocks.value.forEach((b) => {
+    if (b.type === "change") {
+      b.accepted = true
+    }
+  })
+}
+
+// 应用已选修改
+const applySelectedBlocks = () => {
+  let result = ""
+  for (const block of diffBlocks.value) {
+    if (block.type === "equal") {
+      result += block.original
+    } else if (block.accepted) {
+      result += block.optimized
+    } else {
+      result += block.original
+    }
+  }
+  articleForm.value.articleContent = result
+  optimizeVisible.value = false
+  ElMessage.success(`已应用 ${acceptedCount.value} 处修改`)
+}
+
+// 全部替换
+const handleReplaceAll = () => {
+  articleForm.value.articleContent = optimizedContent.value
+  optimizeVisible.value = false
+  ElMessage.success("已替换为优化后的全部内容")
+}
 
 const handleOptimize = () => {
   const content = articleForm.value.articleContent
@@ -364,17 +546,27 @@ const handleOptimize = () => {
     ElMessage.warning("请先编写文章内容")
     return
   }
+  // Token 长度预校验
+  if (content.length > MAX_OPTIMIZE_CHARS) {
+    ElMessage.error(
+      `文章内容过长（当前 ${content.length} 字符），最多支持 ${MAX_OPTIMIZE_CHARS} 字符（约 ${Math.round(
+        (MAX_OPTIMIZE_CHARS * 2) / 3
+      )} tokens），AI 单次最大输出 ${MAX_OUTPUT_TOKENS} tokens。请精简文章后重试。`
+    )
+    return
+  }
+
   optimizeVisible.value = true
   optimizeLoading.value = true
   optimizedContent.value = ""
-  optimizeTab.value = "optimized"
+  diffBlocks.value = []
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json;charset=UTF-8",
   }
-  const token = getToken()
-  if (token) {
-    headers["Authorization"] = token_prefix + token
+  const tokenVal = getToken()
+  if (tokenVal) {
+    headers["Authorization"] = token_prefix + tokenVal
   }
 
   fetch(`/api/admin/ai/optimize`, {
@@ -383,6 +575,22 @@ const handleOptimize = () => {
     body: JSON.stringify({ content }),
   })
     .then(async (response) => {
+      // 检查是否为 JSON 错误响应（后端校验失败时）
+      const contentType = response.headers.get("content-type") || ""
+      if (contentType.includes("application/json")) {
+        try {
+          const result = await response.json()
+          if (!result.flag) {
+            ElMessage.error(result.msg || "AI 优化请求失败")
+          }
+        } catch {
+          ElMessage.error("AI 优化请求失败")
+        }
+        optimizeLoading.value = false
+        optimizeVisible.value = false
+        return
+      }
+
       if (!response.ok) {
         ElMessage.error("AI 优化请求失败")
         optimizeLoading.value = false
@@ -399,6 +607,10 @@ const handleOptimize = () => {
         const { done, value } = await reader.read()
         if (done) {
           optimizeLoading.value = false
+          // 流式结束后计算 diff
+          if (optimizedContent.value) {
+            computeDiffBlocks(content, optimizedContent.value)
+          }
           break
         }
         buffer += decoder.decode(value, { stream: true })
@@ -412,6 +624,10 @@ const handleOptimize = () => {
             if (!sseData) continue
             if (sseData === "[DONE]") {
               optimizeLoading.value = false
+              // 流式结束后计算 diff
+              if (optimizedContent.value) {
+                computeDiffBlocks(content, optimizedContent.value)
+              }
               return
             }
             if (sseData.startsWith("[ERROR]")) {
@@ -435,18 +651,6 @@ const handleOptimize = () => {
       ElMessage.error("AI 优化请求异常")
       optimizeLoading.value = false
     })
-}
-
-const handleReplaceAll = () => {
-  articleForm.value.articleContent = optimizedContent.value
-  optimizeVisible.value = false
-  ElMessage.success("已替换为优化后的内容")
-}
-
-const handleAppendOptimized = () => {
-  articleForm.value.articleContent += "\n\n---\n\n## AI 优化版本\n\n" + optimizedContent.value
-  optimizeVisible.value = false
-  ElMessage.success("优化内容已追加到文章末尾")
 }
 
 // ======================== AI 自动选择分类 ========================
@@ -886,16 +1090,208 @@ onMounted(() => {
   font-size: 14px;
 }
 
-.optimize-done {
-  background: #f0f9eb;
-  color: #67c23a;
+.optimize-progress {
+  color: #909399;
+  font-size: 12px;
 }
 
-.preview-scroll {
-  max-height: 50vh;
+.optimize-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ========== Diff 对比视图 ========== */
+.diff-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diff-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+  color: #606266;
+}
+
+.diff-stats-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.diff-stats-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.diff-stats-dot-change {
+  background: #e6a23c;
+}
+
+.diff-stats-dot-accept {
+  background: #67c23a;
+}
+
+.diff-panel {
+  border: 1px solid #dcdfe6;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.diff-header-row {
+  display: flex;
+  background: #f5f7fa;
+  border-bottom: 1px solid #dcdfe6;
+  font-weight: 600;
+  font-size: 13px;
+  color: #303133;
+}
+
+.diff-header-row .diff-col {
+  padding: 8px 12px;
+}
+
+.diff-body {
+  max-height: 60vh;
   overflow-y: auto;
-  border: 1px solid #ebeef5;
-  border-radius: 4px;
-  padding: 12px;
+}
+
+.diff-block {
+  display: flex;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.diff-block:last-child {
+  border-bottom: none;
+}
+
+.diff-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.diff-col-left {
+  border-right: 1px solid #ebeef5;
+}
+
+.diff-col-gutter {
+  width: 40px;
+  min-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #ebeef5;
+  background: #fafafa;
+}
+
+.diff-header-row .diff-col-gutter {
+  border-right: 1px solid #dcdfe6;
+}
+
+.diff-line {
+  padding: 1px 12px;
+  font-family: "Consolas", "Monaco", "Courier New", "Source Code Pro", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+  min-height: 22px;
+}
+
+.diff-line-empty {
+  color: #c0c4cc;
+  font-style: italic;
+  padding: 2px 12px;
+  font-size: 12px;
+}
+
+/* 相同块 */
+.diff-block-equal {
+  background: transparent;
+}
+
+.diff-block-equal .diff-line {
+  color: #606266;
+}
+
+/* 修改块 - 左侧（删除/原始） */
+.diff-col-removed {
+  background: rgba(255, 77, 79, 0.06);
+  border-left: 3px solid #ff4d4f;
+}
+
+.diff-col-removed .diff-line {
+  color: #a8071a;
+}
+
+/* 修改块 - 右侧（新增/优化） */
+.diff-col-added {
+  background: rgba(82, 196, 26, 0.06);
+  border-left: 3px solid #52c41a;
+}
+
+.diff-col-added .diff-line {
+  color: #135200;
+}
+
+/* 已接受状态 */
+.diff-block-accepted .diff-col-accepted-left {
+  background: rgba(0, 0, 0, 0.02);
+  border-left: 3px solid #dcdfe6;
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.diff-block-accepted .diff-col-accepted-left .diff-line {
+  color: #909399;
+}
+
+.diff-block-accepted .diff-col-accepted-right {
+  background: rgba(82, 196, 26, 0.1);
+  border-left: 3px solid #67c23a;
+}
+
+.diff-block-accepted .diff-col-accepted-right .diff-line {
+  color: #135200;
+  font-weight: 500;
+}
+
+/* Accept 按钮 */
+.diff-accept-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid #dcdfe6;
+  background: #fff;
+  color: #409eff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.diff-accept-btn:hover {
+  background: #ecf5ff;
+  border-color: #409eff;
+  transform: scale(1.1);
+}
+
+.diff-accept-btn-active {
+  background: #67c23a;
+  border-color: #67c23a;
+  color: #fff;
+}
+
+.diff-accept-btn-active:hover {
+  background: #529b2e;
+  border-color: #529b2e;
 }
 </style>
