@@ -25,9 +25,6 @@ public class AiController {
 
     /**
      * AI 流式对话（SSE）
-     *
-     * @param messages 消息列表，每条包含 role（user/assistant）和 content
-     * @return SSE 事件流
      */
     @ApiOperation(value = "AI 流式对话")
     @PostMapping(value = "/ai/chat", produces = "text/event-stream;charset=UTF-8")
@@ -36,10 +33,7 @@ public class AiController {
     }
 
     /**
-     * AI 生成文章摘要
-     *
-     * @param body 请求体，包含 content 字段（文章内容）
-     * @return 100字左右的摘要
+     * AI 生成文章摘要（100字）
      */
     @ApiOperation(value = "AI 生成文章摘要")
     @PostMapping("/admin/ai/summary")
@@ -48,7 +42,70 @@ public class AiController {
         if (content == null || content.trim().isEmpty()) {
             return Result.fail("文章内容不能为空");
         }
-        String summary = aiService.generateSummary(content);
-        return Result.success(summary);
+        return Result.success(aiService.generateSummary(content));
+    }
+
+    /**
+     * AI 快速阅读（200字概要，前台文章详情页使用）
+     */
+    @ApiOperation(value = "AI 快速阅读")
+    @PostMapping("/ai/quick-read")
+    public Result<String> quickRead(@RequestBody Map<String, String> body) {
+        String content = body.get("content");
+        if (content == null || content.trim().isEmpty()) {
+            return Result.fail("文章内容不能为空");
+        }
+        return Result.success(aiService.quickRead(content));
+    }
+
+    /**
+     * AI 生成文章标题
+     */
+    @ApiOperation(value = "AI 生成文章标题")
+    @PostMapping("/admin/ai/title")
+    public Result<String> generateTitle(@RequestBody Map<String, String> body) {
+        String content = body.get("content");
+        if (content == null || content.trim().isEmpty()) {
+            return Result.fail("文章内容不能为空");
+        }
+        return Result.success(aiService.generateTitle(content));
+    }
+
+    /**
+     * AI 自动选择分类
+     */
+    @ApiOperation(value = "AI 自动选择分类")
+    @PostMapping("/admin/ai/category")
+    public Result<String> autoCategory(@RequestBody Map<String, String> body) {
+        String content = body.get("content");
+        String categories = body.get("categories");
+        if (content == null || content.trim().isEmpty()) {
+            return Result.fail("文章内容不能为空");
+        }
+        return Result.success(aiService.autoCategory(content, categories));
+    }
+
+    /**
+     * AI 自动选择标签
+     */
+    @ApiOperation(value = "AI 自动选择标签")
+    @PostMapping("/admin/ai/tags")
+    public Result<List<String>> autoTags(@RequestBody Map<String, String> body) {
+        String content = body.get("content");
+        String tags = body.get("tags");
+        if (content == null || content.trim().isEmpty()) {
+            return Result.fail("文章内容不能为空");
+        }
+        return Result.success(aiService.autoTags(content, tags));
+    }
+
+    /**
+     * AI 一键优化文章（流式）
+     */
+    @ApiOperation(value = "AI 一键优化文章")
+    @PostMapping(value = "/admin/ai/optimize", produces = "text/event-stream;charset=UTF-8")
+    public SseEmitter optimizeArticle(@RequestBody Map<String, String> body) {
+        String content = body.get("content");
+        return aiService.optimizeArticle(content);
     }
 }

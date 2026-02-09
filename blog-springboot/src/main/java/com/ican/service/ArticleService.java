@@ -341,4 +341,59 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         // 将所有的标签绑定到文章标签关联表
         articleTagMapper.saveBatchArticleTag(articleId, existTagIdList);
     }
+
+    /**
+     * 每日推荐文章（同一天返回同一篇，基于 Redis 缓存）
+     */
+    public ArticleRecommendResp getDailyArticle() {
+        String todayKey = RedisConstant.DAILY_ARTICLE + java.time.LocalDate.now();
+        // 尝试从缓存获取
+        Object cachedId = redisService.getObject(todayKey);
+        if (cachedId != null) {
+            Integer articleId = Integer.parseInt(cachedId.toString());
+            Article article = articleMapper.selectOne(new LambdaQueryWrapper<Article>()
+                    .select(Article::getId, Article::getArticleTitle, Article::getArticleCover, Article::getCreateTime)
+                    .eq(Article::getId, articleId)
+                    .eq(Article::getIsDelete, CommonConstant.FALSE)
+                    .eq(Article::getStatus, ArticleStatusEnum.PUBLIC.getStatus()));
+            if (article != null) {
+                ArticleRecommendResp resp = new ArticleRecommendResp();
+                resp.setId(article.getId());
+                resp.setArticleTitle(article.getArticleTitle());
+                resp.setArticleCover(article.getArticleCover());
+                resp.setCreateTime(article.getCreateTime());
+                return resp;
+            }
+        }
+        // 随机选一篇公开文章
+        Long count = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
+                .eq(Article::getIsDelete, CommonConstant.FALSE)
+                .eq(Article::getStatus, ArticleStatusEnum.PUBLIC.getStatus()));
+        if (count == 0) {
+            return null;
+        }
+        // 随机偏移
+        int offset = new java.util.Random().nextInt(count.intValue());
+        List<Article> articles = articleMapper.selectList(new LambdaQueryWrapper<Article>()
+                .select(Article::getId, Article::getArticleTitle, Article::getArticleCover, Article::getCreateTime)
+                .eq(Article::getIsDelete, CommonConstant.FALSE)
+                .eq(Article::getStatus, ArticleStatusEnum.PUBLIC.getStatus())
+                .last("LIMIT 1 OFFSET " + offset));
+        if (articles.isEmpty()) {
+            return null;
+        }
+        Article article = articles.get(0);
+        // 缓存到 Redis，过期时间到当天结束
+        long secondsUntilMidnight = java.time.Duration.between(
+                java.time.LocalDateTime.now(),
+                java.time.LocalDate.now().plusDays(1).atStartOfDay()
+        ).getSeconds();
+        redisService.setObject(todayKey, article.getId(), secondsUntilMidnight, java.util.concurrent.TimeUnit.SECONDS);
+        ArticleRecommendResp resp = new ArticleRecommendResp();
+        resp.setId(article.getId());
+        resp.setArticleTitle(article.getArticleTitle());
+        resp.setArticleCover(article.getArticleCover());
+        resp.setCreateTime(article.getCreateTime());
+        return resp;
+    }
 }

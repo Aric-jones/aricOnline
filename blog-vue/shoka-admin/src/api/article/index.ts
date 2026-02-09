@@ -156,3 +156,47 @@ export function generateAiSummary(content: string): AxiosPromise<Result<string>>
     data: { content },
   });
 }
+
+/**
+ * AI 生成文章标题
+ * @param content 文章内容
+ * @returns 标题文本
+ */
+export function generateAiTitle(content: string): AxiosPromise<Result<string>> {
+  return request({
+    url: "/admin/ai/title",
+    method: "post",
+    timeout: 60000,
+    data: { content },
+  });
+}
+
+/**
+ * AI 自动选择分类
+ * @param content 文章内容
+ * @param categories 已有分类（逗号分隔）
+ * @returns 分类名称
+ */
+export function generateAiCategory(content: string, categories: string): AxiosPromise<Result<string>> {
+  return request({
+    url: "/admin/ai/category",
+    method: "post",
+    timeout: 60000,
+    data: { content, categories },
+  });
+}
+
+/**
+ * AI 自动选择标签
+ * @param content 文章内容
+ * @param tags 已有标签（逗号分隔）
+ * @returns 标签名列表
+ */
+export function generateAiTags(content: string, tags: string): AxiosPromise<Result<string[]>> {
+  return request({
+    url: "/admin/ai/tags",
+    method: "post",
+    timeout: 60000,
+    data: { content, tags },
+  });
+}

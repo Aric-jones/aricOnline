@@ -73,3 +73,28 @@ export function likeArticle(articleId: number): AxiosPromise<Result<null>> {
     method: "post",
   });
 }
+
+/**
+ * AI 快速阅读
+ * @param content 文章内容
+ * @returns 200字概要
+ */
+export function quickReadArticle(content: string): AxiosPromise<Result<string>> {
+  return request({
+    url: "/ai/quick-read",
+    method: "post",
+    timeout: 60000,
+    data: { content },
+  });
+}
+
+/**
+ * 每日推荐文章
+ * @returns 推荐文章
+ */
+export function getDailyArticle(): AxiosPromise<Result<ArticleRecommend>> {
+  return request({
+    url: "/article/daily",
+    method: "get",
+  });
+}

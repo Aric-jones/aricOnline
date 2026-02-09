@@ -67,4 +67,9 @@ public class RedisConstant {
      */
     public static final String BLOG_VIEW_COUNT = "blog_view_count";
 
+    /**
+     * 每日推荐文章
+     */
+    public static final String DAILY_ARTICLE = "daily_article:";
+
 }

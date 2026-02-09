@@ -1,6 +1,6 @@
 <template>
 	<!--背景轮播-->
-<!--	<Images></Images>-->
+	<!--	<Images></Images>-->
 	<!-- 品牌 -->
 	<Brand></Brand>
 	<div class="bg">
@@ -23,6 +23,8 @@
 			></SideBar>
 		</div>
 	</div>
+	<!-- 每日推荐 -->
+	<DailyRecommend></DailyRecommend>
 </template>
 
 <script setup lang="ts">
@@ -34,6 +36,7 @@ import Brand from "./Brand/index.vue";
 // import Images from "./Swiper/Images.vue";
 import Recommend from "./Swiper/Recommend.vue";
 import TalkSwiper from "./Swiper/TalkSwiper.vue";
+import DailyRecommend from "@/components/DailyRecommend/index.vue";
 const app = useAppStore();
 const blog = useBlogStore();
 onMounted(async () => {

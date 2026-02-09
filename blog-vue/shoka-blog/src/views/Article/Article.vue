@@ -61,6 +61,33 @@
 	<div class="bg">
 		<div class="main-container" v-if="article">
 			<div class="left-container" :class="app.sideFlag ? 'w-full' : ''">
+				<!-- AI 快速阅读 -->
+				<div class="quick-read-card" v-if="quickReadVisible">
+					<div class="quick-read-header">
+						<div class="quick-read-title">
+							<svg-icon
+								icon-class="ai"
+								size="1.2rem"
+								style="margin-right: 0.4rem"
+							></svg-icon>
+							<span>AI 快速阅读</span>
+						</div>
+						<button class="quick-read-close" @click="quickReadVisible = false">
+							<svg-icon icon-class="close" size="0.8rem"></svg-icon>
+						</button>
+					</div>
+					<div class="quick-read-body">
+						<div v-if="quickReadLoading" class="quick-read-loading">
+							<span class="dot-loading"></span>
+							AI 正在阅读文章...
+						</div>
+						<div v-else-if="quickReadError" class="quick-read-error">
+							{{ quickReadError }}
+							<button class="retry-btn" @click="fetchQuickRead">重试</button>
+						</div>
+						<p v-else class="quick-read-content">{{ quickReadText }}</p>
+					</div>
+				</div>
 				<div class="article-container">
 					<v-md-preview
 						ref="articleRef"
@@ -200,7 +227,7 @@
 </template>
 
 <script setup lang="ts">
-import { getArticle, likeArticle } from "@/api/article";
+import { getArticle, likeArticle, quickReadArticle } from "@/api/article";
 import { ArticleInfo, ArticlePagination } from "@/api/article/types";
 import { CategoryVO } from "@/api/category/types";
 import { useAppStore, useBlogStore, useUserStore } from "@/store";
@@ -235,6 +262,31 @@ const data = reactive({
 	} as ArticleInfo,
 });
 const { articleLoaded, wordNum, readTime, commentType, article } = toRefs(data);
+
+// AI 快速阅读
+const quickReadVisible = ref(true);
+const quickReadLoading = ref(false);
+const quickReadText = ref("");
+const quickReadError = ref("");
+const fetchQuickRead = () => {
+	if (!article.value.articleContent) return;
+	quickReadLoading.value = true;
+	quickReadError.value = "";
+	quickReadArticle(article.value.articleContent)
+		.then(({ data }) => {
+			if (data.flag && data.data) {
+				quickReadText.value = data.data;
+			} else {
+				quickReadError.value = data.msg || "生成失败";
+			}
+		})
+		.catch(() => {
+			quickReadError.value = "AI 服务暂时不可用，请稍后重试";
+		})
+		.finally(() => {
+			quickReadLoading.value = false;
+		});
+};
 const articleCover = computed(
 	() => (cover: string) => "background-image:url(" + cover + ")"
 );
@@ -282,6 +334,8 @@ onMounted(() => {
 		wordNum.value = deleteHTMLTag(article.value.articleContent).length;
 		readTime.value = Math.round(wordNum.value / 400);
 		articleLoaded.value = true;
+		// 自动触发 AI 快速阅读
+		fetchQuickRead();
 	});
 });
 </script>
@@ -289,11 +343,131 @@ onMounted(() => {
 <style lang="scss" scoped>
 @import "@/assets/styles/mixin.scss";
 
+/* AI 快速阅读卡片 */
+.quick-read-card {
+	margin-bottom: 1rem;
+	border-radius: 0.75rem;
+	background: rgba(147, 112, 219, 0.12);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(147, 112, 219, 0.25);
+	overflow: hidden;
+	box-shadow: 0 2px 12px rgba(147, 112, 219, 0.1);
+	animation: fadeInDown 0.5s ease;
+}
+
+@keyframes fadeInDown {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.quick-read-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid rgba(147, 112, 219, 0.15);
+}
+
+.quick-read-title {
+	display: flex;
+	align-items: center;
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: #6a3fbf;
+}
+
+.quick-read-close {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0.25rem;
+	border-radius: 50%;
+	color: var(--grey-5);
+	transition: all 0.2s;
+
+	&:hover {
+		background: rgba(0, 0, 0, 0.06);
+		color: var(--grey-7);
+	}
+}
+
+.quick-read-body {
+	padding: 1rem 1.25rem;
+}
+
+.quick-read-content {
+	margin: 0;
+	font-size: 0.9rem;
+	line-height: 1.7;
+	color: var(--grey-7);
+}
+
+.quick-read-loading {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.9rem;
+	color: #6a3fbf;
+}
+
+.dot-loading {
+	display: inline-block;
+	width: 1.5rem;
+	height: 0.5rem;
+
+	&::after {
+		content: "...";
+		animation: dotAnim 1.5s steps(3, end) infinite;
+		font-size: 1.2rem;
+		letter-spacing: 2px;
+	}
+}
+
+@keyframes dotAnim {
+	0% {
+		content: ".";
+	}
+	33% {
+		content: "..";
+	}
+	66% {
+		content: "...";
+	}
+}
+
+.quick-read-error {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.9rem;
+	color: #e85d5d;
+}
+
+.retry-btn {
+	background: rgba(147, 112, 219, 0.15);
+	border: 1px solid rgba(147, 112, 219, 0.3);
+	border-radius: 0.3rem;
+	padding: 0.15rem 0.5rem;
+	color: #6a3fbf;
+	font-size: 0.8rem;
+	cursor: pointer;
+	transition: all 0.2s;
+
+	&:hover {
+		background: rgba(147, 112, 219, 0.25);
+	}
+}
+
 .article-container {
 	border-radius: 0.5rem;
 	overflow: hidden;
 	box-shadow: var(--card-shadow);
-
 }
 
 .article-post {

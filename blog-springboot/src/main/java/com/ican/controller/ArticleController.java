@@ -263,4 +263,15 @@ public class ArticleController {
         return Result.success(articleService.listArchiveVO(pageQuery));
     }
 
+    /**
+     * 每日推荐文章
+     *
+     * @return {@link Result<ArticleRecommendResp>} 每日推荐文章
+     */
+    @ApiOperation(value = "每日推荐文章")
+    @GetMapping("/article/daily")
+    public Result<ArticleRecommendResp> getDailyArticle() {
+        return Result.success(articleService.getDailyArticle());
+    }
+
 }

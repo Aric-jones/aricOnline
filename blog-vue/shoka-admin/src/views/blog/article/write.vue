@@ -2,7 +2,16 @@
   <div class="app-container">
     <!-- 文章标题 -->
     <div class="operation-container">
-      <el-input v-model="articleForm.articleTitle" placeholder="请输入文章标题"></el-input>
+      <el-input v-model="articleForm.articleTitle" placeholder="请输入文章标题">
+        <template #append>
+          <el-button :loading="aiTitleLoading" @click="handleAiTitle" title="AI 生成标题">
+            <el-icon><MagicStick /></el-icon>
+          </el-button>
+        </template>
+      </el-input>
+      <el-button type="warning" style="margin-left: 10px" @click="handleOptimize">
+        <el-icon style="margin-right: 4px"><MagicStick /></el-icon>AI 优化
+      </el-button>
       <el-button type="danger" style="margin-left: 10px" @click="openModel">发布文章</el-button>
     </div>
     <!-- 文章内容 -->
@@ -19,6 +28,38 @@
         <emoji-extension :on-insert="insert" />
       </template>
     </md-editor>
+    <!-- AI 优化对话框 -->
+    <el-dialog title="AI 一键优化文章" v-model="optimizeVisible" width="800px" top="2vh" append-to-body destroy-on-close>
+      <div class="optimize-container">
+        <div class="optimize-status" v-if="optimizeLoading">
+          <el-icon class="is-loading"><Loading /></el-icon>
+          <span>AI 正在优化文章，请稍候...</span>
+        </div>
+        <div class="optimize-status optimize-done" v-else-if="optimizedContent">
+          <el-icon><CircleCheckFilled /></el-icon>
+          <span>优化完成！请选择替换方式</span>
+        </div>
+        <div class="optimize-preview" v-if="optimizedContent">
+          <el-tabs v-model="optimizeTab">
+            <el-tab-pane label="优化后内容" name="optimized">
+              <div class="preview-scroll">
+                <md-editor v-model="optimizedContent" :theme="isDark ? 'dark' : 'light'" preview-only />
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="原始内容" name="original">
+              <div class="preview-scroll">
+                <md-editor v-model="articleForm.articleContent" :theme="isDark ? 'dark' : 'light'" preview-only />
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+      </div>
+      <template #footer>
+        <el-button @click="optimizeVisible = false">取消</el-button>
+        <el-button type="primary" :disabled="!optimizedContent || optimizeLoading" @click="handleReplaceAll"> 全部替换 </el-button>
+        <el-button type="success" :disabled="!optimizedContent || optimizeLoading" @click="handleAppendOptimized"> 追加到末尾（对比） </el-button>
+      </template>
+    </el-dialog>
     <!-- 发布或修改对话框 -->
     <el-dialog title="发布文章" v-model="addOrUpdate" width="600px" top="0.5vh" append-to-body>
       <el-form ref="articleFormRef" label-width="80px" :model="articleForm" :rules="rules">
@@ -54,6 +95,16 @@
               </div>
             </div>
           </el-popover>
+          <el-button
+            v-if="!articleForm.categoryName"
+            type="primary"
+            :loading="aiCategoryLoading"
+            :icon="MagicStick"
+            style="margin-left: 8px"
+            @click="handleAiCategory"
+          >
+            AI 选择
+          </el-button>
         </el-form-item>
         <!-- 文章标签 -->
         <el-form-item label="文章标签" prop="tagNameList">
@@ -101,6 +152,16 @@
               </el-tag>
             </div>
           </el-popover>
+          <el-button
+            v-if="articleForm.tagNameList.length === 0"
+            type="primary"
+            :loading="aiTagLoading"
+            :icon="MagicStick"
+            style="margin-left: 8px"
+            @click="handleAiTags"
+          >
+            AI 选择
+          </el-button>
         </el-form-item>
         <!-- 文章类型 -->
         <el-form-item label="文章类型" prop="articleType">
@@ -110,19 +171,33 @@
         </el-form-item>
         <!-- 缩略图 -->
         <el-form-item label="缩略图" prop="articleCover">
-          <el-upload
-            drag
-            :show-file-list="false"
-            :headers="authorization"
-            action="/api/admin/article/upload"
-            accept="image/*"
-            :before-upload="beforeUpload"
-            :on-success="handleSuccess"
-          >
-            <el-icon class="el-icon--upload" v-if="articleForm.articleCover === ''"><upload-filled /></el-icon>
-            <div class="el-upload__text" v-if="articleForm.articleCover === ''">将文件拖到此处，或<em>点击上传</em></div>
-            <img v-else :src="articleForm.articleCover" width="360" />
-          </el-upload>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <el-upload
+              drag
+              :show-file-list="false"
+              :headers="authorization"
+              action="/api/admin/article/upload"
+              accept="image/*"
+              :before-upload="beforeUpload"
+              :on-success="handleSuccess"
+            >
+              <el-icon class="el-icon--upload" v-if="articleForm.articleCover === ''"><upload-filled /></el-icon>
+              <div class="el-upload__text" v-if="articleForm.articleCover === ''">将文件拖到此处，或<em>点击上传</em></div>
+              <img v-else :src="articleForm.articleCover" width="360" />
+            </el-upload>
+            <!-- AI 生成封面 -->
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+              <el-button type="primary" :loading="coverLoading" :icon="MagicStick" @click="handleGenerateCover">
+                {{ coverLoading ? "生成中..." : "AI 生成封面" }}
+              </el-button>
+              <el-radio-group v-model="coverStyle" size="small">
+                <el-radio-button label="gradient">渐变</el-radio-button>
+                <el-radio-button label="tech">科技</el-radio-button>
+                <el-radio-button label="minimal">简约</el-radio-button>
+                <el-radio-button label="dark">暗黑</el-radio-button>
+              </el-radio-group>
+            </div>
+          </div>
         </el-form-item>
         <!-- 置顶 -->
         <el-form-item label="置顶" prop="isTop">
@@ -165,11 +240,24 @@
         </div>
       </template>
     </el-dialog>
+    <!-- 隐藏的 Canvas 用于生成封面 -->
+    <canvas ref="coverCanvas" width="800" height="450" style="display: none"></canvas>
   </div>
 </template>
 
 <script setup lang="ts">
-import { addArticle, editArticle, generateAiSummary, getCategoryOption, getTagOption, updateArticle, uploadArticleCover } from "@/api/article"
+import {
+  addArticle,
+  editArticle,
+  generateAiSummary,
+  generateAiTitle,
+  generateAiCategory,
+  generateAiTags,
+  getCategoryOption,
+  getTagOption,
+  updateArticle,
+  uploadArticleCover,
+} from "@/api/article"
 import { ArticleForm, CategoryVO, TagVO } from "@/api/article/types"
 import EmojiExtension from "@/components/EmojiExtension/index.vue"
 import { toolbars } from "@/components/EmojiExtension/staticConfig"
@@ -180,7 +268,7 @@ import { getToken, token_prefix } from "@/utils/token"
 import { useDark, useDateFormat } from "@vueuse/core"
 import { AxiosError, AxiosResponse } from "axios"
 import { ElMessage, FormInstance, FormRules, UploadRawFile } from "element-plus"
-import { MagicStick } from "@element-plus/icons-vue"
+import { MagicStick, Loading, CircleCheckFilled } from "@element-plus/icons-vue"
 import * as imageConversion from "image-conversion"
 import type { ExposeParam, InsertContentGenerator } from "md-editor-v3"
 import MdEditor from "md-editor-v3"
@@ -228,18 +316,9 @@ const initArticle = {
 const data = reactive({
   addOrUpdate: false,
   typeList: [
-    {
-      value: 1,
-      label: "原创",
-    },
-    {
-      value: 2,
-      label: "转载",
-    },
-    {
-      value: 3,
-      label: "翻译",
-    },
+    { value: 1, label: "原创" },
+    { value: 2, label: "转载" },
+    { value: 3, label: "翻译" },
   ],
   articleForm: initArticle,
   categoryList: [] as CategoryVO[],
@@ -248,6 +327,325 @@ const data = reactive({
   tagName: "",
 })
 const { addOrUpdate, typeList, articleForm, categoryList, tagList, categoryName, tagName } = toRefs(data)
+
+// ======================== AI 生成标题 ========================
+const aiTitleLoading = ref(false)
+const handleAiTitle = async () => {
+  const content = articleForm.value.articleContent
+  if (!content || content.trim() === "") {
+    ElMessage.warning("请先编写文章内容")
+    return
+  }
+  aiTitleLoading.value = true
+  try {
+    const { data } = await generateAiTitle(content)
+    if (data.flag && data.data) {
+      articleForm.value.articleTitle = data.data
+      ElMessage.success("AI 标题生成成功")
+    } else {
+      ElMessage.error(data.msg || "AI 标题生成失败")
+    }
+  } catch {
+    ElMessage.error("AI 标题生成失败，请稍后重试")
+  } finally {
+    aiTitleLoading.value = false
+  }
+}
+
+// ======================== AI 优化文章 ========================
+const optimizeVisible = ref(false)
+const optimizeLoading = ref(false)
+const optimizedContent = ref("")
+const optimizeTab = ref("optimized")
+
+const handleOptimize = () => {
+  const content = articleForm.value.articleContent
+  if (!content || content.trim() === "") {
+    ElMessage.warning("请先编写文章内容")
+    return
+  }
+  optimizeVisible.value = true
+  optimizeLoading.value = true
+  optimizedContent.value = ""
+  optimizeTab.value = "optimized"
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json;charset=UTF-8",
+  }
+  const token = getToken()
+  if (token) {
+    headers["Authorization"] = token_prefix + token
+  }
+
+  fetch(`/api/admin/ai/optimize`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ content }),
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        ElMessage.error("AI 优化请求失败")
+        optimizeLoading.value = false
+        return
+      }
+      const reader = response.body?.getReader()
+      if (!reader) {
+        optimizeLoading.value = false
+        return
+      }
+      const decoder = new TextDecoder("utf-8")
+      let buffer = ""
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) {
+          optimizeLoading.value = false
+          break
+        }
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split("\n")
+        buffer = lines.pop() || ""
+        for (const line of lines) {
+          const trimmed = line.trim()
+          if (!trimmed) continue
+          if (trimmed.startsWith("data:")) {
+            const sseData = trimmed.slice(5)
+            if (!sseData) continue
+            if (sseData === "[DONE]") {
+              optimizeLoading.value = false
+              return
+            }
+            if (sseData.startsWith("[ERROR]")) {
+              ElMessage.error("AI 优化失败")
+              optimizeLoading.value = false
+              return
+            }
+            try {
+              const parsed = JSON.parse(sseData)
+              if (parsed && typeof parsed.content === "string") {
+                optimizedContent.value += parsed.content
+              }
+            } catch {
+              optimizedContent.value += sseData
+            }
+          }
+        }
+      }
+    })
+    .catch(() => {
+      ElMessage.error("AI 优化请求异常")
+      optimizeLoading.value = false
+    })
+}
+
+const handleReplaceAll = () => {
+  articleForm.value.articleContent = optimizedContent.value
+  optimizeVisible.value = false
+  ElMessage.success("已替换为优化后的内容")
+}
+
+const handleAppendOptimized = () => {
+  articleForm.value.articleContent += "\n\n---\n\n## AI 优化版本\n\n" + optimizedContent.value
+  optimizeVisible.value = false
+  ElMessage.success("优化内容已追加到文章末尾")
+}
+
+// ======================== AI 自动选择分类 ========================
+const aiCategoryLoading = ref(false)
+const handleAiCategory = async () => {
+  const content = articleForm.value.articleContent
+  if (!content || content.trim() === "") {
+    ElMessage.warning("请先编写文章内容")
+    return
+  }
+  aiCategoryLoading.value = true
+  try {
+    // 确保分类列表已加载
+    if (categoryList.value.length === 0) {
+      const res = await getCategoryOption()
+      categoryList.value = res.data.data
+    }
+    const categoriesStr = categoryList.value.map((c) => c.categoryName).join(",")
+    const { data } = await generateAiCategory(content, categoriesStr)
+    if (data.flag && data.data) {
+      articleForm.value.categoryName = data.data.trim()
+      ElMessage.success(`AI 已选择分类: ${articleForm.value.categoryName}`)
+    } else {
+      ElMessage.error(data.msg || "AI 分类选择失败")
+    }
+  } catch {
+    ElMessage.error("AI 分类选择失败，请稍后重试")
+  } finally {
+    aiCategoryLoading.value = false
+  }
+}
+
+// ======================== AI 自动选择标签 ========================
+const aiTagLoading = ref(false)
+const handleAiTags = async () => {
+  const content = articleForm.value.articleContent
+  if (!content || content.trim() === "") {
+    ElMessage.warning("请先编写文章内容")
+    return
+  }
+  aiTagLoading.value = true
+  try {
+    // 确保标签列表已加载
+    if (tagList.value.length === 0) {
+      const res = await getTagOption()
+      tagList.value = res.data.data
+    }
+    const tagsStr = tagList.value.map((t) => t.tagName).join(",")
+    const { data } = await generateAiTags(content, tagsStr)
+    if (data.flag && data.data) {
+      const newTags = data.data
+      newTags.forEach((t: string) => {
+        if (articleForm.value.tagNameList.indexOf(t) === -1 && articleForm.value.tagNameList.length < 3) {
+          articleForm.value.tagNameList.push(t)
+        }
+      })
+      ElMessage.success(`AI 已选择标签: ${newTags.join(", ")}`)
+    } else {
+      ElMessage.error(data.msg || "AI 标签选择失败")
+    }
+  } catch {
+    ElMessage.error("AI 标签选择失败，请稍后重试")
+  } finally {
+    aiTagLoading.value = false
+  }
+}
+
+// ======================== AI 生成封面 ========================
+const coverCanvas = ref<HTMLCanvasElement>()
+const coverStyle = ref("gradient")
+const coverLoading = ref(false)
+
+const COVER_STYLES: Record<string, { bg: string[]; textColor: string; subColor: string }> = {
+  gradient: {
+    bg: ["#667eea", "#764ba2"],
+    textColor: "#ffffff",
+    subColor: "rgba(255,255,255,0.7)",
+  },
+  tech: {
+    bg: ["#0f2027", "#2c5364"],
+    textColor: "#00d2ff",
+    subColor: "rgba(0,210,255,0.5)",
+  },
+  minimal: {
+    bg: ["#ffecd2", "#fcb69f"],
+    textColor: "#2d3436",
+    subColor: "rgba(45,52,54,0.5)",
+  },
+  dark: {
+    bg: ["#232526", "#414345"],
+    textColor: "#f5f6fa",
+    subColor: "rgba(245,246,250,0.5)",
+  },
+}
+
+const handleGenerateCover = async () => {
+  const title = articleForm.value.articleTitle
+  if (!title || title.trim() === "") {
+    ElMessage.warning("请先输入文章标题")
+    return
+  }
+  const canvas = coverCanvas.value
+  if (!canvas) return
+
+  coverLoading.value = true
+  try {
+    const ctx = canvas.getContext("2d")!
+    const style = COVER_STYLES[coverStyle.value] || COVER_STYLES.gradient
+    const w = canvas.width
+    const h = canvas.height
+
+    // 绘制渐变背景
+    const gradient = ctx.createLinearGradient(0, 0, w, h)
+    gradient.addColorStop(0, style.bg[0])
+    gradient.addColorStop(1, style.bg[1])
+    ctx.fillStyle = gradient
+    ctx.fillRect(0, 0, w, h)
+
+    // 绘制装饰元素
+    ctx.globalAlpha = 0.1
+    for (let i = 0; i < 5; i++) {
+      ctx.beginPath()
+      ctx.arc(Math.random() * w, Math.random() * h, Math.random() * 120 + 40, 0, Math.PI * 2)
+      ctx.fillStyle = "#ffffff"
+      ctx.fill()
+    }
+    ctx.globalAlpha = 1
+
+    // 绘制标题文字
+    const maxWidth = w - 100
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+
+    // 自动换行
+    let fontSize = 42
+    ctx.font = `bold ${fontSize}px "Microsoft YaHei", "PingFang SC", sans-serif`
+    const lines = wrapText(ctx, title, maxWidth)
+
+    ctx.fillStyle = style.textColor
+    const lineHeight = fontSize * 1.4
+    const startY = h / 2 - ((lines.length - 1) * lineHeight) / 2
+    lines.forEach((line, i) => {
+      ctx.fillText(line, w / 2, startY + i * lineHeight)
+    })
+
+    // 绘制底部日期
+    ctx.font = `16px "Microsoft YaHei", "PingFang SC", sans-serif`
+    ctx.fillStyle = style.subColor
+    const date = new Date().toISOString().slice(0, 10)
+    ctx.fillText(date, w / 2, h - 40)
+
+    // 转为 Blob 并上传
+    canvas.toBlob(async (blob) => {
+      if (!blob) {
+        ElMessage.error("封面生成失败")
+        coverLoading.value = false
+        return
+      }
+      const file = new File([blob], `cover-${Date.now()}.png`, { type: "image/png" })
+      const formData = new FormData()
+      formData.append("file", file)
+      try {
+        const { data } = await uploadArticleCover(formData)
+        if (data.flag) {
+          articleForm.value.articleCover = data.data
+          ElMessage.success("封面生成并上传成功")
+        } else {
+          ElMessage.error("封面上传失败")
+        }
+      } catch {
+        ElMessage.error("封面上传失败")
+      } finally {
+        coverLoading.value = false
+      }
+    }, "image/png")
+  } catch {
+    ElMessage.error("封面生成异常")
+    coverLoading.value = false
+  }
+}
+
+const wrapText = (ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] => {
+  const lines: string[] = []
+  let currentLine = ""
+  for (const char of text) {
+    const testLine = currentLine + char
+    if (ctx.measureText(testLine).width > maxWidth) {
+      lines.push(currentLine)
+      currentLine = char
+    } else {
+      currentLine = testLine
+    }
+  }
+  if (currentLine) lines.push(currentLine)
+  return lines.length > 3 ? lines.slice(0, 3) : lines
+}
+
+// ======================== 原有功能 ========================
+
 const uploadImg = async (files: Array<File>, callback: (urls: string[]) => void) => {
   const res = await Promise.all(
     files.map((file) => {
@@ -288,13 +686,9 @@ const openModel = () => {
   addOrUpdate.value = true
 }
 const removeSpecialChars = (str: string) => {
-  // 移除所有HTML标签
   var cleanedStr = str.replace(/<[^>]*>?/g, "")
-  // 移除所有空格、星号、井号、[]、换行、制表符
   cleanedStr = cleanedStr.replace(/[\s\*#\[\]]/g, "")
-  // 移除所有()和其中内容
   cleanedStr = cleanedStr.replace(/\([^\)]*\)/g, "")
-  // 移除所有换行、制表符
   cleanedStr = cleanedStr.replace(/[\n\t]+/g, "")
   return cleanedStr.substring(0, 100)
 }
@@ -354,7 +748,6 @@ const handleSelectCategory = (item: CategoryVO) => {
   addCategory(item.categoryName)
 }
 const saveCategory = () => {
-  // 分类不为空
   if (categoryName.value.trim() != "") {
     addCategory(categoryName.value)
     categoryName.value = ""
@@ -383,7 +776,6 @@ const beforeUpload = (rawFile: UploadRawFile) => {
     if (rawFile.size / 1024 < 200) {
       resolve(rawFile)
     }
-    // 压缩到200KB,这里的200就是要压缩的大小,可自定义
     imageConversion.compressAccurately(rawFile, 200).then((res) => {
       resolve(res)
     })
@@ -419,8 +811,6 @@ const submitForm = () => {
 }
 onMounted(() => {
   if (articleId) {
-    console.log("sadfasdfas", articleId)
-
     editArticle(Number(articleId)).then(({ data }) => {
       if (data.flag) {
         articleForm.value = data.data
@@ -477,5 +867,35 @@ onMounted(() => {
   margin-bottom: 1rem;
   cursor: not-allowed;
   color: #ccccd8 !important;
+}
+
+/* AI 优化对话框 */
+.optimize-container {
+  min-height: 200px;
+}
+
+.optimize-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f0f9ff;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  color: #409eff;
+  font-size: 14px;
+}
+
+.optimize-done {
+  background: #f0f9eb;
+  color: #67c23a;
+}
+
+.preview-scroll {
+  max-height: 50vh;
+  overflow-y: auto;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  padding: 12px;
 }
 </style>
