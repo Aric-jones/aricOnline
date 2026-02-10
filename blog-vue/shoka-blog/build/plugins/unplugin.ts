@@ -9,12 +9,12 @@ import { prismjsPlugin } from "vite-plugin-prismjs";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 
 export default function unplugin(viteEnv: Env.ImportMeta) {
-	const { VITE_ICON_PREFIX, VITE_ICON_LOCAL_PREFIX } = viteEnv;
+	const { VITE_ICON_PREFIX = "icon", VITE_ICON_LOCAL_PREFIX = "icon-local" } = viteEnv;
 
 	const localIconPath = path.join(process.cwd(), "src/assets/icons");
 	/** 本地svg图标集合名称 */
-	const collectionName = VITE_ICON_LOCAL_PREFIX.replace(
-		`${VITE_ICON_PREFIX}-`,
+	const collectionName = (VITE_ICON_LOCAL_PREFIX || "icon-local").replace(
+		`${VITE_ICON_PREFIX || "icon"}-`,
 		""
 	);
 
