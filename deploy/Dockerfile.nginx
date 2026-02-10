@@ -31,7 +31,7 @@ COPY blog-vue/shoka-admin/package.json blog-vue/shoka-admin/package-lock.json* .
 RUN npm install --registry=https://registry.npmmirror.com
 COPY blog-vue/shoka-admin/ .
 # 跳过类型检查，直接构建（类型错误不影响运行）
-RUN vite build
+RUN npm run build:prod
 
 # ---- Nginx 运行阶段 ----
 FROM nginx:1.25-alpine

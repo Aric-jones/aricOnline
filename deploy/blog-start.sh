@@ -51,6 +51,7 @@ case $ACTION in
         echo "  down    - 停止并移除所有容器"
         echo "  restart - 重启所有服务"
         echo "  logs    - 查看实时日志"
+
         echo "  status  - 查看容器状态"
         ;;
 esac

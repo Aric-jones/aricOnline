@@ -1,5 +1,6 @@
 import router from "@/router";
 import useStore from "@/store";
+import useAppStore from "@/store/modules/app";
 import { isRelogin } from "@/utils/request";
 import { getToken } from "@/utils/token";
 import { ElMessage } from "element-plus";
@@ -18,7 +19,9 @@ const whiteList = ["/login"];
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  const { user, permission, app } = useStore();
+  const store = useStore();
+  const { user, permission } = store;
+  const app = useAppStore();
   app.setRouteLoading(true);
   // 判断是否有token
   if (getToken()) {
@@ -62,7 +65,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach(() => {
-  const { app } = useStore();
+  const app = useAppStore();
   app.setRouteLoading(false);
   NProgress.done();
 });

@@ -28,7 +28,7 @@ const useAppStore = defineStore("useAppStore", {
   getters: {},
   persist: {
     storage: localStorage,
-    pick: ["isCollapse", "device", "size"],
+    paths: ["isCollapse", "device", "size"],
   },
 });
 

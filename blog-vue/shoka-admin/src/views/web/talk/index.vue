@@ -18,13 +18,13 @@
     <!-- 说说列表 -->
     <div class="talk-item" v-for="talk of talkList" :key="talk.id">
       <!-- 用户头像 -->
-      <img class="user-avatar" :src="talk.avatar" alt="用户头像">
+      <img class="user-avatar" :src="talk.avatar" alt="用户头像" />
       <div class="talk-content-container">
         <!-- 用户信息 -->
         <div class="user-info">
           <div class="user-name">{{ talk.nickname }}</div>
           <!-- 操作 -->
-          <el-dropdown trigger="click" @command="(cmd) => handleOperation(cmd, talk.id)">
+          <el-dropdown trigger="click" @command="(cmd: 'update' | 'delete') => handleOperation(cmd, talk.id)">
             <el-icon class="oper-icon"><MoreFilled /></el-icon>
             <template #dropdown>
               <el-dropdown-menu>
@@ -38,34 +38,36 @@
         <div class="talk-info">
           <span class="talk-time">{{ formatDateTime(talk.createTime) }}</span>
           <span class="tag top" v-if="talk.isTop === 1"><svg-icon icon-class="top" size="0.85rem"></svg-icon>置顶</span>
-          <span class="tag secret" v-if="talk.status === 2"><el-icon><Hide /></el-icon>私密</span>
+          <span class="tag secret" v-if="talk.status === 2"
+            ><el-icon><Hide /></el-icon>私密</span
+          >
         </div>
         <!-- 说说内容 -->
         <div class="talk-content" v-html="talk.talkContent"></div>
         <!-- 说说图片 -->
         <div class="talk-image-container" v-if="talk.imgList && talk.imgList.length > 0">
           <el-image
-              class="talk-image"
-              :src="img"
-              :preview-src-list="talk.imgList"
-              :initial-index="index"
-              v-for="(img, index) of talk.imgList"
-              :key="index"
-              fit="contain"
+            class="talk-image"
+            :src="img"
+            :preview-src-list="talk.imgList"
+            :initial-index="index"
+            v-for="(img, index) of talk.imgList"
+            :key="index"
+            fit="contain"
           ></el-image>
         </div>
       </div>
     </div>
     <!-- 分页 -->
     <el-pagination
-        v-if="count > 0"
-        class="pagination-container"
-        v-model:current-page="queryParams.current"
-        v-model:page-size="queryParams.size"
-        layout="prev, pager, next"
-        :total="count"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+      v-if="count > 0"
+      class="pagination-container"
+      v-model:current-page="queryParams.current"
+      v-model:page-size="queryParams.size"
+      layout="prev, pager, next"
+      :total="count"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
     ></el-pagination>
     <!-- 添加或修改对话框 -->
     <el-dialog :title="title" v-model="addOrUpdate" @close="close" width="750px" append-to-body>
@@ -81,40 +83,34 @@
             <template #reference>
               <span class="oper-icon"><svg-icon icon-class="emoji" size="1.4rem" color="#838383"></svg-icon></span>
             </template>
-            <span class="emoji-item" v-for="(value, key, index) of emojiList" :key="index"
-                  @click="addEmoji(key, value)">
-                            <img :src="value" :title="key" class="emoji" width="24" height="24" alt="表情" />
-                        </span>
+            <span class="emoji-item" v-for="(value, key, index) of emojiList" :key="index" @click="addEmoji(key, value)">
+              <img :src="value" :title="key" class="emoji" width="24" height="24" alt="表情" />
+            </span>
           </el-popover>
         </el-col>
         <el-col :span="1.5">
           <!-- 图片上传 -->
           <el-upload
-              accept="image/*"
-              multiple
-              action="/api/admin/talk/upload"
-              :headers="authorization"
-              :before-upload="beforeUpload"
-              :on-success="handleSuccess"
-              :show-file-list="false"
+            accept="image/*"
+            multiple
+            action="/api/admin/talk/upload"
+            :headers="authorization"
+            :before-upload="beforeUpload"
+            :on-success="handleSuccess"
+            :show-file-list="false"
           >
             <span class="oper-icon"><svg-icon icon-class="album" size="1.5rem" color="#838383"></svg-icon></span>
           </el-upload>
         </el-col>
         <el-col :span="1.5" :offset="14">
-          <el-switch
-              v-model="talkForm.isTop"
-              inactive-text="置顶"
-              :active-value="1"
-              :inactive-value="0"
-          />
+          <el-switch v-model="talkForm.isTop" inactive-text="置顶" :active-value="1" :inactive-value="0" />
         </el-col>
         <el-col :span="1.5">
           <el-dropdown trigger="click" @command="handleCommand">
-                        <span class="el-dropdown-link">
-                            {{ statusTitle }}
-                            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-                        </span>
+            <span class="el-dropdown-link">
+              {{ statusTitle }}
+              <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+            </span>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item v-for="(item, index) of statusList" :key="index" :command="item.value">
@@ -130,72 +126,72 @@
       </el-row>
       <!-- 图片上传预览 -->
       <el-upload
-          v-show="uploadList.length > 0"
-          accept="image/*"
-          action="/api/admin/talk/upload"
-          :headers="authorization"
-          list-type="picture-card"
-          :file-list="uploadList"
-          multiple
-          :before-upload="beforeUpload"
-          :on-success="handleSuccess"
-          :on-remove="handleRemove"
-          :on-preview="handlePictureCardPreview"
-          class="upload-preview"
+        v-show="uploadList.length > 0"
+        accept="image/*"
+        action="/api/admin/talk/upload"
+        :headers="authorization"
+        list-type="picture-card"
+        :file-list="uploadList"
+        multiple
+        :before-upload="beforeUpload"
+        :on-success="handleSuccess"
+        :on-remove="handleRemove"
+        :on-preview="handlePictureCardPreview"
+        class="upload-preview"
       >
         <el-icon><Plus /></el-icon>
       </el-upload>
     </el-dialog>
     <!-- 图片预览 -->
     <el-dialog v-model="dialogVisible" append-to-body title="图片预览">
-      <img :src="dialogImageUrl" style="max-width: 100%; max-height: 80vh;" alt="预览图片" />
+      <img :src="dialogImageUrl" style="max-width: 100%; max-height: 80vh" alt="预览图片" />
     </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 // 接口请求
-import { addTalk, deleteTalk, editTalk, getTalkList, updateTalk } from "@/api/talk";
+import { addTalk, deleteTalk, editTalk, getTalkList, updateTalk } from "@/api/talk"
 // 类型定义
-import { Talk, TalkForm, TalkQuery } from "@/api/talk/types";
+import { Talk, TalkForm, TalkQuery } from "@/api/talk/types"
 // 组件
-import Editor from "@/components/Editor/index.vue";
+import Editor from "@/components/Editor/index.vue"
 // 模型
-import { Picture } from "@/model";
+import { Picture } from "@/model"
 // 工具函数
-import { formatDateTime } from "@/utils/date";
-import emojiList from "@/utils/emoji";
-import { messageConfirm, notifySuccess } from "@/utils/modal";
-import { getToken, token_prefix } from "@/utils/token";
+import { formatDateTime } from "@/utils/date"
+import emojiList from "@/utils/emoji"
+import { messageConfirm, notifySuccess } from "@/utils/modal"
+import { getToken, token_prefix } from "@/utils/token"
 // 第三方依赖
-import { AxiosResponse } from "axios";
-import { UploadFile, UploadRawFile } from 'element-plus';
-import * as imageConversion from 'image-conversion';
+import { AxiosResponse } from "axios"
+import { UploadFile, UploadRawFile } from "element-plus"
+import * as imageConversion from "image-conversion"
 // Vue组合式API
-import { computed, onMounted, reactive, ref, toRefs } from 'vue';
+import { computed, onMounted, reactive, ref, toRefs } from "vue"
 // Element Plus图标
-import { MoreFilled, Hide, ArrowDown, Plus } from '@element-plus/icons-vue';
+import { MoreFilled, Hide, ArrowDown, Plus } from "@element-plus/icons-vue"
 
 // 编辑器Ref
-const editorRef = ref<{ clear: () => void; addText: (text: string) => void }>();
+const editorRef = ref<{ clear: () => void; addText: (text: string) => void }>()
 // 图片预览相关
-const dialogImageUrl = ref('');
-const dialogVisible = ref(false);
+const dialogImageUrl = ref("")
+const dialogVisible = ref(false)
 
 // 状态筛选激活样式
 const isActive = computed(() => {
-  return (value: number | undefined) => queryParams.value.status === value ? "active-status" : "status";
-});
+  return (value: number | undefined) => (queryParams.value.status === value ? "active-status" : "status")
+})
 
 // 请求头鉴权
 const authorization = computed(() => ({
   Authorization: token_prefix + getToken(),
-}));
+}))
 
 // 发布状态文字显示
 const statusTitle = computed(() => {
-  return statusList.value.find(item => item.value === talkForm.value.status)?.label || "公开";
-});
+  return statusList.value.find((item) => item.value === talkForm.value.status)?.label || "公开"
+})
 
 // 响应式数据
 const data = reactive({
@@ -211,7 +207,7 @@ const data = reactive({
   // 状态列表
   statusList: [
     { value: 1, label: "公开" },
-    { value: 2, label: "私密" }
+    { value: 2, label: "私密" },
   ],
   // 说说表单
   talkForm: {
@@ -225,155 +221,146 @@ const data = reactive({
   talkList: [] as Talk[],
   // 上传文件列表
   uploadList: [] as Picture[],
-});
+})
 
 // 解构响应式数据
-const {
-  count,
-  title,
-  addOrUpdate,
-  queryParams,
-  statusList,
-  talkForm,
-  talkList,
-  uploadList,
-} = toRefs(data);
+const { count, title, addOrUpdate, queryParams, statusList, talkForm, talkList, uploadList } = toRefs(data)
 
 // 上传成功回调
 const handleSuccess = (response: AxiosResponse) => {
-  uploadList.value.push({ url: response.data });
-};
+  uploadList.value.push({ url: response.data })
+}
 
 // 移除上传文件
 const handleRemove = (file: UploadFile) => {
-  uploadList.value = uploadList.value.filter(item => item.url !== file.url);
-};
+  uploadList.value = uploadList.value.filter((item) => item.url !== file.url)
+}
 
 // 上传图片预览
 const handlePictureCardPreview = (file: UploadFile) => {
-  dialogImageUrl.value = file.url!;
-  dialogVisible.value = true;
-};
+  dialogImageUrl.value = file.url!
+  dialogVisible.value = true
+}
 
 // 上传前压缩图片
 const beforeUpload = (rawFile: UploadRawFile) => {
   return new Promise((resolve) => {
-    if (rawFile.size / 1024 < 200) return resolve(rawFile);
+    if (rawFile.size / 1024 < 200) return resolve(rawFile)
     // 压缩到200KB
-    imageConversion.compressAccurately(rawFile, 200).then(res => resolve(res));
-  });
-};
+    imageConversion.compressAccurately(rawFile, 200).then((res) => resolve(res))
+  })
+}
 
 // 说说操作（编辑/删除）- 优化传参，无需拼接字符串
-const handleOperation = (type: 'update' | 'delete', id: number) => {
-  talkForm.value.id = id;
+const handleOperation = (type: "update" | "delete", id: number) => {
+  talkForm.value.id = id
   if (type === "delete") {
     messageConfirm("确认删除该说说？").then(() => {
       deleteTalk(id).then(({ data }) => {
         if (data.flag) {
-          notifySuccess(data.msg);
-          getList();
+          notifySuccess(data.msg)
+          getList()
         }
-      });
-    });
+      })
+    })
   } else {
     editTalk(id).then(({ data }) => {
       if (data.flag) {
-        talkForm.value = { ...data.data };
+        talkForm.value = { ...data.data }
         // 回显上传图片
         if (data.data.imgList) {
-          uploadList.value = data.data.imgList.map(url => ({ url }));
+          uploadList.value = data.data.imgList.map((url) => ({ url }))
         }
-        title.value = "修改说说";
-        addOrUpdate.value = true;
+        title.value = "修改说说"
+        addOrUpdate.value = true
       }
-    });
+    })
   }
-};
+}
 
 // 切换发布状态
 const handleCommand = (command: number) => {
-  talkForm.value.status = command;
-};
+  talkForm.value.status = command
+}
 
 // 添加表情
 const addEmoji = (key: string, value: string) => {
-  editorRef.value?.addText(`<img src='${value}' width='24' height='24' alt='${key}' style='margin: 0 1px;vertical-align: text-bottom'/>`);
-};
+  editorRef.value?.addText(`<img src='${value}' width='24' height='24' alt='${key}' style='margin: 0 1px;vertical-align: text-bottom'/>`)
+}
 
 // 切换状态筛选
 const changeStatus = (value: number | undefined) => {
-  queryParams.value.current = 1;
-  queryParams.value.status = value;
-  getList();
-};
+  queryParams.value.current = 1
+  queryParams.value.status = value
+  getList()
+}
 
 // 分页大小改变
 const handleSizeChange = (size: number) => {
-  queryParams.value.size = size;
-  getList();
-};
+  queryParams.value.size = size
+  getList()
+}
 
 // 页码改变
 const handleCurrentChange = (current: number) => {
-  queryParams.value.current = current;
-  getList();
-};
+  queryParams.value.current = current
+  getList()
+}
 
 // 提交表单（新增/修改）
 const submitForm = () => {
   // 处理图片列表
   if (uploadList.value.length > 0) {
-    const imgList = uploadList.value.map(item => item.url);
-    talkForm.value.images = JSON.stringify(imgList);
+    const imgList = uploadList.value.map((item) => item.url)
+    talkForm.value.images = JSON.stringify(imgList)
   } else {
-    talkForm.value.images = "";
+    talkForm.value.images = ""
   }
 
   // 区分新增和修改
-  const request = talkForm.value.id ? updateTalk(talkForm.value) : addTalk(talkForm.value);
+  const request = talkForm.value.id ? updateTalk(talkForm.value) : addTalk(talkForm.value)
   request.then(({ data }) => {
     if (data.flag) {
-      notifySuccess(data.msg);
-      getList();
-      addOrUpdate.value = false;
-      uploadList.value = [];
+      notifySuccess(data.msg)
+      getList()
+      addOrUpdate.value = false
+      uploadList.value = []
     }
-  });
-};
+  })
+}
 
 // 重置表单
 const reset = () => {
-  talkForm.value = { id: undefined, talkContent: "", images: "", isTop: 0, status: 1 };
-  uploadList.value = [];
-  editorRef.value?.clear();
-};
+  talkForm.value = { id: undefined, talkContent: "", images: "", isTop: 0, status: 1 }
+  uploadList.value = []
+  editorRef.value?.clear()
+}
 
 // 关闭弹窗
 const close = () => {
-  reset();
-  addOrUpdate.value = false;
-};
+  reset()
+  addOrUpdate.value = false
+}
 
 // 打开发布弹窗
 const openModel = () => {
-  reset();
-  title.value = "发布说说";
-  addOrUpdate.value = true;
-};
+  reset()
+  title.value = "发布说说"
+  addOrUpdate.value = true
+}
 
 // 获取说说列表
 const getList = () => {
   getTalkList(queryParams.value).then(({ data }) => {
-    talkList.value = data.data.recordList || [];
-    count.value = data.data.count || 0;
-  });
-};
+    talkList.value = data.data.recordList || []
+    count.value = data.data.count || 0
+  })
+}
 
 // 初始化加载列表
 onMounted(() => {
-  getList();
-});
+  getList()
+})
 </script>
 
 <style lang="scss" scoped>
