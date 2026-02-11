@@ -8,7 +8,7 @@ function getStoredTheme(): ThemeMode {
   if (typeof window === 'undefined') return 'light';
   const stored = localStorage.getItem(THEME_KEY) as ThemeMode | null;
   if (stored === 'light' || stored === 'dark' || stored === 'gradient') return stored;
-  return 'light';
+  return 'gradient';
 }
 
 function applyTheme(mode: ThemeMode) {

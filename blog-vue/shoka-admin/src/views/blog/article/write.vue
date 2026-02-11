@@ -244,10 +244,10 @@
                 {{ coverLoading ? "生成中..." : "AI 生成封面" }}
               </el-button>
               <el-radio-group v-model="coverStyle" size="small">
-                <el-radio-button label="gradient">渐变</el-radio-button>
-                <el-radio-button label="tech">科技</el-radio-button>
-                <el-radio-button label="minimal">简约</el-radio-button>
-                <el-radio-button label="dark">暗黑</el-radio-button>
+                <el-radio-button label="gradient">炫彩渐变</el-radio-button>
+                <el-radio-button label="tech">科技网格</el-radio-button>
+                <el-radio-button label="minimal">温暖简约</el-radio-button>
+                <el-radio-button label="dark">深邃暗夜</el-radio-button>
               </el-radio-group>
             </div>
           </div>
@@ -723,27 +723,247 @@ const coverCanvas = ref<HTMLCanvasElement>()
 const coverStyle = ref("gradient")
 const coverLoading = ref(false)
 
-const COVER_STYLES: Record<string, { bg: string[]; textColor: string; subColor: string }> = {
+interface CoverTheme {
+  bg: string[]
+  bgAngle?: number
+  textColor: string
+  subColor: string
+  accentColor: string
+  decorColor: string
+}
+
+const COVER_STYLES: Record<string, CoverTheme> = {
   gradient: {
-    bg: ["#667eea", "#764ba2"],
+    bg: ["#667eea", "#764ba2", "#f093fb"],
     textColor: "#ffffff",
-    subColor: "rgba(255,255,255,0.7)",
+    subColor: "rgba(255,255,255,0.6)",
+    accentColor: "rgba(255,255,255,0.15)",
+    decorColor: "rgba(255,255,255,0.08)",
   },
   tech: {
-    bg: ["#0f2027", "#2c5364"],
+    bg: ["#0a0a2e", "#16213e", "#0f3460"],
     textColor: "#00d2ff",
-    subColor: "rgba(0,210,255,0.5)",
+    subColor: "rgba(0,210,255,0.4)",
+    accentColor: "rgba(0,210,255,0.12)",
+    decorColor: "rgba(0,210,255,0.06)",
   },
   minimal: {
-    bg: ["#ffecd2", "#fcb69f"],
+    bg: ["#ffecd2", "#fcb69f", "#ff9a9e"],
     textColor: "#2d3436",
-    subColor: "rgba(45,52,54,0.5)",
+    subColor: "rgba(45,52,54,0.4)",
+    accentColor: "rgba(255,255,255,0.5)",
+    decorColor: "rgba(45,52,54,0.05)",
   },
   dark: {
-    bg: ["#232526", "#414345"],
-    textColor: "#f5f6fa",
-    subColor: "rgba(245,246,250,0.5)",
+    bg: ["#1a1a2e", "#16213e", "#0f3460"],
+    textColor: "#e2e8f0",
+    subColor: "rgba(226,232,240,0.4)",
+    accentColor: "rgba(226,232,240,0.08)",
+    decorColor: "rgba(226,232,240,0.04)",
   },
+}
+
+// 基于标题内容的确定性随机，让同一标题生成相同的封面
+const seedRandom = (seed: number) => {
+  let s = seed
+  return () => {
+    s = (s * 16807 + 0) % 2147483647
+    return (s - 1) / 2147483646
+  }
+}
+
+const titleToSeed = (title: string): number => {
+  let hash = 0
+  for (let i = 0; i < title.length; i++) {
+    hash = (hash << 5) - hash + title.charCodeAt(i)
+    hash |= 0
+  }
+  return Math.abs(hash) || 1
+}
+
+// 绘制几何装饰
+const drawGeometricDecor = (ctx: CanvasRenderingContext2D, w: number, h: number, theme: CoverTheme, rand: () => number) => {
+  const shapes = Math.floor(rand() * 4) + 6
+
+  for (let i = 0; i < shapes; i++) {
+    const x = rand() * w
+    const y = rand() * h
+    const size = rand() * 80 + 20
+    const shapeType = Math.floor(rand() * 5)
+
+    ctx.save()
+    ctx.translate(x, y)
+    ctx.rotate(rand() * Math.PI * 2)
+    ctx.globalAlpha = rand() * 0.08 + 0.03
+
+    switch (shapeType) {
+      case 0: // 圆环
+        ctx.beginPath()
+        ctx.arc(0, 0, size, 0, Math.PI * 2)
+        ctx.strokeStyle = theme.textColor
+        ctx.lineWidth = rand() * 3 + 1
+        ctx.stroke()
+        break
+      case 1: // 三角形
+        ctx.beginPath()
+        ctx.moveTo(0, -size)
+        ctx.lineTo(size * 0.866, size * 0.5)
+        ctx.lineTo(-size * 0.866, size * 0.5)
+        ctx.closePath()
+        ctx.strokeStyle = theme.textColor
+        ctx.lineWidth = 2
+        ctx.stroke()
+        break
+      case 2: // 小方块
+        ctx.fillStyle = theme.textColor
+        ctx.fillRect(-size / 2, -size / 2, size, size)
+        break
+      case 3: // 十字
+        ctx.strokeStyle = theme.textColor
+        ctx.lineWidth = 2
+        ctx.beginPath()
+        ctx.moveTo(-size / 2, 0)
+        ctx.lineTo(size / 2, 0)
+        ctx.moveTo(0, -size / 2)
+        ctx.lineTo(0, size / 2)
+        ctx.stroke()
+        break
+      case 4: // 虚线圆
+        ctx.beginPath()
+        ctx.setLineDash([4, 6])
+        ctx.arc(0, 0, size, 0, Math.PI * 2)
+        ctx.strokeStyle = theme.textColor
+        ctx.lineWidth = 1.5
+        ctx.stroke()
+        ctx.setLineDash([])
+        break
+    }
+
+    ctx.restore()
+  }
+}
+
+// 绘制流动波浪线
+const drawWaves = (ctx: CanvasRenderingContext2D, w: number, h: number, theme: CoverTheme, rand: () => number) => {
+  const waveCount = 3
+  for (let wave = 0; wave < waveCount; wave++) {
+    ctx.save()
+    ctx.globalAlpha = 0.06 + wave * 0.02
+    ctx.strokeStyle = theme.textColor
+    ctx.lineWidth = 1.5 + wave * 0.5
+    ctx.beginPath()
+
+    const baseY = h * (0.65 + wave * 0.1)
+    const amplitude = 15 + rand() * 20
+    const frequency = 0.005 + rand() * 0.005
+    const phase = rand() * Math.PI * 2
+
+    for (let x = 0; x <= w; x += 2) {
+      const y = baseY + Math.sin(x * frequency + phase) * amplitude
+      if (x === 0) ctx.moveTo(x, y)
+      else ctx.lineTo(x, y)
+    }
+    ctx.stroke()
+    ctx.restore()
+  }
+}
+
+// 绘制粒子/光点
+const drawParticles = (ctx: CanvasRenderingContext2D, w: number, h: number, theme: CoverTheme, rand: () => number) => {
+  const count = Math.floor(rand() * 20) + 15
+  for (let i = 0; i < count; i++) {
+    const x = rand() * w
+    const y = rand() * h
+    const r = rand() * 3 + 0.5
+    const alpha = rand() * 0.3 + 0.05
+
+    ctx.save()
+    ctx.globalAlpha = alpha
+    ctx.fillStyle = theme.textColor
+    ctx.beginPath()
+    ctx.arc(x, y, r, 0, Math.PI * 2)
+    ctx.fill()
+
+    // 光晕
+    if (r > 2) {
+      const glow = ctx.createRadialGradient(x, y, 0, x, y, r * 4)
+      glow.addColorStop(0, theme.accentColor)
+      glow.addColorStop(1, "transparent")
+      ctx.globalAlpha = alpha * 0.5
+      ctx.fillStyle = glow
+      ctx.beginPath()
+      ctx.arc(x, y, r * 4, 0, Math.PI * 2)
+      ctx.fill()
+    }
+
+    ctx.restore()
+  }
+}
+
+// 绘制连线网格（tech 风格专属）
+const drawGrid = (ctx: CanvasRenderingContext2D, w: number, h: number, theme: CoverTheme, rand: () => number) => {
+  const nodeCount = 12
+  const nodes: { x: number; y: number }[] = []
+  for (let i = 0; i < nodeCount; i++) {
+    nodes.push({ x: rand() * w, y: rand() * h })
+  }
+
+  ctx.save()
+  ctx.globalAlpha = 0.06
+  ctx.strokeStyle = theme.textColor
+  ctx.lineWidth = 0.8
+
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y)
+      if (dist < 250) {
+        ctx.beginPath()
+        ctx.moveTo(nodes[i].x, nodes[i].y)
+        ctx.lineTo(nodes[j].x, nodes[j].y)
+        ctx.stroke()
+      }
+    }
+  }
+
+  // 节点
+  ctx.globalAlpha = 0.15
+  ctx.fillStyle = theme.textColor
+  for (const node of nodes) {
+    ctx.beginPath()
+    ctx.arc(node.x, node.y, 2.5, 0, Math.PI * 2)
+    ctx.fill()
+  }
+
+  ctx.restore()
+}
+
+// 绘制大号装饰性文字/图案（模糊背景字）
+const drawBackgroundAccent = (ctx: CanvasRenderingContext2D, w: number, h: number, theme: CoverTheme, rand: () => number, title: string) => {
+  ctx.save()
+  ctx.globalAlpha = 0.04
+
+  // 使用标题第一个字作为巨型背景字
+  const firstChar = title.charAt(0)
+  ctx.font = `bold 280px "Microsoft YaHei", "PingFang SC", sans-serif`
+  ctx.fillStyle = theme.textColor
+  ctx.textAlign = "center"
+  ctx.textBaseline = "middle"
+  ctx.translate(w * (0.2 + rand() * 0.6), h * (0.3 + rand() * 0.4))
+  ctx.rotate((rand() - 0.5) * 0.3)
+  ctx.fillText(firstChar, 0, 0)
+
+  ctx.restore()
+}
+
+// 绘制文本投影
+const drawTextShadow = (ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string) => {
+  ctx.save()
+  ctx.shadowColor = color
+  ctx.shadowBlur = 20
+  ctx.shadowOffsetX = 0
+  ctx.shadowOffsetY = 2
+  ctx.fillText(text, x, y)
+  ctx.restore()
 }
 
 const handleGenerateCover = async () => {
@@ -758,49 +978,128 @@ const handleGenerateCover = async () => {
   coverLoading.value = true
   try {
     const ctx = canvas.getContext("2d")!
-    const style = COVER_STYLES[coverStyle.value] || COVER_STYLES.gradient
+    const theme = COVER_STYLES[coverStyle.value] || COVER_STYLES.gradient
     const w = canvas.width
     const h = canvas.height
+    const seed = titleToSeed(title + coverStyle.value)
+    const rand = seedRandom(seed)
 
-    // 绘制渐变背景
-    const gradient = ctx.createLinearGradient(0, 0, w, h)
-    gradient.addColorStop(0, style.bg[0])
-    gradient.addColorStop(1, style.bg[1])
+    // 1. 绘制多色渐变背景
+    const angle = rand() * Math.PI
+    const gx = Math.cos(angle) * w
+    const gy = Math.sin(angle) * h
+    const gradient = ctx.createLinearGradient(w / 2 - gx / 2, h / 2 - gy / 2, w / 2 + gx / 2, h / 2 + gy / 2)
+    const stops = theme.bg.length
+    theme.bg.forEach((color, i) => {
+      gradient.addColorStop(i / (stops - 1), color)
+    })
     ctx.fillStyle = gradient
     ctx.fillRect(0, 0, w, h)
 
-    // 绘制装饰元素
-    ctx.globalAlpha = 0.1
-    for (let i = 0; i < 5; i++) {
-      ctx.beginPath()
-      ctx.arc(Math.random() * w, Math.random() * h, Math.random() * 120 + 40, 0, Math.PI * 2)
-      ctx.fillStyle = "#ffffff"
-      ctx.fill()
-    }
-    ctx.globalAlpha = 1
+    // 2. 叠加柔和的径向渐变光效
+    const radGrad = ctx.createRadialGradient(w * (0.3 + rand() * 0.4), h * (0.2 + rand() * 0.3), 0, w * 0.5, h * 0.5, w * 0.8)
+    radGrad.addColorStop(0, theme.accentColor)
+    radGrad.addColorStop(1, "transparent")
+    ctx.fillStyle = radGrad
+    ctx.fillRect(0, 0, w, h)
 
-    // 绘制标题文字
-    const maxWidth = w - 100
+    // 3. 绘制背景装饰大字
+    drawBackgroundAccent(ctx, w, h, theme, rand, title)
+
+    // 4. 绘制装饰元素（按风格选择不同组合）
+    const styleName = coverStyle.value
+    if (styleName === "tech") {
+      drawGrid(ctx, w, h, theme, rand)
+      drawParticles(ctx, w, h, theme, rand)
+    } else if (styleName === "minimal") {
+      drawGeometricDecor(ctx, w, h, theme, rand)
+    } else if (styleName === "dark") {
+      drawParticles(ctx, w, h, theme, rand)
+      drawWaves(ctx, w, h, theme, rand)
+    } else {
+      // gradient
+      drawGeometricDecor(ctx, w, h, theme, rand)
+      drawWaves(ctx, w, h, theme, rand)
+      drawParticles(ctx, w, h, theme, rand)
+    }
+
+    // 5. 绘制半透明装饰条
+    ctx.save()
+    ctx.globalAlpha = 0.08
+    ctx.fillStyle = theme.textColor
+    const barY = h * 0.42
+    ctx.fillRect(w * 0.08, barY, w * 0.84, 2)
+    ctx.fillRect(w * 0.08, barY + h * 0.22, w * 0.84, 2)
+    ctx.restore()
+
+    // 6. 绘制标题文字（带投影）
+    const maxWidth = w - 140
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
 
-    // 自动换行
-    let fontSize = 42
+    let fontSize = 44
     ctx.font = `bold ${fontSize}px "Microsoft YaHei", "PingFang SC", sans-serif`
     const lines = wrapText(ctx, title, maxWidth)
 
-    ctx.fillStyle = style.textColor
-    const lineHeight = fontSize * 1.4
-    const startY = h / 2 - ((lines.length - 1) * lineHeight) / 2
+    // 如果标题超过2行，适当减小字号
+    if (lines.length > 2) {
+      fontSize = 36
+      ctx.font = `bold ${fontSize}px "Microsoft YaHei", "PingFang SC", sans-serif`
+      lines.length = 0
+      lines.push(...wrapText(ctx, title, maxWidth))
+    }
+
+    const lineHeight = fontSize * 1.5
+    const startY = h * 0.5 - ((lines.length - 1) * lineHeight) / 2
+
+    // 标题文字背景毛玻璃区域
+    ctx.save()
+    ctx.globalAlpha = 0.12
+    ctx.fillStyle = theme.bg[0]
+    const textBlockH = lines.length * lineHeight + 40
+    const textBlockY = startY - lineHeight / 2 - 20
+    const radius = 16
+    ctx.beginPath()
+    ctx.moveTo(w * 0.06 + radius, textBlockY)
+    ctx.lineTo(w * 0.94 - radius, textBlockY)
+    ctx.quadraticCurveTo(w * 0.94, textBlockY, w * 0.94, textBlockY + radius)
+    ctx.lineTo(w * 0.94, textBlockY + textBlockH - radius)
+    ctx.quadraticCurveTo(w * 0.94, textBlockY + textBlockH, w * 0.94 - radius, textBlockY + textBlockH)
+    ctx.lineTo(w * 0.06 + radius, textBlockY + textBlockH)
+    ctx.quadraticCurveTo(w * 0.06, textBlockY + textBlockH, w * 0.06, textBlockY + textBlockH - radius)
+    ctx.lineTo(w * 0.06, textBlockY + radius)
+    ctx.quadraticCurveTo(w * 0.06, textBlockY, w * 0.06 + radius, textBlockY)
+    ctx.closePath()
+    ctx.fill()
+    ctx.restore()
+
+    // 绘制文字
+    ctx.fillStyle = theme.textColor
+    ctx.font = `bold ${fontSize}px "Microsoft YaHei", "PingFang SC", sans-serif`
     lines.forEach((line, i) => {
-      ctx.fillText(line, w / 2, startY + i * lineHeight)
+      const y = startY + i * lineHeight
+      drawTextShadow(ctx, line, w / 2, y, "rgba(0,0,0,0.3)")
+      ctx.fillStyle = theme.textColor
+      ctx.fillText(line, w / 2, y)
     })
 
-    // 绘制底部日期
-    ctx.font = `16px "Microsoft YaHei", "PingFang SC", sans-serif`
-    ctx.fillStyle = style.subColor
+    // 7. 绘制底部日期和分隔线
+    ctx.font = `14px "Microsoft YaHei", "PingFang SC", sans-serif`
+    ctx.fillStyle = theme.subColor
     const date = new Date().toISOString().slice(0, 10)
-    ctx.fillText(date, w / 2, h - 40)
+    ctx.fillText(date, w / 2, h - 35)
+
+    // 底部小装饰点
+    ctx.save()
+    ctx.globalAlpha = 0.25
+    ctx.fillStyle = theme.textColor
+    const dotY = h - 55
+    for (let i = -2; i <= 2; i++) {
+      ctx.beginPath()
+      ctx.arc(w / 2 + i * 12, dotY, 2, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    ctx.restore()
 
     // 转为 Blob 并上传
     canvas.toBlob(async (blob) => {

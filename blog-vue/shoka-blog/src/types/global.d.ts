@@ -16,7 +16,7 @@ interface ImportMeta {
 }
 
 
-declare module "APlayer";
+declare module "aplayer";
 declare module "@kangc/v-md-editor";
 declare module "@kangc/v-md-editor/lib/preview";
 declare module "@kangc/v-md-editor/lib/plugins/katex/cdn";
