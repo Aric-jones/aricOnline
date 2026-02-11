@@ -135,6 +135,42 @@ const userAvatar = computed(() =>
 );
 
 /**
+ * 解析表情包文本为 HTML img 标签
+ * @param content 原始消息内容（可能包含 [嘻嘻] 这样的表情文本）
+ * @param emojiTypeValue 表情类型（0=emoji, 1=tv）
+ * @returns 解析后的 HTML 字符串
+ */
+const parseEmoji = (content: string, emojiTypeValue: number): string => {
+	if (!content || typeof content !== "string") return content;
+	// 如果已经是 HTML（包含 <img>），直接返回
+	if (content.includes("<img")) return content;
+	
+	return content.replace(/\[.+?\]/g, (str) => {
+		if (emojiTypeValue === 0) {
+			if (emojiList[str] === undefined) {
+				return str;
+			}
+			return (
+				"<img src='" +
+				emojiList[str] +
+				"' width='21' height='21' style='margin: 0 1px;vertical-align: text-bottom'/>"
+			);
+		}
+		if (emojiTypeValue === 1) {
+			if (tvList[str] === undefined) {
+				return str;
+			}
+			return (
+				"<img src='" +
+				tvList[str] +
+				"' width='21' height='21' style='margin: 0 1px;vertical-align: text-bottom'/>"
+			);
+		}
+		return str;
+	});
+};
+
+/**
  * 智能推导 WebSocket URL
  * - 如果后台配置的 websocketUrl 包含 localhost 或为空，则自动用当前页面域名拼接
  * - 如果页面是 https，则使用 wss://；否则使用 ws://
@@ -233,30 +269,8 @@ const handleSend = () => {
 		window.$message?.error("内容不能为空");
 		return;
 	}
-	// 解析表情
-	chatContent.value = chatContent.value.replace(/\[.+?\]/g, (str) => {
-		if (emojiType.value === 0) {
-			if (emojiList[str] === undefined) {
-				return str;
-			}
-			return (
-				"<img src='" +
-				emojiList[str] +
-				"' width='21' height='21' style='margin: 0 1px;vertical-align: text-bottom'/>"
-			);
-		}
-		if (emojiType.value === 1) {
-			if (tvList[str] === undefined) {
-				return str;
-			}
-			return (
-				"<img src='" +
-				tvList[str] +
-				"' width='21' height='21' style='margin: 0 1px;vertical-align: text-bottom'/>"
-			);
-		}
-		return str;
-	});
+	// 解析表情（发送前转换）
+	chatContent.value = parseEmoji(chatContent.value, emojiType.value);
 	let chat = {
 		nickname: userNickname.value,
 		avatar: userAvatar.value,
