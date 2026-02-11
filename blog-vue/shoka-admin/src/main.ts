@@ -2,7 +2,7 @@ import "@/assets/styles/index.scss";
 import CalendarHeatmap from "@/components/CalendarHeatmap/index.vue";
 import Echarts from "@/components/Echarts/index.vue";
 import Pagination from "@/components/Pagination/index.vue";
-import RightToolbar from "@/components/RightToolbar/index.vue";
+import RightToolbar from "@/components/RightToolBar/index.vue";
 import SvgIcon from "@/components/SvgIcon/index.vue";
 import * as directive from "@/directive";
 import "@/permission";

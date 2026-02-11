@@ -20,8 +20,8 @@ services:
       - "${MYSQL_PORT:-4000}:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      # 首次启动时自动导入 blog.sql
-      - ../blog.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      # 首次启动时自动导入 blog.sql（blog.sql 在 deploy/ 目录下）
+      - ./blog.sql:/docker-entrypoint-initdb.d/init.sql:ro
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
@@ -61,11 +61,17 @@ services:
     env_file:
       - .env
     environment:
-      # 覆盖 host 为容器名（Docker 内部网络）
+      # 覆盖为容器名和容器内部端口（Docker 内部网络）
+      # 注意：.env 中的 MYSQL_PORT=4000 和 REDIS_PORT=5000 是宿主机端口
+      # 容器内部通信必须使用 MySQL 和 Redis 的默认端口
       MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
       REDIS_HOST: redis
+      REDIS_PORT: 6379
       # 后端服务端口
       SERVER_PORT: 8000
+      # 使用 dev 配置文件
+      SPRING_PROFILE: dev
     ports:
       - "${SERVER_PORT:-8000}:8000"
     volumes:

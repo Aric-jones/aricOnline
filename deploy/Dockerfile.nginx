@@ -43,6 +43,8 @@ RUN apk add --no-cache tzdata && \
 # 拷贝构建产物
 COPY --from=blog-builder /build/blog/blog /usr/share/nginx/blog
 COPY --from=admin-builder /build/admin/dist /usr/share/nginx/admin
+# 拷贝静态资源（表情包等）
+COPY --from=admin-builder /build/admin/static /usr/share/nginx/static
 # 拷贝 nginx 配置
 COPY deploy/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80 443
