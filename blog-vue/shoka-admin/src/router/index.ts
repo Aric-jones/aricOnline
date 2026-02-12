@@ -44,10 +44,9 @@ export const constantRoutes: RouteRecordRaw[] = [
 ];
 
 const router = createRouter({
-  // base 与 vite.config.ts 中的 base 保持一致
-  // 线上部署：base 是 /admin，本地开发：base 是 /
-  // import.meta.env.BASE_URL 可能带尾部斜杠，需要去掉
-  history: createWebHistory(import.meta.env.BASE_URL.replace(/\/$/, '') || '/'),
+  // import.meta.env.BASE_URL 由 Vite 自动注入，等于 vite.config.ts 中的 base
+  // 本地开发：/  线上构建：/admin/
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: constantRoutes,
 });
 

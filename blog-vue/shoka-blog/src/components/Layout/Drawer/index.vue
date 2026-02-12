@@ -95,14 +95,15 @@ const blog = useBlogStore();
 const user = useUserStore();
 const { width } = useWindowSize();
 
-// 管理后台和发布文章的 URL（线上线下都是 /admin 开头）
-const getAdminBase = () => {
-	return import.meta.env.DEV
-		? `${window.location.protocol}//${window.location.hostname}:5173/`
-		: `${window.location.origin}/`;
-};
-const adminUrl = computed(() => getAdminBase());
-const writeArticleUrl = computed(() => `${getAdminBase()}/article/write`);
+// 管理后台和发布文章的 URL
+// 本地开发：后台在 5173 端口，base 是 /
+// 线上部署：同域名 80 端口，Nginx 路由到 /admin
+const adminUrl = computed(() =>
+	import.meta.env.DEV
+		? `${window.location.protocol}//${window.location.hostname}:5173`
+		: `${window.location.origin}/admin`
+);
+const writeArticleUrl = computed(() => `${adminUrl.value}/article/write`);
 
 const menuList = [
 	{
