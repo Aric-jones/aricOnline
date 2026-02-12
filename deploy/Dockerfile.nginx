@@ -31,6 +31,7 @@ COPY blog-vue/shoka-admin/package.json blog-vue/shoka-admin/package-lock.json* .
 RUN npm install --registry=https://registry.npmmirror.com
 COPY blog-vue/shoka-admin/ .
 # 确保 .env.prod 文件存在，如果没有则创建默认配置
+# 线上部署在 /admin 路径下，所以 base 必须是 /admin
 RUN if [ ! -f .env.prod ]; then \
         echo "VITE_BASE_URL=/admin" > .env.prod; \
     fi
