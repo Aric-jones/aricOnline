@@ -64,6 +64,16 @@
 							<svg-icon icon-class="author"></svg-icon> 个人中心
 						</router-link>
 					</li>
+					<li v-if="user.isAdmin" class="item">
+						<a :href="adminUrl" target="_blank">
+							<svg-icon icon-class="home"></svg-icon> 后台管理
+						</a>
+					</li>
+					<li v-if="user.isAdmin" class="item">
+						<a :href="writeArticleUrl" target="_blank">
+							<svg-icon icon-class="edit"></svg-icon> 发布文章
+						</a>
+					</li>
 					<li class="item">
 						<a @click="logout">
 							<svg-icon icon-class="logout"></svg-icon> 退出
@@ -84,6 +94,16 @@ const app = useAppStore();
 const blog = useBlogStore();
 const user = useUserStore();
 const { width } = useWindowSize();
+
+// 管理后台和发布文章的 URL（线上线下都是 /admin 开头）
+const getAdminBase = () => {
+	return import.meta.env.DEV
+		? `${window.location.protocol}//${window.location.hostname}:5173/`
+		: `${window.location.origin}/`;
+};
+const adminUrl = computed(() => getAdminBase());
+const writeArticleUrl = computed(() => `${getAdminBase()}/article/write`);
+
 const menuList = [
 	{
 		name: "首页",

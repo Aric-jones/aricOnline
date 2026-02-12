@@ -54,6 +54,10 @@ interface UserState {
    * 说说点赞集合
    */
   talkLikeSet: number[];
+  /**
+   * 角色标识列表
+   */
+  roleList: string[];
 }
 
 
@@ -71,6 +75,7 @@ export const useUserStore = defineStore("useUserStore", {
 		articleLikeSet: [],
 		commentLikeSet: [],
 		talkLikeSet: [],
+		roleList: [],
 	}),
 	actions: {
 		GetUserInfo() {
@@ -86,9 +91,10 @@ export const useUserStore = defineStore("useUserStore", {
 							this.webSite = data.data.webSite;
 							this.intro = data.data.intro;
 							this.loginType = data.data.loginType;
-							this.articleLikeSet = data.data.articleLikeSet;
-							this.commentLikeSet = data.data.commentLikeSet;
-							this.talkLikeSet = data.data.talkLikeSet;
+						this.articleLikeSet = data.data.articleLikeSet;
+						this.commentLikeSet = data.data.commentLikeSet;
+						this.talkLikeSet = data.data.talkLikeSet;
+						this.roleList = data.data.roleList || [];
 						}
 						resolve(data);
 					})
@@ -147,7 +153,14 @@ export const useUserStore = defineStore("useUserStore", {
 			this.intro = user.intro;
 		},
 	},
-	getters: {},
+	getters: {
+		/**
+		 * 是否为管理员（roleId 为 "1" 表示管理员）
+		 */
+		isAdmin(): boolean {
+			return this.roleList.includes("1");
+		},
+	},
 	persist: {
 		key: "user",
 		storage: sessionStorage,

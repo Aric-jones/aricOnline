@@ -89,6 +89,8 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         Set<Object> articleLikeSet = redisService.getSet(RedisConstant.USER_ARTICLE_LIKE + userId);
         Set<Object> commentLikeSet = redisService.getSet(RedisConstant.USER_COMMENT_LIKE + userId);
         Set<Object> talkLikeSet = redisService.getSet(RedisConstant.USER_TALK_LIKE + userId);
+        // 查询用户角色列表
+        List<String> roleList = StpUtil.getRoleList();
         return UserInfoResp
                 .builder()
                 .id(userId)
@@ -102,6 +104,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .commentLikeSet(commentLikeSet)
                 .talkLikeSet(talkLikeSet)
                 .loginType(user.getLoginType())
+                .roleList(roleList)
                 .build();
     }
 

@@ -44,7 +44,9 @@ export const constantRoutes: RouteRecordRaw[] = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  // base 与 vite.config.ts 中的 base: '/admin' 保持一致
+  // import.meta.env.BASE_URL 可能带尾部斜杠，需要去掉
+  history: createWebHistory(import.meta.env.BASE_URL.replace(/\/$/, '') || '/admin'),
   routes: constantRoutes,
 });
 

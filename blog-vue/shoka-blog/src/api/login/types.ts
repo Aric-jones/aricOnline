@@ -60,6 +60,10 @@ export interface UserInfo {
    * 说说点赞集合
    */
   talkLikeSet: number[];
+  /**
+   * 角色标识列表
+   */
+  roleList: string[];
 }
 
 /**

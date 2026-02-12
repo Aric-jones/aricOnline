@@ -1,6 +1,6 @@
 <template>
 	<div v-if="blog.blogInfoSafe.siteConfig.isChat">
-		<div class="chat-container" v-show="show">
+		<div class="chat-container" v-show="show" @click.stop>
 			<div class="chat-header">
 				<img
 					width="32"
@@ -34,6 +34,16 @@
 							>
 								{{ formatDateTime(chat.createTime) }}
 							</span>
+							<span
+								v-if="chat.ipSource"
+								style="
+									color: var(--color-grey);
+									font-size: 11px;
+									margin-left: 8px;
+								"
+							>
+								{{ chat.ipSource }}
+							</span>
 						</div>
 						<div
 							class="user-content"
@@ -64,6 +74,8 @@
 				></svg-icon>
 			</div>
 		</div>
+		<!-- 遮罩层，点击外部关闭聊天室 -->
+		<div v-if="show" class="chat-overlay" @click="show = false"></div>
 		<div class="chat-btn" @click="handleOpen">
 			<span class="unread" v-if="unreadCount > 0">{{ unreadCount }}</span>
 			<img
@@ -144,7 +156,7 @@ const parseEmoji = (content: string, emojiTypeValue: number): string => {
 	if (!content || typeof content !== "string") return content;
 	// 如果已经是 HTML（包含 <img>），直接返回
 	if (content.includes("<img")) return content;
-	
+
 	return content.replace(/\[.+?\]/g, (str) => {
 		if (emojiTypeValue === 0) {
 			if (emojiList[str] === undefined) {
@@ -171,66 +183,93 @@ const parseEmoji = (content: string, emojiTypeValue: number): string => {
 };
 
 /**
- * 智能推导 WebSocket URL
- * - 如果后台配置的 websocketUrl 包含 localhost 或为空，则自动用当前页面域名拼接
- * - 如果页面是 https，则使用 wss://；否则使用 ws://
+ * 获取 WebSocket URL
+ * 优先使用后台配置的 websocketUrl，否则根据环境自动推导
  */
 const getWebSocketUrl = (): string => {
 	const configuredUrl = blog.blogInfoSafe.siteConfig.websocketUrl;
-	if (
-		configuredUrl &&
-		!configuredUrl.includes("localhost") &&
-		!configuredUrl.includes("127.0.0.1")
-	) {
+	// 如果后台配置了完整地址，直接使用
+	if (configuredUrl && configuredUrl.trim()) {
 		return configuredUrl;
+	}
+	// 自动推导：本地开发直连后端，线上通过 Nginx 代理
+	if (import.meta.env.DEV) {
+		return "ws://localhost:8080/websocket";
 	}
 	const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 	return `${protocol}//${window.location.host}/websocket`;
 };
 
+/**
+ * 创建 WebSocket 连接
+ */
+const createWebSocket = () => {
+	const ws = new WebSocket(getWebSocketUrl());
+	ws.onopen = () => {
+		webSocketState.value = true;
+		startHeart();
+	};
+	ws.onmessage = (event: MessageEvent) => {
+		const data = JSON.parse(event.data);
+		switch (data.type) {
+			case Type.ONLINE_COUNT:
+				onlineCount.value = data.data;
+				break;
+			case Type.HISTORY_RECORD:
+				recordList.value = data.data.chatRecordList;
+				ipAddress.value = data.data.ipAddress;
+				ipSource.value = data.data.ipSource;
+				break;
+			case Type.SEND_MESSAGE:
+				if (data.data && data.data.content) {
+					data.data.content = parseEmoji(data.data.content, emojiType.value);
+				}
+				recordList.value.push(data.data);
+				if (!show.value) {
+					unreadCount.value++;
+				}
+				break;
+			case Type.RECALL_MESSAGE:
+				for (let i = 0; i < recordList.value.length; i++) {
+					if (recordList.value[i].id === data.data) {
+						recordList.value.splice(i, 1);
+						i--;
+					}
+				}
+				break;
+			case Type.HEART_BEAT:
+				webSocketState.value = true;
+				break;
+		}
+	};
+	ws.onclose = () => {
+		webSocketState.value = false;
+		websocket.value = undefined; // 重置，允许重连
+		clear();
+	};
+	ws.onerror = (error) => {
+		webSocketState.value = false;
+		websocket.value = undefined;
+		clear();
+		// 提示连接失败
+		if (show.value) {
+			window.$message?.error(
+				"WebSocket 连接失败，请检查后台配置的 websocketUrl"
+			);
+		}
+	};
+	websocket.value = ws;
+};
+
 const handleOpen = () => {
-	if (websocket.value === undefined) {
-		websocket.value = new WebSocket(getWebSocketUrl());
-		websocket.value.onopen = () => {
-			webSocketState.value = true;
-			startHeart();
-		};
-		websocket.value.onmessage = (event: MessageEvent) => {
-			const data = JSON.parse(event.data);
-			switch (data.type) {
-				case Type.ONLINE_COUNT:
-					// 在线人数
-					onlineCount.value = data.data;
-					break;
-				case Type.HISTORY_RECORD:
-					recordList.value = data.data.chatRecordList;
-					ipAddress.value = data.data.ipAddress;
-					ipSource.value = data.data.ipSource;
-					break;
-				case Type.SEND_MESSAGE:
-					recordList.value.push(data.data);
-					if (!show.value) {
-						unreadCount.value++;
-					}
-					break;
-				case Type.RECALL_MESSAGE:
-					for (let i = 0; i < recordList.value.length; i++) {
-						if (recordList.value[i].id === data.data) {
-							recordList.value.splice(i, 1);
-							i--;
-						}
-					}
-					break;
-				case Type.HEART_BEAT:
-					webSocketState.value = true;
-					break;
-			}
-		};
-		websocket.value.onclose = () => {
-			alert("关闭连接");
-			webSocketState.value = false;
-			clear();
-		};
+	// 如果 WebSocket 不存在或已关闭，重新创建
+	if (
+		!websocket.value ||
+		websocket.value.readyState === WebSocket.CLOSED ||
+		websocket.value.readyState === WebSocket.CLOSING
+	) {
+		websocket.value = undefined;
+		createWebSocket();
 	}
 	unreadCount.value = 0;
 	show.value = !show.value;
@@ -269,6 +308,13 @@ const handleSend = () => {
 		window.$message?.error("内容不能为空");
 		return;
 	}
+	// 检查连接状态，断开则自动重连
+	if (!websocket.value || websocket.value.readyState !== WebSocket.OPEN) {
+		websocket.value = undefined;
+		createWebSocket();
+		window.$message?.warning("连接已断开，正在重连，请稍后再试");
+		return;
+	}
 	// 解析表情（发送前转换）
 	chatContent.value = parseEmoji(chatContent.value, emojiType.value);
 	let chat = {
@@ -281,17 +327,20 @@ const handleSend = () => {
 	};
 	websocketMessage.type = Type.SEND_MESSAGE;
 	websocketMessage.data = chat;
-	websocket.value?.send(JSON.stringify(websocketMessage));
+	websocket.value.send(JSON.stringify(websocketMessage));
 	chatContent.value = "";
 };
 const startHeart = () => {
+	clear();
 	timeout.value = setTimeout(() => {
-		const beatMessage = {
-			type: Type.HEART_BEAT,
-			data: "ping",
-		};
-		websocket.value?.send(JSON.stringify(beatMessage));
-		waitServer();
+		if (websocket.value && websocket.value.readyState === WebSocket.OPEN) {
+			const beatMessage = {
+				type: Type.HEART_BEAT,
+				data: "ping",
+			};
+			websocket.value.send(JSON.stringify(beatMessage));
+			waitServer();
+		}
 	}, 30 * 1000);
 };
 const waitServer = () => {
@@ -301,7 +350,10 @@ const waitServer = () => {
 			startHeart();
 			return;
 		}
-		websocket.value?.close();
+		// 服务器未响应心跳，关闭连接（onclose 会重置 websocket.value）
+		if (websocket.value && websocket.value.readyState === WebSocket.OPEN) {
+			websocket.value.close();
+		}
 	}, 20 * 1000);
 };
 const clear = () => {
@@ -453,6 +505,17 @@ onUpdated(() => {
 	color: #000;
 	text-align: center;
 	display: none;
+}
+
+.chat-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.3);
+	z-index: 1199;
+	backdrop-filter: blur(2px);
 }
 
 .chat-btn {

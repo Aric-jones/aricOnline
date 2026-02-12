@@ -43,7 +43,7 @@ public class LoginController {
     }
 
     /**
-     * 后台登录
+     * 后台登录（仅管理员可登录）
      *
      * @param login 登录参数
      * @return {@link String} Token
@@ -51,7 +51,7 @@ public class LoginController {
     @ApiOperation(value = "后台登录")
     @PostMapping("/admin/login")
     public Result<String> adminLogin(@Validated @RequestBody LoginReq login) {
-        return Result.success(loginService.login(login));
+        return Result.success(loginService.adminLogin(login));
     }
 
     /**

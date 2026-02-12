@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -82,4 +83,10 @@ public class UserInfoResp {
      */
     @ApiModelProperty(value = "登录类型")
     private Integer loginType;
+
+    /**
+     * 角色标识列表
+     */
+    @ApiModelProperty(value = "角色标识列表")
+    private List<String> roleList;
 }

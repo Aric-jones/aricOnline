@@ -2,7 +2,7 @@
 	<div class="menu">
 		<div class="menu-item title">
 			<router-link to="/" class="menu-btn">
-				{{ blog.blogInfoSafe.siteConfig?.siteName ?? '博客' }}
+				{{ blog.blogInfoSafe.siteConfig?.siteName ?? "博客" }}
 			</router-link>
 		</div>
 		<template v-for="menu of menuList" :key="menu.name">
@@ -48,6 +48,16 @@
 						<router-link to="/user" class="link">
 							<svg-icon icon-class="author"></svg-icon> 个人中心
 						</router-link>
+					</li>
+					<li v-if="user.isAdmin" class="subitem">
+						<a class="link" :href="adminUrl" target="_blank">
+							<svg-icon icon-class="home"></svg-icon> 后台管理
+						</a>
+					</li>
+					<li v-if="user.isAdmin" class="subitem">
+						<a class="link" :href="writeArticleUrl" target="_blank">
+							<svg-icon icon-class="edit"></svg-icon> 发布文章
+						</a>
 					</li>
 					<li class="subitem">
 						<a class="link" @click="logout"
@@ -158,6 +168,15 @@ const delayHideHistory = () => {
 		showHistory.value = false;
 	}, 200);
 };
+// 管理后台和发布文章的 URL（线上线下都是 /admin 开头）
+const getAdminBase = () => {
+	return import.meta.env.DEV
+		? `${window.location.protocol}//${window.location.hostname}:5173/admin`
+		: `${window.location.origin}/admin`;
+};
+const adminUrl = computed(() => getAdminBase());
+const writeArticleUrl = computed(() => `${getAdminBase()}/article/write`);
+
 const menuList = [
 	{
 		name: "首页",

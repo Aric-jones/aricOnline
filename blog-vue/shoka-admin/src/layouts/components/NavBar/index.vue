@@ -59,7 +59,7 @@ import { computed } from "vue";
 const { app, user } = useStore();
 const device = computed(() => app.device);
 const openHome = () => {
-  window.open("https://www.ttkwsd.top");
+  window.open("http://212.64.28.65/");
 };
 const handleCommand = (command: string) => {
   switch (command) {

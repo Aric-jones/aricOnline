@@ -3,13 +3,18 @@ import path from "path";
 import AutoImport from "unplugin-auto-import/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import Components from "unplugin-vue-components/vite";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import { prismjsPlugin } from "vite-plugin-prismjs";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  base: '/admin',
+export default defineConfig((configEnv) => {
+  // 加载环境变量
+  const viteEnv = loadEnv(configEnv.mode, process.cwd());
+  
+  return {
+    // 支持通过环境变量 VITE_BASE_URL 配置 base，默认 /admin
+    base: viteEnv.VITE_BASE_URL || '/',
   plugins: [
     vue(),
     AutoImport({
@@ -51,5 +56,5 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
-  },
+  }}
 });

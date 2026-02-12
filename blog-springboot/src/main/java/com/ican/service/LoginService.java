@@ -26,6 +26,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -69,6 +70,32 @@ public class LoginService {
         StpUtil.checkDisable(user.getId());
         // 通过校验后，再进行登录
         StpUtil.login(user.getId());
+        return StpUtil.getTokenValue();
+    }
+
+    /**
+     * 后台登录（仅管理员可用）
+     *
+     * @param login 登录信息
+     * @return Token
+     */
+    public String adminLogin(LoginReq login) {
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
+                .select(User::getId)
+                .eq(User::getUsername, login.getUsername())
+                .eq(User::getPassword, SecurityUtils.sha256Encrypt(login.getPassword())));
+        Assert.notNull(user, "用户不存在或密码错误");
+        // 校验是否被封禁
+        StpUtil.checkDisable(user.getId());
+        // 先登录，获取角色列表
+        StpUtil.login(user.getId());
+        // 校验是否为管理员角色
+        List<String> roleList = StpUtil.getRoleList();
+        if (!roleList.contains(RoleEnum.ADMIN.getRoleId())) {
+            // 不是管理员，退出登录并抛出异常
+            StpUtil.logout();
+            throw new RuntimeException("权限不足，仅管理员可登录后台");
+        }
         return StpUtil.getTokenValue();
     }
 
