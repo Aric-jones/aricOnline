@@ -73,6 +73,7 @@ const send = () => {
   left: 0;
   right: 0;
   width: 22.5rem;
+  max-width: calc(100vw - 2rem);
   margin: 0 auto;
   text-align: center;
   color: #fff;

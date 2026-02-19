@@ -41,4 +41,19 @@ const blog = useBlogStore();
 .author-avatar:hover {
 	transform: rotate(360deg);
 }
+
+.avatar-box {
+	text-align: center;
+}
+
+@media (max-width: 767px) {
+	.author-avatar {
+		width: 80px;
+		height: 80px;
+	}
+
+	.md {
+		font-size: 0.9rem;
+	}
+}
 </style>

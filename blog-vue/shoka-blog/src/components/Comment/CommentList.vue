@@ -367,4 +367,35 @@ onMounted(() => {
 		}
 	}
 }
+
+@media (max-width: 767px) {
+	.reply-title {
+		margin: 12px 0;
+		font-size: 16px;
+		padding-left: 5px;
+	}
+
+	.sub-reply-item {
+		padding: 6px 0 6px 28px;
+		font-size: 13px;
+	}
+
+	.reply-info {
+		font-size: 0.75rem;
+		flex-wrap: wrap;
+		gap: 2px 0;
+
+		.reply-time {
+			margin-right: 10px;
+		}
+
+		.reply-like {
+			margin-right: 10px;
+		}
+	}
+
+	.reply-content {
+		font-size: 0.875rem;
+	}
+}
 </style>

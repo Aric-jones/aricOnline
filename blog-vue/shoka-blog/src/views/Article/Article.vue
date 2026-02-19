@@ -231,12 +231,14 @@ import { getArticle, likeArticle, quickReadArticle } from "@/api/article";
 import { ArticleInfo, ArticlePagination } from "@/api/article/types";
 import { CategoryVO } from "@/api/category/types";
 import { useAppStore, useBlogStore, useUserStore } from "@/store";
+import { useArticlePreview } from "@/composables/useArticlePreview";
 import { formatDate } from "@/utils/date";
 import { Share } from "vue3-social-share";
 import "vue3-social-share/lib/index.css";
 const user = useUserStore();
 const app = useAppStore();
 const blog = useBlogStore();
+const { articlePreviewRef } = useArticlePreview();
 const articleRef = ref();
 const route = useRoute();
 const articleHref = window.location.href;
@@ -334,9 +336,14 @@ onMounted(() => {
 		wordNum.value = deleteHTMLTag(article.value.articleContent).length;
 		readTime.value = Math.round(wordNum.value / 400);
 		articleLoaded.value = true;
-		// 自动触发 AI 快速阅读
+		nextTick(() => {
+			articlePreviewRef.value = articleRef.value;
+		});
 		fetchQuickRead();
 	});
+});
+onUnmounted(() => {
+	articlePreviewRef.value = null;
 });
 </script>
 

@@ -27,7 +27,7 @@ const isMessage = computed(() => route.path == "/message");
   bottom: 0;
   width: 100%;
   height: 8rem;
-  padding: 2.5rem 0;
+  padding: 2.5rem 1rem;
   font-size: 0.875rem;
   text-align: center;
   color: var(--grey-0);
@@ -35,6 +35,7 @@ const isMessage = computed(() => route.path == "/message");
   background-size: 300% 300%;
   -webkit-animation: gradientBG 10s ease infinite;
   animation: gradientBG 10s ease infinite;
+  word-break: break-all;
 }
 
 @keyframes gradientBG {

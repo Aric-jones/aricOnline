@@ -236,11 +236,20 @@ const close = () => {
 
 @media (max-width: 767px) {
 	.daily-card {
-		width: 320px;
+		width: calc(100vw - 2rem);
+		max-width: 320px;
 	}
 
 	.daily-cover {
 		height: 160px;
+	}
+
+	.daily-info {
+		padding: 0.75rem 1rem 0.5rem;
+	}
+
+	.daily-title {
+		font-size: 1rem;
 	}
 }
 </style>

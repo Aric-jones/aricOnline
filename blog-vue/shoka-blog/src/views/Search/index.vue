@@ -470,4 +470,57 @@ onMounted(() => {
 	display: flex;
 	justify-content: center;
 }
+
+@media (max-width: 767px) {
+	.article-item {
+		flex-direction: column !important;
+		height: auto;
+		margin-bottom: 1rem;
+
+		.article-cover {
+			width: 100%;
+			height: 10rem;
+			margin: 0 !important;
+			clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%) !important;
+			border-radius: 0.625rem 0.625rem 0 0 !important;
+		}
+
+		.article-info {
+			width: 100% !important;
+			padding: 0.5rem 0.75rem 2.5rem !important;
+		}
+	}
+
+	.article-meta {
+		justify-content: flex-start !important;
+		flex-wrap: wrap;
+		gap: 0.25rem 0.5rem;
+		font-size: 0.75rem;
+	}
+
+	.article-title {
+		font-size: 1.1rem;
+		margin: 0.4rem 0;
+	}
+
+	.article-content {
+		font-size: 0.8rem;
+		line-height: 1.6;
+		-webkit-line-clamp: 2;
+	}
+
+	.ml-3\.75 {
+		margin-left: 0;
+	}
+}
+
+@media (max-width: 480px) {
+	.article-content {
+		display: none !important;
+	}
+
+	.article-title {
+		font-size: 1rem;
+	}
+}
 </style>

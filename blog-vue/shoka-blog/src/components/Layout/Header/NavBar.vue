@@ -343,6 +343,7 @@ const logout = () => {
 	outline: none;
 	color: currentColor;
 	width: 250px;
+	max-width: 40vw;
 	padding: 0 5px;
 	font-size: 14px;
 
@@ -439,7 +440,7 @@ const logout = () => {
 	border-bottom: 0;
 }
 
-@media (max-width: 865px) {
+@media (max-width: 1065px) {
 	.menu {
 		justify-content: center;
 	}
@@ -450,6 +451,28 @@ const logout = () => {
 
 	.menu .title {
 		display: block;
+	}
+
+	.menu .search-item {
+		display: block;
+	}
+
+	.search-input {
+		width: 120px;
+		max-width: 30vw;
+	}
+}
+
+@media (max-width: 480px) {
+	.search-input {
+		width: 100px;
+		max-width: 25vw;
+		font-size: 12px;
+	}
+
+	.search-input-container {
+		padding: 3px 8px;
+		margin-left: 5px;
 	}
 }
 </style>

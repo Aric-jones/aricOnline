@@ -11,10 +11,10 @@
     <div class="page-container">
       <n-form ref="formInstRef" label-placement="left" :label-width="90" :model="form" :rules="rules">
         <n-form-item label="SESSDATA:" label-style="color: var(--text-color);" path="data">
-          <n-input placeholder="输入SESSDATA" v-model:value="form.data" style="width: 400px;" />
+          <n-input placeholder="输入SESSDATA" v-model:value="form.data" style="width: 100%; max-width: 400px;" />
         </n-form-item>
         <n-form-item label="bili_jct:" label-style="color: var(--text-color);" path="csrf">
-          <n-input placeholder="请输入bili_jct" v-model:value="form.csrf" style="width: 400px;"/>
+          <n-input placeholder="请输入bili_jct" v-model:value="form.csrf" style="width: 100%; max-width: 400px;"/>
         </n-form-item>
       </n-form>
       <div class="btn-list">
@@ -123,12 +123,20 @@ onMounted(() => {
   }
 }
 
-.ml {
-  margin-left: 15px;
-}
-
 .btn-list {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ml {
+  margin-left: 0;
+}
+
+@media (max-width: 767px) {
+  .card {
+    max-width: calc(50% - 1rem);
+  }
 }
 
 .mask {

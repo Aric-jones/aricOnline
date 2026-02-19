@@ -270,6 +270,26 @@
 	animation: gradientBG 10s ease infinite;
 }
 
+/* gradient：抽屉导航栏用动态 RGB 渐变 */
+[theme="gradient"] .side-bg {
+	background: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab) !important;
+	background-size: 300% 300% !important;
+	animation: gradientBG 10s ease infinite !important;
+}
+[theme="gradient"] .side-bg .side-menu .item {
+	color: rgba(255, 255, 255, 0.85);
+}
+[theme="gradient"] .side-bg .author-name,
+[theme="gradient"] .side-bg .site-desc,
+[theme="gradient"] .side-bg .blog-item,
+[theme="gradient"] .side-bg .count,
+[theme="gradient"] .side-bg .name {
+	color: rgba(255, 255, 255, 0.9);
+}
+[theme="gradient"] .side-bg .blog-item:not(:first-child) {
+	border-left-color: rgba(255, 255, 255, 0.3);
+}
+
 /* 波浪：与底部一致的同款 RGB 色（还原为渐变前的样式） */
 [theme="gradient"] .waves .parallax .use {
 	&:nth-child(1) { fill: rgba(236, 140, 105, 0.5); }

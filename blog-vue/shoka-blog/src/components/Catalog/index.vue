@@ -85,6 +85,8 @@ onMounted(() => {
   padding: 2px 6px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 
   &:hover {
     color: var(--primary-color);

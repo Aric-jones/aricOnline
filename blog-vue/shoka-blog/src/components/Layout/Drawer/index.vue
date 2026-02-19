@@ -2,7 +2,7 @@
 	<n-drawer
 		class="side-bg"
 		v-model:show="drawerVisible"
-		:width="240"
+		:width="drawerWidth"
 		:block-scroll="false"
 		placement="right"
 	>
@@ -81,6 +81,16 @@
 					</li>
 				</template>
 			</ul>
+		<div class="drawer-sidebar">
+			<div v-if="isArticlePage && articlePreviewRef" class="drawer-card">
+				<Catalog :domRef="articlePreviewRef"></Catalog>
+			</div>
+			<Notice class="side-card"></Notice>
+			<SideBarLatestArticles class="side-card"></SideBarLatestArticles>
+			<SideBarPopularArticles class="side-card"></SideBarPopularArticles>
+			<SideBarTagCloud class="side-card"></SideBarTagCloud>
+			<WebInfo class="side-card"></WebInfo>
+		</div>
 		</n-drawer-content>
 	</n-drawer>
 </template>
@@ -88,12 +98,22 @@
 <script setup lang="ts">
 import { useAppStore, useBlogStore, useUserStore } from "@/store";
 import { useWindowSize } from "@vueuse/core";
+import { useArticlePreview } from "@/composables/useArticlePreview";
+import Catalog from "@/components/Catalog/index.vue";
+import Notice from "@/components/Layout/SideBar/Notice.vue";
+import SideBarLatestArticles from "@/components/Layout/SideBar/SideBarLatestArticles.vue";
+import SideBarPopularArticles from "@/components/Layout/SideBar/SideBarPopularArticles.vue";
+import SideBarTagCloud from "@/components/Layout/SideBar/SideBarTagCloud.vue";
+import WebInfo from "@/components/Layout/SideBar/WebInfo.vue";
 const route = useRoute();
 const router = useRouter();
 const app = useAppStore();
 const blog = useBlogStore();
 const user = useUserStore();
 const { width } = useWindowSize();
+const drawerWidth = computed(() => Math.min(300, width.value * 0.82));
+const { articlePreviewRef } = useArticlePreview();
+const isArticlePage = computed(() => /^\/article\/\d+/.test(route.path));
 
 // 管理后台和发布文章的 URL
 // 本地开发：后台在 5173 端口，base 是 /
@@ -242,6 +262,43 @@ const logout = () => {
 	&:hover {
 		color: var(--grey-0);
 		box-shadow: 0 0 0.75rem var(--color-pink);
+	}
+}
+
+
+</style>
+
+<style lang="scss">
+.side-bg .drawer-sidebar {
+	padding: 0 0.75rem 1rem;
+	border-top: 1px solid rgba(128, 128, 128, 0.2);
+	margin-top: 0.5rem;
+}
+
+.side-bg .drawer-card {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.75rem;
+	margin-top: 0.75rem;
+	border-radius: 0.5rem;
+	background: rgba(255, 255, 255, 0.15);
+	overflow: hidden;
+
+	.side-card {
+		width: 100% !important;
+		box-shadow: none !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		border-radius: 0 !important;
+		background: transparent !important;
+	}
+
+	.cloud_wrap {
+		height: 180px;
+	}
+
+	.catalog-content {
+		max-height: 50vh;
 	}
 }
 </style>

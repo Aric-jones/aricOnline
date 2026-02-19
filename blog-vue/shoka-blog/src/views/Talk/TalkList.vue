@@ -163,14 +163,14 @@ onMounted(() => {
 
 // ########## 核心：单张图片样式（最大高度200px、自适应、不拉伸）##########
 .image {
-	max-height: 200px !important; // 最大高度200px，超出等比例缩小
-	width: auto !important; // 宽度按原始比例自适应
-	height: auto !important; // 高度跟随比例，不固定
-	border-radius: 0.25rem; // 圆角，和管理端一致
-	cursor: pointer; // 鼠标小手，提示可点击预览
-	flex-shrink: 0; // 防止图片被挤压，保证一行多列
-	object-fit: contain; // 完整显示，不拉伸、不裁剪
-	object-position: center; // 比例不符时居中显示
+	max-height: 200px !important;
+	max-width: 100% !important;
+	width: auto !important;
+	height: auto !important;
+	border-radius: 0.25rem;
+	cursor: pointer;
+	object-fit: contain;
+	object-position: center;
 }
 
 // 说说信息（点赞/评论）：补充间距、样式
@@ -190,5 +190,20 @@ onMounted(() => {
 .loading-warp {
 	text-align: center;
 	margin-top: 2rem;
+}
+
+@media (max-width: 767px) {
+	.talk-item {
+		padding: 0.75rem;
+	}
+
+	.user-avatar {
+		width: 2.2rem;
+		height: 2.2rem;
+	}
+
+	.image {
+		max-height: 150px !important;
+	}
 }
 </style>

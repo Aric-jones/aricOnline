@@ -110,4 +110,17 @@ onMounted(() => {
     justify-content: center;
   }
 }
+
+@media (max-width: 767px) {
+  .info-container {
+    .avatar {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .info {
+      width: 100%;
+    }
+  }
+}
 </style>

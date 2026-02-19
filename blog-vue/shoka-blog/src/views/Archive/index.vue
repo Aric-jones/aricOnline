@@ -171,6 +171,39 @@ onMounted(() => {
 .article-title:hover {
   color: var(--primary-color);
   transform: translateX(10px);
+}
 
+@media (max-width: 767px) {
+  .archive-title {
+    font-size: 1.2rem;
+    padding-left: 15px;
+    margin-left: 5px;
+  }
+
+  .archive-list {
+    margin-left: 5px;
+    padding-left: 15px;
+  }
+
+  .article-cover {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+  }
+
+  .archive-item {
+    margin: 0 0 15px 5px;
+  }
+
+  .article-info {
+    margin: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-cover {
+    width: 65px;
+    height: 65px;
+  }
 }
 </style>

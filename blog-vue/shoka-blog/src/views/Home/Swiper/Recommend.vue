@@ -139,4 +139,34 @@ onMounted(() => {
 	background: rgba(255, 255, 255, 0.3);
 	border-radius: 100%;
 }
+
+@media (max-width: 767px) {
+	.swiper-container {
+		height: 10rem;
+		margin: 0.5rem 0.25rem;
+	}
+
+	.slide-content {
+		padding: 0 1rem 1rem;
+
+		.slide-title {
+			font-size: 1.2rem;
+		}
+	}
+
+	:deep(.swiper-button-next),
+	:deep(.swiper-button-prev) {
+		display: none;
+	}
+}
+
+@media (max-width: 480px) {
+	.slide-content .slide-title {
+		font-size: 1rem;
+	}
+
+	.slide-time {
+		font-size: 0.75rem;
+	}
+}
 </style>
