@@ -54,16 +54,21 @@
 							<svg-icon icon-class="home"></svg-icon> 后台管理
 						</a>
 					</li>
-					<li v-if="user.isAdmin" class="subitem">
-						<a class="link" :href="writeArticleUrl" target="_blank">
-							<svg-icon icon-class="edit"></svg-icon> 发布文章
-						</a>
-					</li>
-					<li class="subitem">
-						<a class="link" @click="logout"
-							><svg-icon icon-class="logout"></svg-icon> 退出
-						</a>
-					</li>
+				<li v-if="user.isAdmin" class="subitem">
+					<a class="link" :href="writeArticleUrl" target="_blank">
+						<svg-icon icon-class="edit"></svg-icon> 发布文章
+					</a>
+				</li>
+				<li v-if="user.isAdmin" class="subitem" :class="{ active: route.path === '/todo' }">
+					<router-link to="/todo" class="link">
+						<svg-icon icon-class="calendar"></svg-icon> 我的代办
+					</router-link>
+				</li>
+				<li class="subitem">
+					<a class="link" @click="logout"
+						><svg-icon icon-class="logout"></svg-icon> 退出
+					</a>
+				</li>
 				</ul>
 			</template>
 		</div>

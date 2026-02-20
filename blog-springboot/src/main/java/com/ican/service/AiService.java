@@ -158,6 +158,13 @@ public class AiService {
     /**
      * 通用同步 AI 调用
      */
+    /**
+     * 供其他 Service 调用的同步 AI 方法
+     */
+    public String callAiSyncPublic(String systemPrompt, String userMessage, double temperature, int maxTokens) {
+        return callAiSync(systemPrompt, userMessage, temperature, maxTokens);
+    }
+
     private String callAiSync(String systemPrompt, String userMessage, double temperature, int maxTokens) {
         JSONArray messagesArray = new JSONArray();
 

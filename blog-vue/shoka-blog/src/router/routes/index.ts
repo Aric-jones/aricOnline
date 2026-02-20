@@ -139,5 +139,12 @@ export const routes: RouteRecordRaw[] = [
 			title: "搜索结果",
 		},
 	},
+	{
+		path: "/todo",
+		component: () => import("@/views/Todo/index.vue"),
+		meta: {
+			title: "我的代办",
+		},
+	},
 	{ path: "/:catchAll(.*)", redirect: "/404" },
 ];

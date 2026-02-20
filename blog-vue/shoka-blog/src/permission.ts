@@ -26,7 +26,13 @@ router.beforeEach((to, from, next) => {
     if (user.id === undefined) {
       user
         .GetUserInfo()
-        .then(() => next())
+        .then(() => {
+          if (to.path === "/todo" && !user.isAdmin) {
+            next("/404");
+          } else {
+            next();
+          }
+        })
         .catch(() => {
           user.LogOut().then(() => {
             window.$message?.warning("凭证失效，请重新登录");
@@ -34,10 +40,19 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-      next();
+      if (to.path === "/todo" && !user.isAdmin) {
+        next("/404");
+      } else {
+        next();
+      }
     }
   } else {
-    next();
+    if (to.path === "/todo") {
+      window.$message?.warning("请先登录");
+      next("/");
+    } else {
+      next();
+    }
   }
 });
 router.afterEach(() => {

@@ -19,6 +19,7 @@ desktop.ini
 .classpath
 .project
 .settings/
+temp/
 
 # ===================== 后端（Spring Boot + Maven）=====================
 target/

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.TodoMapper">
+
+    <select id="selectTodoList" resultType="com.ican.entity.Todo">
+        SELECT * FROM t_todo
+        WHERE user_id = #{userId}
+        <if test="param.status != null">
+            AND status = #{param.status}
+        </if>
+        <if test="param.priority != null">
+            AND priority = #{param.priority}
+        </if>
+        <if test="param.category != null and param.category != ''">
+            AND category = #{param.category}
+        </if>
+        <if test="param.keyword != null and param.keyword != ''">
+            AND (title LIKE CONCAT('%', #{param.keyword}, '%')
+                 OR description LIKE CONCAT('%', #{param.keyword}, '%'))
+        </if>
+        <if test="param.startDate != null and param.startDate != ''">
+            AND (end_time >= #{param.startDate} OR end_time IS NULL)
+        </if>
+        <if test="param.endDate != null and param.endDate != ''">
+            AND (start_time &lt;= #{param.endDate} OR start_time IS NULL)
+        </if>
+        ORDER BY status ASC, priority DESC, end_time ASC, create_time DESC
+        LIMIT #{param.current}, #{param.size}
+    </select>
+
+    <select id="selectTodoCount" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM t_todo
+        WHERE user_id = #{userId}
+        <if test="param.status != null">
+            AND status = #{param.status}
+        </if>
+        <if test="param.priority != null">
+            AND priority = #{param.priority}
+        </if>
+        <if test="param.category != null and param.category != ''">
+            AND category = #{param.category}
+        </if>
+        <if test="param.keyword != null and param.keyword != ''">
+            AND (title LIKE CONCAT('%', #{param.keyword}, '%')
+                 OR description LIKE CONCAT('%', #{param.keyword}, '%'))
+        </if>
+        <if test="param.startDate != null and param.startDate != ''">
+            AND (end_time >= #{param.startDate} OR end_time IS NULL)
+        </if>
+        <if test="param.endDate != null and param.endDate != ''">
+            AND (start_time &lt;= #{param.endDate} OR start_time IS NULL)
+        </if>
+    </select>
+
+    <select id="selectTodoByDateRange" resultType="com.ican.entity.Todo">
+        SELECT * FROM t_todo
+        WHERE user_id = #{userId}
+          AND ((start_time BETWEEN #{startDate} AND #{endDate})
+               OR (end_time BETWEEN #{startDate} AND #{endDate})
+               OR (start_time &lt;= #{startDate} AND end_time >= #{endDate}))
+        ORDER BY priority DESC, start_time ASC
+    </select>
+
+</mapper>

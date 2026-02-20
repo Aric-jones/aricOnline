@@ -11,7 +11,7 @@
 	</div>
 	<div class="bg">
 		<div class="page-container">
-			<div class="notfound">Σ( ° △ °|||)︴404！何も見えない</div>
+			<div class="notfound">找不到页面啊，你是不是找错地方了？</div>
 			<div class="notfound-actions">
 				<router-link to="/" class="back-home">返回首页</router-link>
 			</div>

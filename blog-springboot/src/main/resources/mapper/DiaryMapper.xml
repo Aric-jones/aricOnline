@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.DiaryMapper">
+
+    <select id="selectByUserAndDate" resultType="com.ican.entity.Diary">
+        SELECT * FROM t_diary
+        WHERE user_id = #{userId} AND diary_date = #{diaryDate}
+        LIMIT 1
+    </select>
+
+    <select id="selectDiaryByDateRange" resultType="com.ican.entity.Diary">
+        SELECT * FROM t_diary
+        WHERE user_id = #{userId}
+          AND diary_date BETWEEN #{startDate} AND #{endDate}
+        ORDER BY diary_date DESC
+    </select>
+
+</mapper>
