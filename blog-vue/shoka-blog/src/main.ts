@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import { getBlogInfo } from "./api/blogInfo";
 import { setupDirectives } from "./directives";
-import { setupAssets, setupLazy, setupMasonry, setupMdPreview, setupViewer } from "./plugins";
+import { setupAssets, setupLazy, setupMasonry, setupMdEditor, setupMdPreview, setupViewer } from "./plugins";
 import { setupRouter } from "./router";
 import { setupStore, useBlogStore } from "./store";
 
@@ -25,6 +25,7 @@ async function setupApp() {
 	setupDirectives(app);
 	setupLazy(app);
 	setupMdPreview(app);
+	setupMdEditor(app);
 	setupMasonry(app);
 	setupViewer(app);
 	await setupRouter(app);
