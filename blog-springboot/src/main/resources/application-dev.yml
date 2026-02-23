@@ -118,8 +118,8 @@ elasticsearch:
 sa-token:
   token-name: Authorization
   token-prefix: Bearer
-  timeout: -1
-  active-timeout: -1
+  timeout: 86400
+  active-timeout: 86400
   auto-renew: false
   is-concurrent: true
   token-style: uuid

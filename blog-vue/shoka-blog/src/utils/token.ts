@@ -16,7 +16,8 @@ export function getToken() {
 // 本地运行记得删除domain
 export function setToken(token: string) {
   // 项目线上部署可以取消注释
-  return Cookies.set(TokenKey, token);
+  // 设置过期时间为1天（86400秒）
+  return Cookies.set(TokenKey, token, { expires: 1 });
   // return Cookies.set(TokenKey, token);
 }
 

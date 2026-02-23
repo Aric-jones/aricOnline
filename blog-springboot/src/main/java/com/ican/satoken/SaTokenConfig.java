@@ -45,7 +45,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
             "/oauth/*",
     };
 
-    private final long timeout = 600;
+    private final long timeout = 86400;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -86,7 +86,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
                     SaRouter.match("/admin/**").check(r -> StpUtil.checkLogin());
                     // 刷新token有效期
                     if (StpUtil.getTokenTimeout() < timeout) {
-                        StpUtil.renewTimeout(1800);
+                        StpUtil.renewTimeout(86400);
                     }
                     // 输出 API 请求日志，方便调试代码
 //                    SaManager.getLog().debug("----- 请求path={}  提交token={}", SaHolder.getRequest().getRequestPath(), StpUtil.getTokenValue());
