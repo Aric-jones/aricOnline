@@ -7,14 +7,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.entity.AiRecord;
 import com.ican.entity.Diary;
 import com.ican.entity.Todo;
+import com.ican.entity.Habit;
+import com.ican.entity.HabitRecord;
 import com.ican.mapper.AiRecordMapper;
 import com.ican.mapper.DiaryMapper;
+import com.ican.mapper.HabitMapper;
+import com.ican.mapper.HabitRecordMapper;
 import com.ican.mapper.TodoMapper;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.query.TodoQuery;
 import com.ican.model.vo.request.TodoReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,6 +41,15 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
 
     @Autowired
     private AiService aiService;
+
+    @Autowired
+    private AiPromptService aiPromptService;
+
+    @Autowired
+    private HabitMapper habitMapper;
+
+    @Autowired
+    private HabitRecordMapper habitRecordMapper;
 
     private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -179,13 +193,8 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         }
 
         String typeLabel = "daily".equals(type) ? "日" : "weekly".equals(type) ? "周" : "月";
-        String systemPrompt = "你是一位专注于个人能力提升的导师。请根据用户提供的代办事项和日记，生成一份" + typeLabel + "度总结报告。\n" +
-                "报告要求：\n" +
-                "1. 先总结本时段完成了什么、未完成什么\n" +
-                "2. 分析时间利用效率和工作重点\n" +
-                "3. 以「个人能力提升」为核心目标，给出 2-3 条具体的改进建议\n" +
-                "4. 语气亲切专业，像一位关心你成长的导师\n" +
-                "5. 使用 Markdown 格式，结构清晰";
+        String systemPrompt = aiPromptService.getPromptContent("summary")
+                .replace("{period}", typeLabel);
         String result = aiService.callAiSyncPublic(systemPrompt, context.toString(), 0.7, 2000);
         saveAiRecord("summary_" + type, result);
         return result;
@@ -215,12 +224,7 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
             context.append("\n");
         }
 
-        String systemPrompt = "你是一位个人能力提升导师，请根据用户近两周的代办完成情况，从以下维度给出具体的改进建议：\n" +
-                "1. 时间管理：是否有拖延、优先级分配是否合理\n" +
-                "2. 技能提升：根据代办内容推测用户的发展方向，建议学习路径\n" +
-                "3. 习惯养成：推荐有助于效率提升的小习惯\n" +
-                "4. 目标设定：建议短期（1周）和中期（1月）目标\n" +
-                "要求：语气亲切，建议具体可操作，使用 Markdown 格式";
+        String systemPrompt = aiPromptService.getPromptContent("suggest");
         String result = aiService.callAiSyncPublic(systemPrompt, context.toString(), 0.7, 2000);
         saveAiRecord("suggest", result);
         return result;
@@ -252,6 +256,142 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
                 new LambdaQueryWrapper<AiRecord>()
                         .eq(AiRecord::getUserId, currentUserId())
                         .eq(AiRecord::getRecordType, recordType));
+    }
+
+    private static final Map<String, Long> RANGE_DAYS = Map.of(
+            "7d", 6L, "1m", 29L, "3m", 89L, "6m", 179L, "1y", 364L
+    );
+
+    private static final Map<String, String> RANGE_LABELS = Map.of(
+            "7d", "近7天", "1m", "近1个月", "3m", "近3个月", "6m", "近6个月", "1y", "近1年"
+    );
+
+    /**
+     * 构建用户数据上下文，用于对话时让 AI 了解用户真实数据
+     */
+    private String buildUserContext(String range) {
+        Integer userId = currentUserId();
+        LocalDate now = LocalDate.now();
+        long days = RANGE_DAYS.getOrDefault(range, 6L);
+        String label = RANGE_LABELS.getOrDefault(range, "近7天");
+        String start = now.minusDays(days).toString();
+        String end = now.toString();
+
+        StringBuilder ctx = new StringBuilder();
+        ctx.append("【以下是当前用户").append(label).append("的真实数据，今天是 ")
+                .append(now).append("，回答问题时请参考】\n\n");
+
+        // 待办：量大时只取最近100条
+        int todoLimit = days <= 30 ? 50 : 100;
+        List<Todo> recentTodos = this.lambdaQuery()
+                .eq(Todo::getUserId, userId)
+                .ge(Todo::getCreateTime, start + " 00:00:00")
+                .le(Todo::getCreateTime, end + " 23:59:59")
+                .orderByDesc(Todo::getCreateTime)
+                .last("LIMIT " + todoLimit)
+                .list();
+        long completed = recentTodos.stream().filter(t -> t.getStatus() == 1).count();
+        ctx.append("== ").append(label).append("待办事项 (共").append(recentTodos.size())
+                .append("条, 已完成").append(completed).append("条) ==\n");
+        if (recentTodos.isEmpty()) {
+            ctx.append("无待办记录。\n");
+        } else {
+            for (Todo t : recentTodos) {
+                ctx.append("- [").append(t.getStatus() == 1 ? "✓" : "○").append("] ")
+                        .append(t.getTitle());
+                if (t.getCategory() != null && !t.getCategory().isEmpty()) {
+                    ctx.append(" #").append(t.getCategory());
+                }
+                ctx.append(" P").append(t.getPriority() == 0 ? "低" : t.getPriority() == 1 ? "中" : "高");
+                if (t.getEndTime() != null) {
+                    ctx.append(" 截止:").append(t.getEndTime().toLocalDate());
+                }
+                ctx.append("\n");
+            }
+        }
+
+        // 日记：优先用 summary 字段，没有则截取纯文本
+        List<Diary> recentDiaries = diaryMapper.selectDiaryByDateRange(userId, start, end);
+        ctx.append("\n== ").append(label).append("日记 (共").append(recentDiaries.size()).append("篇) ==\n");
+        if (recentDiaries.isEmpty()) {
+            ctx.append("无日记记录。\n");
+        } else {
+            for (Diary d : recentDiaries) {
+                ctx.append("[").append(d.getDiaryDate()).append("]");
+                if (d.getMood() != null && !d.getMood().isEmpty()) {
+                    ctx.append(" 心情:").append(d.getMood());
+                }
+                String text = d.getSummary();
+                if (text == null || text.trim().isEmpty()) {
+                    text = d.getContent();
+                    if (text != null) {
+                        text = text.replaceAll("<[^>]+>", "").trim();
+                        if (text.length() > 80) text = text.substring(0, 80) + "...";
+                    }
+                }
+                if (text != null && !text.isEmpty()) {
+                    ctx.append(" ").append(text);
+                }
+                ctx.append("\n");
+            }
+        }
+
+        // 习惯：统计打卡天数
+        List<Habit> habits = habitMapper.selectList(
+                new LambdaQueryWrapper<Habit>()
+                        .eq(Habit::getUserId, userId)
+                        .eq(Habit::getIsActive, 1));
+        ctx.append("\n== 活跃习惯 (").append(label).append("打卡统计) ==\n");
+        if (habits.isEmpty()) {
+            ctx.append("无活跃习惯。\n");
+        } else {
+            for (Habit h : habits) {
+                ctx.append("- ").append(h.getIcon() != null ? h.getIcon() + " " : "")
+                        .append(h.getName());
+                if (h.getCategory() != null && !h.getCategory().isEmpty()) {
+                    ctx.append(" (").append(h.getCategory()).append(")");
+                }
+                List<HabitRecord> records = habitRecordMapper.selectRecordsByDateRange(
+                        userId, h.getId(), start, end);
+                long totalDays = days + 1;
+                ctx.append(" 打卡").append(records.size()).append("/").append(totalDays).append("天");
+                if (!records.isEmpty()) {
+                    double avgRating = records.stream()
+                            .filter(r -> r.getRating() != null)
+                            .mapToInt(HabitRecord::getRating)
+                            .average().orElse(0);
+                    if (avgRating > 0) {
+                        ctx.append(" 平均评分:").append(String.format("%.1f", avgRating));
+                    }
+                }
+                ctx.append("\n");
+            }
+        }
+
+        return ctx.toString();
+    }
+
+    /**
+     * 上下文感知的 AI 对话（自动注入用户数据）
+     */
+    public SseEmitter contextAwareChat(List<Map<String, String>> messages, String range) {
+        String chatPrompt = aiPromptService.getPromptContent("chat");
+        String userContext = buildUserContext(range);
+
+        String systemPrompt = chatPrompt + "\n\n" + userContext
+                + "\n\n【重要规则】\n"
+                + "1. 用户的问题如果和待办、日记、习惯、时间管理、个人成长相关，请结合上面的真实数据来回答，给出有针对性的建议。\n"
+                + "2. 如果用户询问的是完全无关的话题（如编程技术、天气、新闻、娱乐等），请友善地提醒：「这个问题超出了我的专业范围哦～我是你的个人效能助手，擅长帮你分析待办、日记、习惯数据，给出时间管理和个人成长建议。有什么关于你的计划或习惯想聊的吗？😊」\n"
+                + "3. 回答要具体、有条理、语气亲切专业，使用 Markdown 格式。";
+
+        List<Map<String, String>> userMessages = new ArrayList<>();
+        for (Map<String, String> msg : messages) {
+            if (!"system".equals(msg.get("role"))) {
+                userMessages.add(msg);
+            }
+        }
+
+        return aiService.chatStream(systemPrompt, userMessages);
     }
 
     private LocalDateTime parseDateTime(String str) {

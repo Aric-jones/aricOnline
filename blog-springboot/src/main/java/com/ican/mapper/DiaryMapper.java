@@ -3,6 +3,7 @@ package com.ican.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Diary;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +16,7 @@ public interface DiaryMapper extends BaseMapper<Diary> {
     List<Diary> selectDiaryByDateRange(@Param("userId") Integer userId,
                                        @Param("startDate") String startDate,
                                        @Param("endDate") String endDate);
+
+    @Update("UPDATE t_diary SET summary = #{summary} WHERE id = #{id}")
+    void updateSummary(@Param("id") Integer id, @Param("summary") String summary);
 }

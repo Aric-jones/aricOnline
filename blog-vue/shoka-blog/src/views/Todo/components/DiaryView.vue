@@ -1,6 +1,5 @@
 <template>
 	<div class="diary-container">
-		<!-- 日记卡片头部 -->
 		<div class="diary-card">
 			<div class="diary-card-header">
 				<div class="header-left">
@@ -26,7 +25,7 @@
 				</div>
 			</div>
 
-			<!-- 心情 + 天气栏 -->
+			<!-- 心情栏 -->
 			<div class="meta-bar">
 				<div class="meta-group">
 					<span class="meta-label">心情</span>
@@ -63,15 +62,21 @@
 				</div>
 			</div>
 
-			<!-- Markdown 编辑器 -->
-			<div class="editor-wrapper">
-				<MdEditor
+			<!-- wangeditor 富文本编辑器 -->
+			<div class="editor-section">
+				<Toolbar
+					class="editor-toolbar"
+					:editor="editorInstance"
+					:defaultConfig="toolbarConfig"
+					mode="simple"
+				/>
+				<Editor
+					class="editor-content"
+					:style="{ minHeight: editorHeight }"
 					v-model="diaryContent"
-					:style="{ height: editorHeight }"
-					placeholder="记录今天的想法、感悟、收获... 支持 Markdown 语法"
-					:toolbars="editorToolbars"
-					:preview="true"
-					show-code-row-number
+					:defaultConfig="editorConfig"
+					mode="simple"
+					@onCreated="handleCreated"
 				/>
 			</div>
 
@@ -96,7 +101,8 @@
 			<!-- 底部操作栏 -->
 			<div class="diary-footer">
 				<div class="footer-info">
-					<span v-if="diaryId" class="save-hint">已保存</span>
+					<span v-if="isDirty" class="save-hint unsaved">未保存</span>
+					<span v-else-if="diaryId" class="save-hint">已保存</span>
 					<span v-else class="save-hint new">新日记</span>
 				</div>
 				<div class="footer-actions">
@@ -117,9 +123,9 @@
 import { getDiary, saveDiary, deleteDiary, getCalendarData, toggleTodoStatus } from "@/api/todo";
 import type { TodoItem } from "@/api/todo/types";
 import { useWindowSize } from "@vueuse/core";
-import { MdEditor } from "md-editor-v3";
-import type { ToolbarNames } from "md-editor-v3";
-import "md-editor-v3/lib/style.css";
+import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
+import type { IEditorConfig, IToolbarConfig } from "@wangeditor/editor";
+import "@wangeditor/editor/dist/css/style.css";
 
 const { width: winWidth } = useWindowSize();
 
@@ -141,15 +147,58 @@ const saving = ref(false);
 const deleting = ref(false);
 const dayTodos = ref<TodoItem[]>([]);
 
-const editorHeight = computed(() => (winWidth.value < 768 ? "300px" : "420px"));
+const editorInstance = shallowRef<any>(null);
 
-const editorToolbars: ToolbarNames[] = [
-	"bold", "underline", "italic", "strikeThrough", "-",
-	"title", "quote", "unorderedList", "orderedList", "task", "-",
-	"codeRow", "code", "link", "image", "table", "-",
-	"revoke", "next", "=",
-	"pageFullscreen", "fullscreen", "preview", "catalog",
-];
+const editorHeight = computed(() => (winWidth.value < 768 ? "250px" : "380px"));
+
+const toolbarConfig: Partial<IToolbarConfig> = {
+	toolbarKeys: [
+		"headerSelect",
+		"bold",
+		"italic",
+		"underline",
+		"through",
+		"|",
+		"color",
+		"bgColor",
+		"fontSize",
+		"|",
+		"bulletedList",
+		"numberedList",
+		"todo",
+		"|",
+		"justifyLeft",
+		"justifyCenter",
+		"justifyRight",
+		"|",
+		"uploadImage",
+		"insertLink",
+		"blockquote",
+		"divider",
+		"|",
+		"undo",
+		"redo",
+	],
+};
+
+const editorConfig: Partial<IEditorConfig> = {
+	placeholder: "记录今天的想法、感悟、收获...",
+	MENU_CONF: {
+		uploadImage: {
+			customUpload(file: File, insertFn: (url: string) => void) {
+				const reader = new FileReader();
+				reader.onload = () => {
+					insertFn(reader.result as string);
+				};
+				reader.readAsDataURL(file);
+			},
+		},
+	},
+};
+
+const handleCreated = (editor: any) => {
+	editorInstance.value = editor;
+};
 
 const dateMain = computed(() => {
 	const d = new Date(selectedDate.value);
@@ -178,6 +227,33 @@ const completedCount = computed(() => dayTodos.value.filter((t) => t.status === 
 const progressPct = computed(() => (dayTodos.value.length > 0 ? Math.round((completedCount.value / dayTodos.value.length) * 100) : 0));
 const priorityLabel = (p: number) => (p === 0 ? "低" : p === 1 ? "中" : "高");
 
+const lastSavedContent = ref("");
+const lastSavedMood = ref("");
+
+const isDirty = computed(() => {
+	return diaryContent.value !== lastSavedContent.value || currentMood.value !== lastSavedMood.value;
+});
+
+const hasContent = (html: string) => {
+	const text = html.replace(/<[^>]*>/g, "").trim();
+	return text.length > 0;
+};
+
+const autoSave = async (date?: string) => {
+	const content = diaryContent.value;
+	const mood = currentMood.value;
+	const targetDate = date || selectedDate.value;
+
+	if (!isDirty.value) return;
+	if (!hasContent(content)) return;
+
+	try {
+		await saveDiary({ id: diaryId.value || undefined, diaryDate: targetDate, content, mood });
+		lastSavedContent.value = content;
+		lastSavedMood.value = mood;
+	} catch (_) {}
+};
+
 const changeDate = (dir: number) => {
 	const d = new Date(selectedDate.value);
 	d.setDate(d.getDate() + dir);
@@ -195,6 +271,8 @@ const loadDiary = () => {
 			currentMood.value = "";
 			diaryId.value = null;
 		}
+		lastSavedContent.value = diaryContent.value;
+		lastSavedMood.value = currentMood.value;
 	});
 	getCalendarData(selectedDate.value + " 00:00:00", selectedDate.value + " 23:59:59").then(({ data }) => {
 		if (data.flag) dayTodos.value = data.data || [];
@@ -210,15 +288,18 @@ const handleToggleTodo = (item: TodoItem) => {
 };
 
 const handleSave = () => {
-	if (!diaryContent.value.trim()) {
+	const content = diaryContent.value;
+	if (!hasContent(content)) {
 		window.$message?.warning("日记内容不能为空");
 		return;
 	}
 	saving.value = true;
-	saveDiary({ id: diaryId.value || undefined, diaryDate: selectedDate.value, content: diaryContent.value, mood: currentMood.value })
+	saveDiary({ id: diaryId.value || undefined, diaryDate: selectedDate.value, content, mood: currentMood.value })
 		.then(({ data }) => {
 			if (data.flag) {
 				window.$message?.success("保存成功");
+				lastSavedContent.value = content;
+				lastSavedMood.value = currentMood.value;
 				loadDiary();
 			}
 		})
@@ -246,7 +327,7 @@ const handleDelete = () => {
 	});
 };
 
-// 语音输入
+// ========== 语音输入 ==========
 const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 const speechSupported = ref(!!SpeechRecognition);
 const isListening = ref(false);
@@ -270,8 +351,8 @@ if (SpeechRecognition) {
 				interim += transcript;
 			}
 		}
-		if (finalTranscript) {
-			diaryContent.value += finalTranscript;
+		if (finalTranscript && editorInstance.value) {
+			editorInstance.value.insertText(finalTranscript);
 			finalTranscript = "";
 		}
 	};
@@ -299,31 +380,43 @@ const toggleVoice = () => {
 		isListening.value = false;
 		recognition.stop();
 	} else {
+		editorInstance.value?.focus();
 		isListening.value = true;
 		recognition.start();
 	}
 };
 
-onUnmounted(() => {
+onBeforeUnmount(async () => {
+	await autoSave();
 	if (recognition && isListening.value) {
 		isListening.value = false;
 		recognition.stop();
 	}
+	const editor = editorInstance.value;
+	if (editor) editor.destroy();
 });
 
-watch(selectedDate, loadDiary, { immediate: true });
+watch(selectedDate, async (newDate, oldDate) => {
+	if (oldDate) {
+		await autoSave(oldDate);
+	}
+	loadDiary();
+}, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
 .diary-container {
 	max-width: 800px;
 	margin: 0 auto;
-	color: var(--grey-7, #333);
+	color: var(--grey-7, #1e293b);
 }
 .diary-card {
-	border-radius: 0.75rem;
-	background: var(--card-bg, #fff);
-	box-shadow: var(--card-shadow);
+	border-radius: 20px;
+	background: var(--card-bg, rgba(255, 255, 255, 0.65));
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1.5px solid var(--card-border, rgba(255, 255, 255, 0.5));
+	box-shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
 	overflow: hidden;
 }
 
@@ -332,7 +425,7 @@ watch(selectedDate, loadDiary, { immediate: true });
 	align-items: center;
 	justify-content: space-between;
 	padding: 1rem 1.25rem;
-	border-bottom: 1px solid var(--grey-2, #f0f0f0);
+	border-bottom: 1px solid rgba(99, 102, 241, 0.06);
 }
 .header-left {
 	display: flex;
@@ -362,7 +455,7 @@ watch(selectedDate, loadDiary, { immediate: true });
 
 .meta-bar {
 	padding: 0.6rem 1.25rem;
-	border-bottom: 1px solid var(--grey-2, #f0f0f0);
+	border-bottom: 1px solid rgba(99, 102, 241, 0.06);
 }
 .meta-group {
 	display: flex;
@@ -380,24 +473,26 @@ watch(selectedDate, loadDiary, { immediate: true });
 	gap: 0.25rem;
 }
 .meta-chip {
-	width: 2rem;
-	height: 2rem;
+	width: 2.1rem;
+	height: 2.1rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 50%;
+	border-radius: 12px;
 	font-size: 1.1rem;
 	cursor: pointer;
-	transition: all 0.2s;
+	transition: all 0.25s ease;
 	border: 2px solid transparent;
+	background: var(--grey-1, rgba(0,0,0,0.02));
 	&:hover {
 		background: var(--grey-2, #f5f5f5);
 		transform: scale(1.15);
 	}
 	&.active {
-		border-color: var(--primary-color);
-		background: rgba(64, 158, 255, 0.1);
+		border-color: transparent;
+		background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15));
 		transform: scale(1.2);
+		box-shadow: 0 2px 12px rgba(99,102,241,0.2);
 	}
 }
 .mood-text {
@@ -408,8 +503,8 @@ watch(selectedDate, loadDiary, { immediate: true });
 
 .day-todos-summary {
 	padding: 0.75rem 1.25rem;
-	border-bottom: 1px solid var(--grey-2, #f0f0f0);
-	background: rgba(64, 158, 255, 0.03);
+	border-bottom: 1px solid rgba(99, 102, 241, 0.06);
+	background: rgba(99, 102, 241, 0.03);
 }
 .summary-header {
 	display: flex;
@@ -430,8 +525,8 @@ watch(selectedDate, loadDiary, { immediate: true });
 }
 .progress-fill {
 	height: 100%;
-	border-radius: 2px;
-	background: linear-gradient(90deg, #667eea, #764ba2);
+	border-radius: 4px;
+	background: linear-gradient(90deg, #6366f1, #8b5cf6);
 	transition: width 0.3s;
 }
 .summary-list {
@@ -453,16 +548,16 @@ watch(selectedDate, loadDiary, { immediate: true });
 .todo-check {
 	width: 1.1rem;
 	height: 1.1rem;
-	border-radius: 50%;
+	border-radius: 6px;
 	border: 2px solid var(--grey-4);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	transition: all 0.2s;
+	transition: all 0.25s ease;
 	&.done {
-		border-color: var(--primary-color);
-		background: var(--primary-color);
+		border-color: transparent;
+		background: linear-gradient(135deg, #6366f1, #8b5cf6);
 		color: #fff;
 	}
 }
@@ -472,21 +567,69 @@ watch(selectedDate, loadDiary, { immediate: true });
 }
 .priority-badge {
 	font-size: 0.6rem;
-	padding: 0 4px;
-	border-radius: 3px;
-	color: #fff;
-	line-height: 1.4;
-	&.p0 { background: #8bc34a; }
-	&.p1 { background: #ff9800; }
-	&.p2 { background: #f44336; }
+	padding: 1px 8px;
+	border-radius: 50px;
+	font-weight: 600;
+	line-height: 1.5;
+	&.p0 { background: rgba(34,197,94,0.12); color: #16a34a; }
+	&.p1 { background: rgba(245,158,11,0.12); color: #d97706; }
+	&.p2 { background: rgba(239,68,68,0.12); color: #dc2626; }
 }
 
-.editor-wrapper {
-	:deep(.md-editor) {
-		border: none;
-		border-radius: 0;
-		box-shadow: none;
+// ===== wangeditor =====
+.editor-section {
+	border-bottom: 1px solid rgba(99, 102, 241, 0.06);
+}
+
+.editor-toolbar {
+	border-bottom: 1px solid rgba(99, 102, 241, 0.06) !important;
+}
+
+.editor-content {
+	overflow-y: auto;
+	font-size: 0.95rem;
+	line-height: 1.8;
+}
+
+:deep(.w-e-toolbar) {
+	background: var(--grey-1-a3, rgba(250, 250, 250, 0.3)) !important;
+	border: none !important;
+}
+
+:deep(.w-e-bar-item button) {
+	color: var(--grey-6, #666) !important;
+	&:hover {
+		background: var(--grey-2, #f0f0f0) !important;
 	}
+}
+
+:deep(.w-e-text-container) {
+	background: transparent !important;
+	border: none !important;
+	color: var(--grey-7, #333) !important;
+}
+
+:deep(.w-e-text-placeholder) {
+	color: var(--grey-4, #ccc) !important;
+	font-style: normal !important;
+	top: 0 !important;
+	left: 0 !important;
+	padding: 0.75rem 1.25rem !important;
+	line-height: 1.8 !important;
+	font-size: 0.95rem !important;
+}
+
+:deep(.w-e-text-container [data-slate-editor]) {
+	padding: 0.75rem 1.25rem !important;
+
+	p {
+		margin: 0 !important;
+	}
+}
+
+:deep(.w-e-text-container img) {
+	max-width: 100%;
+	border-radius: 6px;
 }
 
 .voice-bar {
@@ -494,7 +637,7 @@ watch(selectedDate, loadDiary, { immediate: true });
 	align-items: center;
 	gap: 0.5rem;
 	padding: 0.5rem 1.25rem;
-	border-top: 1px solid var(--grey-2, #f0f0f0);
+	border-top: 1px solid rgba(99, 102, 241, 0.06);
 }
 .voice-btn {
 	flex-shrink: 0;
@@ -539,8 +682,9 @@ watch(selectedDate, loadDiary, { immediate: true });
 	align-items: center;
 	justify-content: space-between;
 	padding: 0.75rem 1.25rem;
-	border-top: 1px solid var(--grey-2, #f0f0f0);
-	background: var(--grey-1-a3, rgba(250, 250, 250, 0.5));
+	border-top: 1px solid rgba(99, 102, 241, 0.06);
+	background: var(--glass-bg);
+	backdrop-filter: blur(12px);
 }
 .footer-info {
 	display: flex;
@@ -551,12 +695,12 @@ watch(selectedDate, loadDiary, { immediate: true });
 	font-size: 0.75rem;
 	color: var(--primary-color);
 	&.new { color: var(--grey-5); }
+	&.unsaved { color: #ff9800; }
 }
 .footer-actions {
 	display: flex;
 	gap: 0.5rem;
 }
-
 @media (max-width: 767px) {
 	.diary-card-header {
 		flex-direction: column;
@@ -573,5 +717,12 @@ watch(selectedDate, loadDiary, { immediate: true });
 	.day-todos-summary { padding: 0.6rem 1rem; }
 	.diary-footer { padding: 0.6rem 1rem; }
 	.voice-bar { padding: 0.4rem 1rem; }
+
+	:deep(.w-e-text-container [data-slate-editor]) {
+		padding: 0.5rem 0.75rem !important;
+	}
+	:deep(.w-e-text-placeholder) {
+		padding: 0.5rem 0.75rem !important;
+	}
 }
 </style>

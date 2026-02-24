@@ -27,11 +27,7 @@ router.beforeEach((to, from, next) => {
       user
         .GetUserInfo()
         .then(() => {
-          if (to.path === "/todo" && !user.isAdmin) {
-            next("/404");
-          } else {
-            next();
-          }
+          next();
         })
         .catch(() => {
           user.LogOut().then(() => {
@@ -40,11 +36,7 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-      if (to.path === "/todo" && !user.isAdmin) {
-        next("/404");
-      } else {
-        next();
-      }
+      next();
     }
   } else {
     if (to.path === "/todo") {

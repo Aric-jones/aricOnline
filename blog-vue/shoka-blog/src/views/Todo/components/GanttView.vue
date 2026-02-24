@@ -128,104 +128,67 @@ watch([startDate, rangeDays], loadGantt, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
-.gantt-container {
-	color: var(--grey-7, #333);
-}
+$card: rgba(255, 255, 255, 0.65);
+$card-border: rgba(255, 255, 255, 0.5);
+$shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+$primary: #6366f1;
+$primary-bg: rgba(99, 102, 241, 0.08);
+
+.gantt-container { color: var(--grey-7, #1e293b); }
 .gantt-toolbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 1rem;
-	gap: 0.5rem;
+	display: flex; justify-content: space-between; align-items: center;
+	margin-bottom: 1.25rem; gap: 0.5rem;
 }
-.gantt-range-label {
-	font-size: 0.9rem;
-	font-weight: 500;
-	min-width: 8rem;
-	text-align: center;
-}
-.loading-tip, .empty-tip {
-	text-align: center;
-	padding: 3rem 0;
-	color: var(--grey-5);
-}
+.gantt-range-label { font-size: 0.9rem; font-weight: 600; min-width: 8rem; text-align: center; }
+.loading-tip, .empty-tip { text-align: center; padding: 3rem 0; color: var(--grey-5, #94a3b8); }
 .gantt-chart {
-	overflow-x: auto;
-	border-radius: 0.5rem;
-	box-shadow: var(--card-shadow);
-	background: var(--card-bg, #fff);
+	overflow-x: auto; border-radius: 16px;
+	background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+	border: 1.5px solid var(--glass-border); box-shadow: var(--glass-shadow);
 }
-.gantt-header, .gantt-row {
-	display: flex;
-	min-width: fit-content;
-}
+.gantt-header, .gantt-row { display: flex; min-width: fit-content; }
 .gantt-header {
-	font-size: 0.7rem;
-	font-weight: 600;
-	color: var(--grey-6);
-	border-bottom: 1px solid var(--grey-3, #eee);
-	position: sticky;
-	top: 0;
-	background: var(--card-bg, #fff);
-	z-index: 1;
+	font-size: 0.7rem; font-weight: 700; color: var(--grey-6, #64748b);
+	border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+	position: sticky; top: 0;
+	background: var(--glass-bg); backdrop-filter: blur(12px);
+	z-index: 1; letter-spacing: 0.3px;
 }
 .gantt-label-col {
-	width: 140px;
-	min-width: 140px;
-	padding: 0.4rem 0.5rem;
-	display: flex;
-	align-items: center;
-	gap: 4px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	border-right: 1px solid var(--grey-3, #eee);
-	font-size: 0.8rem;
+	width: 140px; min-width: 140px; padding: 0.4rem 0.5rem;
+	display: flex; align-items: center; gap: 4px;
+	overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+	border-right: 1px solid rgba(99, 102, 241, 0.06); font-size: 0.8rem;
 }
 .row-title {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+	overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 	&.done { text-decoration: line-through; opacity: 0.5; }
 }
-.gantt-timeline {
-	display: flex;
-	flex: 1;
-}
+.gantt-timeline { display: flex; flex: 1; }
 .gantt-date-col, .gantt-cell {
-	width: 40px;
-	min-width: 40px;
-	text-align: center;
-	padding: 0.3rem 0;
-	border-right: 1px solid var(--grey-2, #f5f5f5);
+	width: 40px; min-width: 40px; text-align: center; padding: 0.3rem 0;
+	border-right: 1px solid rgba(0, 0, 0, 0.03);
 }
-.gantt-date-col.today {
-	background: rgba(64, 158, 255, 0.1);
-	color: var(--primary-color);
-}
+.gantt-date-col.today { background: $primary-bg; color: $primary; font-weight: 700; }
 .gantt-row {
-	border-bottom: 1px solid var(--grey-2, #f5f5f5);
-	&:hover { background: rgba(0, 0, 0, 0.02); }
+	border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+	transition: background 0.2s;
+	&:hover { background: $primary-bg; }
 }
 .gantt-cell {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 0.35rem 1px;
+	display: flex; align-items: center; justify-content: center; padding: 0.35rem 1px;
 }
 .gantt-bar {
-	width: 100%;
-	height: 10px;
-	border-radius: 5px;
-	&.p-high { background: #f44336; }
-	&.p-mid { background: #ff9800; }
-	&.p-low { background: #8bc34a; }
-	&.done { opacity: 0.4; }
+	width: 100%; height: 10px; border-radius: 5px;
+	&.p-high { background: linear-gradient(90deg, #ef4444, #f87171); }
+	&.p-mid { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+	&.p-low { background: linear-gradient(90deg, #22c55e, #4ade80); }
+	&.done { opacity: 0.35; }
 }
 .priority-dot {
 	width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-	&.p0 { background: #8bc34a; }
-	&.p1 { background: #ff9800; }
-	&.p2 { background: #f44336; }
+	&.p0 { background: #22c55e; }
+	&.p1 { background: #f59e0b; }
+	&.p2 { background: #ef4444; }
 }
 </style>

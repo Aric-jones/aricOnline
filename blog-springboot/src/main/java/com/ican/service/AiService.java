@@ -289,13 +289,13 @@ public class AiService {
     }
 
     /**
-     * 流式对话
+     * 流式对话（自定义系统提示词）
      */
-    public SseEmitter chatStream(List<Map<String, String>> messages) {
+    public SseEmitter chatStream(String systemPrompt, List<Map<String, String>> messages) {
         JSONArray messagesArray = new JSONArray();
         JSONObject systemMsg = new JSONObject();
         systemMsg.put("role", "system");
-        systemMsg.put("content", deepSeekProperties.getSystemPrompt());
+        systemMsg.put("content", systemPrompt);
         messagesArray.add(systemMsg);
         for (Map<String, String> msg : messages) {
             JSONObject jsonMsg = new JSONObject();
@@ -312,5 +312,12 @@ public class AiService {
         requestBody.put("max_tokens", 2048);
 
         return doStreamCall(requestBody);
+    }
+
+    /**
+     * 流式对话（使用默认系统提示词）
+     */
+    public SseEmitter chatStream(List<Map<String, String>> messages) {
+        return chatStream(deepSeekProperties.getSystemPrompt(), messages);
     }
 }

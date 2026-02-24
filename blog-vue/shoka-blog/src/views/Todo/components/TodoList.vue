@@ -2,10 +2,9 @@
 	<div class="todo-list-container">
 		<!-- 顶部工具栏 -->
 		<div class="toolbar">
-			<n-button type="primary" @click="showAdd">
-				<svg-icon icon-class="edit" size="0.9rem" style="margin-right: 4px" />
-				新增代办
-			</n-button>
+			<button class="btn-add" @click="showAdd">
+				<span class="btn-add-icon">＋</span> 新增代办
+			</button>
 			<div class="filters">
 				<n-select
 					v-model:value="query.status"
@@ -27,6 +26,7 @@
 					v-model:value="query.keyword"
 					placeholder="搜索..."
 					clearable
+					round
 					style="width: 160px"
 					@clear="loadData"
 					@keyup.enter="loadData"
@@ -45,9 +45,7 @@
 				:class="{ completed: item.status === 1 }"
 			>
 				<div class="card-left" @click="handleToggle(item.id)">
-					<div class="checkbox" :class="{ checked: item.status === 1 }">
-						<svg-icon v-if="item.status === 1" icon-class="badge" size="1rem" />
-					</div>
+					<div class="checkbox" :class="{ checked: item.status === 1 }"></div>
 				</div>
 				<div class="card-body">
 					<div class="card-title">{{ item.title }}</div>
@@ -57,19 +55,18 @@
 						</span>
 						<span v-if="item.category" class="category-tag">{{ item.category }}</span>
 						<span v-if="item.endTime" class="time-tag">
-							<svg-icon icon-class="clock" size="0.75rem" />
-							{{ formatShortDate(item.endTime) }}
+							🕐 {{ formatShortDate(item.endTime) }}
 						</span>
 					</div>
 					<div v-if="item.description" class="card-desc">{{ item.description }}</div>
 				</div>
 				<div class="card-actions">
-					<n-button text @click="showEdit(item)">
-						<svg-icon icon-class="edit" size="0.9rem" />
-					</n-button>
-					<n-button text @click="handleDelete(item.id)">
-						<svg-icon icon-class="delete" size="0.9rem" />
-					</n-button>
+					<button class="icon-btn" @click="showEdit(item)" title="编辑">
+						<svg-icon icon-class="edit" size="0.85rem" />
+					</button>
+					<button class="icon-btn icon-btn-del" @click="handleDelete(item.id)" title="删除">
+						<svg-icon icon-class="delete" size="0.85rem" />
+					</button>
 				</div>
 			</div>
 		</div>
@@ -85,43 +82,44 @@
 		</div>
 
 		<!-- 新增/编辑弹窗 -->
-		<n-modal v-model:show="dialogVisible" preset="card" :title="editingId ? '编辑代办' : '新增代办'" style="max-width: 500px; width: calc(100vw - 2rem)" :mask-closable="true" display-directive="if">
-			<n-form label-placement="top">
-				<n-form-item label="标题" required>
-					<n-input v-model:value="form.title" placeholder="请输入代办标题" />
-				</n-form-item>
-				<n-form-item label="描述">
+		<n-modal v-model:show="dialogVisible" :mask-closable="true" display-directive="if">
+			<div class="modal-glass">
+				<div class="modal-title">{{ editingId ? '编辑代办' : '新增代办' }}</div>
+				<div class="form-group">
+					<label class="form-label">标题</label>
+					<n-input v-model:value="form.title" placeholder="请输入代办标题" round />
+				</div>
+				<div class="form-group">
+					<label class="form-label">描述</label>
 					<n-input v-model:value="form.description" type="textarea" placeholder="详细描述（可选）" :rows="3" />
-				</n-form-item>
-			<n-grid :cols="formCols" :x-gap="12">
-				<n-grid-item>
-					<n-form-item label="优先级">
+				</div>
+				<div class="form-row">
+					<div class="form-group">
+						<label class="form-label">优先级</label>
 						<n-select v-model:value="form.priority" :options="priorityOptions" />
-					</n-form-item>
-				</n-grid-item>
-				<n-grid-item>
-					<n-form-item label="分类">
-						<n-input v-model:value="form.category" placeholder="分类标签" />
-					</n-form-item>
-				</n-grid-item>
-			</n-grid>
-			<n-grid :cols="formCols" :x-gap="12">
-				<n-grid-item>
-					<n-form-item label="开始时间">
+					</div>
+					<div class="form-group">
+						<label class="form-label">分类</label>
+						<n-input v-model:value="form.category" placeholder="分类标签" round />
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group">
+						<label class="form-label">开始时间</label>
 						<n-date-picker v-model:formatted-value="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable style="width:100%" />
-					</n-form-item>
-				</n-grid-item>
-				<n-grid-item>
-					<n-form-item label="截止时间">
+					</div>
+					<div class="form-group">
+						<label class="form-label">截止时间</label>
 						<n-date-picker v-model:formatted-value="form.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable style="width:100%" />
-					</n-form-item>
-				</n-grid-item>
-			</n-grid>
-			</n-form>
-			<template #action>
-				<n-button @click="dialogVisible = false">取消</n-button>
-				<n-button type="primary" @click="handleSubmit" :loading="submitting">确定</n-button>
-			</template>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn-ghost" @click="dialogVisible = false">取消</button>
+					<button class="btn-add" @click="handleSubmit" :disabled="submitting">
+						{{ submitting ? '提交中...' : '确定' }}
+					</button>
+				</div>
+			</div>
 		</n-modal>
 	</div>
 </template>
@@ -264,23 +262,50 @@ onMounted(() => loadData());
 </script>
 
 <style lang="scss" scoped>
+/* ====== Glass Morphism Theme ====== */
 .toolbar {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 0.75rem;
-	margin-bottom: 1rem;
+	margin-bottom: 1.25rem;
 }
+.btn-add {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 0.55rem 1.25rem;
+	border-radius: 50px;
+	border: none;
+	font-size: 0.85rem;
+	font-weight: 600;
+	cursor: pointer;
+	background: linear-gradient(135deg, var(--primary-color, #6366f1), var(--primary-color-light, #818cf8));
+	color: #fff;
+	box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+	transition: all 0.25s ease;
+	font-family: inherit;
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+	}
+	&:active { transform: translateY(0); }
+	&:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+}
+.btn-add-icon { font-size: 1rem; }
+
 .filters {
 	display: flex;
 	gap: 0.5rem;
 	flex-wrap: wrap;
 }
+
+/* ====== Cards ====== */
 .todo-cards {
 	display: flex;
 	flex-direction: column;
-	gap: 0.5rem;
+	gap: 0.6rem;
 }
 .loading-tip,
 .empty-tip {
@@ -292,15 +317,22 @@ onMounted(() => loadData());
 .todo-card {
 	display: flex;
 	align-items: flex-start;
-	gap: 0.75rem;
-	padding: 0.75rem 1rem;
-	border-radius: 0.5rem;
-	background: var(--card-bg, #fff);
-	box-shadow: var(--card-shadow);
-	color: var(--grey-7, #333);
-	transition: all 0.2s;
+	gap: 0.85rem;
+	padding: 1rem 1.25rem;
+	border-radius: 16px;
+	background: var(--card-bg, rgba(255, 255, 255, 0.65));
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1.5px solid var(--card-border, rgba(255, 255, 255, 0.5));
+	box-shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+	color: var(--grey-7, #1e293b);
+	transition: all 0.3s ease;
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 32px rgba(99, 102, 241, 0.12);
+	}
 	&.completed {
-		opacity: 0.6;
+		opacity: 0.55;
 		.card-title {
 			text-decoration: line-through;
 			color: var(--grey-5);
@@ -308,32 +340,41 @@ onMounted(() => loadData());
 	}
 }
 .card-left {
-	padding-top: 2px;
+	padding-top: 1px;
 	cursor: pointer;
 }
 .checkbox {
-	width: 1.25rem;
-	height: 1.25rem;
-	border-radius: 50%;
-	border: 2px solid var(--grey-4);
+	width: 22px;
+	height: 22px;
+	border-radius: 7px;
+	border: 2px solid var(--grey-4, #ccc);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	transition: all 0.2s;
+	flex-shrink: 0;
+	&::after { content: ""; }
 	&.checked {
-		border-color: var(--primary-color);
-		background: var(--primary-color);
-		color: #fff;
+		border-color: var(--primary-color, #6366f1);
+		background: linear-gradient(135deg, var(--primary-color, #6366f1), var(--primary-color-light, #818cf8));
+		&::after {
+			content: "✓";
+			color: #fff;
+			font-size: 12px;
+			font-weight: 700;
+		}
 	}
+	&:hover { border-color: var(--primary-color, #6366f1); }
 }
 .card-body {
 	flex: 1;
 	min-width: 0;
 }
 .card-title {
-	font-size: 0.95rem;
-	font-weight: 500;
-	margin-bottom: 0.25rem;
+	font-size: 0.92rem;
+	font-weight: 600;
+	margin-bottom: 0.3rem;
+	line-height: 1.4;
 }
 .card-meta {
 	display: flex;
@@ -343,30 +384,32 @@ onMounted(() => loadData());
 	font-size: 0.75rem;
 }
 .priority-tag {
-	padding: 1px 6px;
-	border-radius: 3px;
-	font-size: 0.7rem;
-	color: #fff;
-	&.p0 { background: #8bc34a; }
-	&.p1 { background: #ff9800; }
-	&.p2 { background: #f44336; }
+	padding: 2px 10px;
+	border-radius: 50px;
+	font-size: 0.68rem;
+	font-weight: 600;
+	&.p0 { background: rgba(34, 197, 94, 0.12); color: #16a34a; }
+	&.p1 { background: rgba(245, 158, 11, 0.12); color: #d97706; }
+	&.p2 { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
 }
 .category-tag {
-	padding: 1px 6px;
-	border-radius: 3px;
-	background: rgba(64, 158, 255, 0.15);
-	color: #409eff;
-	font-size: 0.7rem;
+	padding: 2px 10px;
+	border-radius: 50px;
+	background: rgba(99, 102, 241, 0.08);
+	color: var(--primary-color, #6366f1);
+	font-size: 0.68rem;
+	font-weight: 600;
 }
 .time-tag {
 	display: flex;
 	align-items: center;
 	gap: 2px;
 	color: var(--grey-5);
+	font-size: 0.72rem;
 }
 .card-desc {
-	margin-top: 0.3rem;
-	font-size: 0.8rem;
+	margin-top: 0.35rem;
+	font-size: 0.78rem;
 	color: var(--grey-5);
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -374,20 +417,101 @@ onMounted(() => loadData());
 }
 .card-actions {
 	display: flex;
-	gap: 0.25rem;
+	gap: 0.15rem;
 	flex-shrink: 0;
 }
+.icon-btn {
+	width: 32px;
+	height: 32px;
+	border-radius: 8px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--grey-5, #94a3b8);
+	transition: all 0.2s;
+	&:hover {
+		background: rgba(99, 102, 241, 0.08);
+		color: var(--primary-color, #6366f1);
+	}
+}
+.icon-btn-del:hover {
+	background: rgba(239, 68, 68, 0.08) !important;
+	color: #ef4444 !important;
+}
+
 .pagination {
 	display: flex;
 	justify-content: center;
-	margin-top: 1rem;
+	margin-top: 1.25rem;
 }
 
+/* ====== Modal Glass ====== */
+.modal-glass {
+	background: var(--glass-bg-heavy);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1.5px solid var(--glass-border);
+	border-radius: 20px;
+	padding: 2rem;
+	width: 480px;
+	max-width: calc(100vw - 2rem);
+	margin: 0 auto;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+.modal-title {
+	font-size: 1.15rem;
+	font-weight: 700;
+	margin-bottom: 1.5rem;
+	color: var(--grey-8, #1e293b);
+}
+.form-group {
+	margin-bottom: 1rem;
+}
+.form-label {
+	display: block;
+	font-size: 0.78rem;
+	font-weight: 600;
+	color: var(--grey-6, #64748b);
+	margin-bottom: 0.35rem;
+}
+.form-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.75rem;
+}
+.modal-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.6rem;
+	margin-top: 1.5rem;
+}
+.btn-ghost {
+	background: transparent;
+	border: 1.5px solid rgba(99, 102, 241, 0.2);
+	color: var(--grey-6, #64748b);
+	padding: 0.5rem 1.2rem;
+	border-radius: 50px;
+	font-size: 0.82rem;
+	cursor: pointer;
+	font-weight: 600;
+	font-family: inherit;
+	transition: all 0.2s;
+	&:hover {
+		border-color: var(--primary-color, #6366f1);
+		color: var(--primary-color, #6366f1);
+	}
+}
+
+/* ====== Responsive ====== */
 @media (max-width: 767px) {
 	.toolbar {
 		flex-direction: column;
 		align-items: stretch;
 	}
+	.btn-add { width: 100%; justify-content: center; }
 	.filters {
 		flex-wrap: wrap;
 		:deep(.n-select), :deep(.n-input) {
@@ -397,24 +521,21 @@ onMounted(() => loadData());
 		}
 	}
 	.todo-card {
-		padding: 0.6rem 0.75rem;
-		gap: 0.5rem;
+		padding: 0.75rem 1rem;
+		gap: 0.65rem;
+		border-radius: 12px;
 	}
-	.card-title {
-		font-size: 0.85rem;
-	}
-	.card-desc {
-		font-size: 0.75rem;
-	}
+	.card-title { font-size: 0.85rem; }
+	.card-desc { font-size: 0.75rem; }
+	.form-row { grid-template-columns: 1fr; }
+	.modal-glass { padding: 1.5rem; }
 }
 
 @media (max-width: 480px) {
-	.card-meta {
-		font-size: 0.65rem;
-	}
+	.card-meta { font-size: 0.65rem; }
 	.priority-tag, .category-tag {
 		font-size: 0.6rem;
-		padding: 0 4px;
+		padding: 1px 7px;
 	}
 }
 </style>

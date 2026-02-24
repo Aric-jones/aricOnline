@@ -2,6 +2,7 @@ package com.ican;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * 博客启动类
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author ican
  * @date 2022/11/28 18:54
  **/
+@EnableAsync
 @SpringBootApplication
 public class BlogApplication {
 

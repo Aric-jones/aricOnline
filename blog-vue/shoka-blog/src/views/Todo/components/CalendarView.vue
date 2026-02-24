@@ -220,143 +220,96 @@ watch([viewMode, currentDate], loadCalendar, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
-.calendar-container {
-	color: var(--grey-7, #333);
-}
-.cal-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 1rem;
-	flex-wrap: wrap;
-	gap: 0.5rem;
-}
-.cal-nav {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-}
-.cal-title {
-	font-size: 1.1rem;
-	font-weight: 600;
-	min-width: 10rem;
-	text-align: center;
-}
+$card: rgba(255, 255, 255, 0.65);
+$card-border: rgba(255, 255, 255, 0.5);
+$shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+$primary: #6366f1;
+$primary-light: #818cf8;
+$primary-bg: rgba(99, 102, 241, 0.08);
 
-/* 月视图 */
+.calendar-container { color: var(--grey-7, #1e293b); }
+.cal-header {
+	display: flex; justify-content: space-between; align-items: center;
+	margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;
+}
+.cal-nav { display: flex; align-items: center; gap: 0.75rem; }
+.cal-title { font-size: 1.1rem; font-weight: 700; min-width: 10rem; text-align: center; }
+
 .month-scroll-wrapper {
-	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
-	border-radius: 0.5rem;
+	overflow-x: auto; -webkit-overflow-scrolling: touch;
+	padding: 0.5rem 0.25rem; margin: -0.5rem -0.25rem;
 }
 .month-grid {
-	display: grid;
-	grid-template-columns: repeat(7, 1fr);
-	min-width: 500px;
-	gap: 1px;
-	background: var(--grey-3, #eee);
-	border-radius: 0.5rem;
-	overflow: hidden;
+	display: grid; grid-template-columns: repeat(7, 1fr); min-width: 500px;
+	gap: 1px; background: var(--grey-3, #e5e7eb); border-radius: 16px; overflow: hidden;
 }
 .weekday-header {
-	text-align: center;
-	padding: 0.4rem;
-	font-size: 0.8rem;
-	font-weight: 600;
-	background: var(--card-bg, #fff);
-	color: var(--grey-6);
+	text-align: center; padding: 0.5rem; font-size: 0.78rem; font-weight: 700;
+	background: var(--glass-bg); backdrop-filter: blur(12px);
+	color: var(--grey-6, #64748b); letter-spacing: 1px;
 }
 .month-cell {
-	min-height: 5rem;
-	padding: 0.25rem;
-	background: var(--card-bg, #fff);
-	&.today { background: rgba(64, 158, 255, 0.08); }
-	&.other { opacity: 0.4; }
+	min-height: 5rem; padding: 0.3rem;
+	background: var(--glass-bg); backdrop-filter: blur(8px);
+	transition: background 0.2s;
+	&.today { background: $primary-bg; }
+	&.other { opacity: 0.35; }
 }
-.cell-date {
-	font-size: 0.75rem;
-	font-weight: 500;
-	margin-bottom: 2px;
-	color: var(--grey-7);
-}
+.cell-date { font-size: 0.75rem; font-weight: 600; margin-bottom: 2px; color: var(--grey-7); }
 .cell-todo-item {
-	font-size: 0.65rem;
-	padding: 1px 3px;
-	margin-bottom: 1px;
-	border-radius: 2px;
-	background: rgba(64, 158, 255, 0.15);
-	color: #409eff;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	&.done { opacity: 0.5; text-decoration: line-through; }
-	&.high-p { background: rgba(244, 67, 54, 0.15); color: #f44336; }
+	font-size: 0.65rem; padding: 2px 6px; margin-bottom: 2px; border-radius: 50px;
+	background: $primary-bg; color: $primary;
+	overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-weight: 500;
+	&.done { opacity: 0.45; text-decoration: line-through; }
+	&.high-p { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 }
-.cell-more {
-	font-size: 0.6rem;
-	color: var(--grey-5);
-}
+.cell-more { font-size: 0.6rem; color: var(--grey-5); padding-left: 4px; }
 
-/* 周视图 */
 .week-scroll-wrapper {
-	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
+	overflow-x: auto; -webkit-overflow-scrolling: touch;
+	padding: 0.5rem 1rem; margin: -0.5rem -0.25rem;
 }
-.week-grid {
-	display: grid;
-	grid-template-columns: repeat(7, 1fr);
-	min-width: 560px;
-	gap: 0.5rem;
-}
+.week-grid { display: grid; grid-template-columns: repeat(7, 1fr); min-width: 560px; gap: 0.6rem; }
 .week-cell {
-	border-radius: 0.5rem;
-	background: var(--card-bg, #fff);
-	box-shadow: var(--card-shadow);
-	overflow: hidden;
+	border-radius: 16px; background: var(--glass-bg);
+	backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+	border: 1.5px solid var(--glass-border); box-shadow: var(--glass-shadow);
+	overflow: hidden; transition: transform 0.25s ease, box-shadow 0.25s ease;
+	&:hover { transform: scale(1.05); box-shadow: 0 8px 28px rgba(99, 102, 241, 0.15); z-index: 2; }
 }
 .week-cell-header {
-	text-align: center;
-	padding: 0.4rem;
-	font-size: 0.8rem;
-	background: var(--grey-2);
-	color: var(--grey-7);
-	&.today { background: var(--primary-color); color: #fff; }
+	text-align: center; padding: 0.45rem; font-size: 0.8rem; font-weight: 600;
+	background: var(--grey-2, rgba(0, 0, 0, 0.03)); color: var(--grey-7);
+	&.today { background: linear-gradient(135deg, $primary, $primary-light); color: #fff; }
 }
 .week-day-name { margin-right: 4px; }
-.week-cell-body { padding: 0.4rem; min-height: 4rem; }
+.week-cell-body { padding: 0.45rem; min-height: 4rem; }
 .week-todo-item {
-	display: flex;
-	align-items: center;
-	gap: 4px;
-	font-size: 0.75rem;
-	padding: 2px 0;
+	display: flex; align-items: center; gap: 4px; font-size: 0.75rem; padding: 2px 0;
 	&.done { text-decoration: line-through; opacity: 0.5; }
 }
 .week-empty { font-size: 0.7rem; color: var(--grey-4); text-align: center; padding: 1rem 0; }
 
-/* 日视图 */
 .day-view { max-width: 600px; margin: 0 auto; }
-.day-header { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; text-align: center; }
-.day-empty { text-align: center; padding: 3rem 0; color: var(--grey-5); }
+.day-header { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; text-align: center; }
+.day-empty { text-align: center; padding: 3rem 0; color: var(--grey-5, #94a3b8); }
 .day-todo-item {
-	display: flex;
-	gap: 0.75rem;
-	padding: 0.75rem 1rem;
-	margin-bottom: 0.5rem;
-	border-radius: 0.5rem;
-	background: var(--card-bg, #fff);
-	box-shadow: var(--card-shadow);
-	color: var(--grey-7, #333);
+	display: flex; gap: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.6rem;
+	border-radius: 16px; background: var(--glass-bg);
+	backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+	border: 1.5px solid var(--glass-border); box-shadow: var(--glass-shadow);
+	color: var(--grey-7, #1e293b); transition: all 0.3s ease;
+	&:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99, 102, 241, 0.12); }
 }
-.day-todo-title { font-weight: 500; &.done { text-decoration: line-through; color: var(--grey-5); } }
-.day-todo-desc { font-size: 0.8rem; color: var(--grey-5); margin-top: 0.25rem; }
-.day-todo-time { font-size: 0.75rem; color: var(--grey-4); margin-top: 0.25rem; }
+.day-todo-title { font-weight: 600; &.done { text-decoration: line-through; color: var(--grey-5, #94a3b8); } }
+.day-todo-desc { font-size: 0.8rem; color: var(--grey-5, #64748b); margin-top: 0.25rem; }
+.day-todo-time { font-size: 0.75rem; color: var(--grey-4, #94a3b8); margin-top: 0.25rem; }
 
 .priority-dot {
 	width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 2px;
-	&.p0 { background: #8bc34a; }
-	&.p1 { background: #ff9800; }
-	&.p2 { background: #f44336; }
+	&.p0 { background: #22c55e; }
+	&.p1 { background: #f59e0b; }
+	&.p2 { background: #ef4444; }
 }
 
 @media (max-width: 767px) {
@@ -364,5 +317,6 @@ watch([viewMode, currentDate], loadCalendar, { immediate: true });
 	.month-cell { min-height: 3.5rem; }
 	.cell-todo-item { font-size: 0.55rem; }
 	.cell-date { font-size: 0.65rem; }
+	.month-grid, .week-cell { border-radius: 12px; }
 }
 </style>

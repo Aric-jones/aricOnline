@@ -7,6 +7,7 @@ import com.ican.model.vo.Result;
 import com.ican.model.vo.query.TodoQuery;
 import com.ican.model.vo.request.TodoReq;
 import com.ican.service.AiService;
+import com.ican.service.HabitInsightService;
 import com.ican.service.TodoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,83 +29,98 @@ public class TodoController {
     @Autowired
     private AiService aiService;
 
+    @Autowired
+    private HabitInsightService habitInsightService;
+
     @ApiOperation(value = "查询代办列表")
-    @GetMapping("/admin/todo/list")
+    @GetMapping("/user/todo/list")
     public Result<PageResult<Todo>> listTodo(TodoQuery query) {
         return Result.success(todoService.listTodo(query));
     }
 
     @ApiOperation(value = "新增代办")
-    @PostMapping("/admin/todo")
+    @PostMapping("/user/todo")
     public Result<?> addTodo(@Validated @RequestBody TodoReq req) {
         todoService.addTodo(req);
         return Result.success();
     }
 
     @ApiOperation(value = "修改代办")
-    @PutMapping("/admin/todo")
+    @PutMapping("/user/todo")
     public Result<?> updateTodo(@Validated @RequestBody TodoReq req) {
         todoService.updateTodo(req);
         return Result.success();
     }
 
     @ApiOperation(value = "删除代办")
-    @DeleteMapping("/admin/todo/{id}")
+    @DeleteMapping("/user/todo/{id}")
     public Result<?> deleteTodo(@PathVariable Integer id) {
         todoService.deleteTodo(id);
         return Result.success();
     }
 
     @ApiOperation(value = "切换完成状态")
-    @PutMapping("/admin/todo/status/{id}")
+    @PutMapping("/user/todo/status/{id}")
     public Result<?> toggleStatus(@PathVariable Integer id) {
         todoService.toggleStatus(id);
         return Result.success();
     }
 
     @ApiOperation(value = "日历视图数据")
-    @GetMapping("/admin/todo/calendar")
+    @GetMapping("/user/todo/calendar")
     public Result<List<Todo>> calendarData(@RequestParam String startDate, @RequestParam String endDate) {
         return Result.success(todoService.getCalendarData(startDate, endDate));
     }
 
     @ApiOperation(value = "获取分类列表")
-    @GetMapping("/admin/todo/categories")
+    @GetMapping("/user/todo/categories")
     public Result<List<String>> getCategoryList() {
         return Result.success(todoService.getCategoryList());
     }
 
     @ApiOperation(value = "AI总结")
-    @PostMapping("/admin/todo/ai/summary")
+    @PostMapping("/user/todo/ai/summary")
     public Result<String> aiSummary(@RequestBody Map<String, String> body) {
         String type = body.getOrDefault("type", "daily");
         return Result.success(todoService.aiSummary(type));
     }
 
     @ApiOperation(value = "AI改进建议")
-    @PostMapping("/admin/todo/ai/suggest")
+    @PostMapping("/user/todo/ai/suggest")
     public Result<String> aiSuggest() {
         return Result.success(todoService.aiSuggest());
     }
 
     @ApiOperation(value = "AI代办对话")
-    @PostMapping(value = "/admin/todo/ai/chat", produces = "text/event-stream;charset=UTF-8")
-    public SseEmitter aiChat(@RequestBody List<Map<String, String>> messages) {
-        return aiService.chatStream(messages);
+    @PostMapping(value = "/user/todo/ai/chat", produces = "text/event-stream;charset=UTF-8")
+    public SseEmitter aiChat(@RequestBody Map<String, Object> body) {
+        @SuppressWarnings("unchecked")
+        List<Map<String, String>> messages = (List<Map<String, String>>) body.get("messages");
+        String range = (String) body.getOrDefault("range", "7d");
+        return todoService.contextAwareChat(messages, range);
     }
 
     @ApiOperation(value = "获取AI记录")
-    @GetMapping("/admin/todo/ai/record/{type}")
+    @GetMapping("/user/todo/ai/record/{type}")
     public Result<AiRecord> getAiRecord(@PathVariable("type") String type) {
         return Result.success(todoService.getAiRecord(type));
     }
 
     @ApiOperation(value = "保存AI记录（对话等）")
-    @PostMapping("/admin/todo/ai/record")
+    @PostMapping("/user/todo/ai/record")
     public Result<?> saveAiRecord(@RequestBody Map<String, String> body) {
         String type = body.get("recordType");
         String content = body.get("content");
         todoService.saveAiRecord(type, content);
         return Result.success();
+    }
+
+    @ApiOperation(value = "习惯洞察")
+    @PostMapping("/user/todo/ai/habit-insight")
+    public Result<String> habitInsight(@RequestBody Map<String, Object> body) {
+        @SuppressWarnings("unchecked")
+        List<Integer> habitIds = (List<Integer>) body.get("habitIds");
+        String result = habitInsightService.generateInsight(habitIds);
+        return Result.success(result);
     }
 }

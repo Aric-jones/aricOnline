@@ -74,7 +74,7 @@
 						<svg-icon icon-class="edit"></svg-icon> 发布文章
 					</a>
 				</li>
-				<li v-if="user.isAdmin" class="item" :class="{ active: route.path === '/todo' }">
+				<li class="item" :class="{ active: route.path === '/todo' }">
 					<router-link to="/todo">
 						<svg-icon icon-class="calendar"></svg-icon> 我的代办
 					</router-link>

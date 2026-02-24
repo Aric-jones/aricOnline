@@ -37,8 +37,8 @@ const { user } = useStore();
 const ruleFormRef = ref<FormInstance>();
 const loading = ref(false);
 const loginForm = reactive({
-    username: "admin@qq.com",
-    password: "123456",
+    username: "",
+    password: "",
 });
 const rules = reactive<FormRules>({
     username: [{ required: true, message: "请输入用户名", trigger: "blur" }],

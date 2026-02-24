@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.HabitRecordMapper">
+
+    <select id="selectRecordsByDateRange" resultType="com.ican.entity.HabitRecord">
+        SELECT * FROM t_habit_record
+        WHERE user_id = #{userId}
+        <if test="habitId != null">
+            AND habit_id = #{habitId}
+        </if>
+        AND record_date BETWEEN #{startDate} AND #{endDate}
+        ORDER BY record_date DESC, create_time DESC
+    </select>
+
+    <select id="selectDailyStats" resultType="java.util.HashMap">
+        SELECT record_date AS recordDate,
+               COUNT(*) AS count,
+               COALESCE(SUM(value), 0) AS totalValue,
+               ROUND(AVG(rating), 1) AS avgRating
+        FROM t_habit_record
+        WHERE user_id = #{userId}
+        <if test="habitId != null">
+            AND habit_id = #{habitId}
+        </if>
+        AND record_date BETWEEN #{startDate} AND #{endDate}
+        GROUP BY record_date
+        ORDER BY record_date ASC
+    </select>
+
+</mapper>

@@ -59,7 +59,7 @@
 						<svg-icon icon-class="edit"></svg-icon> 发布文章
 					</a>
 				</li>
-				<li v-if="user.isAdmin" class="subitem" :class="{ active: route.path === '/todo' }">
+				<li class="subitem" :class="{ active: route.path === '/todo' }">
 					<router-link to="/todo" class="link">
 						<svg-icon icon-class="calendar"></svg-icon> 我的代办
 					</router-link>
@@ -330,15 +330,16 @@ const logout = () => {
 	display: flex;
 	align-items: center;
 	position: relative;
-	background-color: rgba(255, 255, 255, 0.2);
+	background-color: var(--search-input-bg, rgba(255, 255, 255, 0.2));
 	border-radius: 20px;
 	padding: 4px 12px;
 	transition: all 0.3s;
 	margin-left: 10px;
+	border: 1px solid var(--search-input-border, transparent);
 
 	&:hover,
 	&:focus-within {
-		background-color: rgba(255, 255, 255, 0.3);
+		background-color: var(--search-input-bg-focus, rgba(255, 255, 255, 0.3));
 	}
 }
 
@@ -353,7 +354,7 @@ const logout = () => {
 	font-size: 14px;
 
 	&::placeholder {
-		color: rgba(255, 255, 255, 0.7);
+		color: var(--search-placeholder, rgba(255, 255, 255, 0.7));
 	}
 }
 
@@ -434,6 +435,23 @@ const logout = () => {
 
 .sub.menu .submenu {
 	background-color: var(--grey-1);
+}
+
+.sub .search-input-container {
+	background-color: rgba(0, 0, 0, 0.08);
+	border-color: var(--grey-4, #ccc);
+
+	&:hover,
+	&:focus-within {
+		background-color: rgba(0, 0, 0, 0.12);
+		border-color: var(--primary-color);
+	}
+}
+
+.sub .search-input {
+	&::placeholder {
+		color: var(--grey-5, #999);
+	}
 }
 
 .drop::after {
