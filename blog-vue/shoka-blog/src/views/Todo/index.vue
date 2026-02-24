@@ -51,10 +51,7 @@ const activeTab = ref("list");
 $primary: #6366f1;
 $primary-light: #818cf8;
 $primary-bg: rgba(99, 102, 241, 0.08);
-$glass-border: rgba(99, 102, 241, 0.15);
-$card-bg: rgba(255, 255, 255, 0.65);
-$card-border: rgba(255, 255, 255, 0.5);
-$shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+$glass-input-border: rgba(99, 102, 241, 0.15);
 $radius: 16px;
 $radius-sm: 10px;
 
