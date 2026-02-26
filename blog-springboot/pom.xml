@@ -162,12 +162,14 @@
             <artifactId>yauaa</artifactId>
             <version>${yauaa.version}</version>
         </dependency>
-        <!-- 过滤敏感词 -->
+        <!-- 过滤敏感词（已替换为AC自动机实现，无需外部依赖） -->
+        <!--
         <dependency>
             <groupId>com.github.houbb</groupId>
             <artifactId>sensitive-word</artifactId>
             <version>${sensitive.version}</version>
         </dependency>
+        -->
         <!-- 阿里云oss -->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
