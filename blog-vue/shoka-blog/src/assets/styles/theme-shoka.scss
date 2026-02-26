@@ -193,8 +193,8 @@
 	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.18), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
 	--card-shadow-hover: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.22), 0 0.75rem 2rem rgba(0, 0, 0, 0.14);
 	--card-bg: rgba(255, 255, 255, 0.2);
-	--nav-bg: linear-gradient(-45deg, #dd9a83, #d27886, #5aacda, #23d5ab);
-	--footer-bg: linear-gradient(-45deg, #dd9a83, #d27886, #5aacda, #23d5ab);
+	--nav-bg: linear-gradient(-45deg, #e2714a, #e64f67, #5aacda, #23d5ab);
+	--footer-bg: linear-gradient(-45deg, #e2714a, #e64f67, #5aacda, #23d5ab);
 
 	/* --- 文章语义变量（gradient 下标题用深色，提升可读性） --- */
 	--article-title-color: var(--grey-8);
@@ -202,7 +202,7 @@
 	--article-meta-color: var(--grey-5);
 	--category-link-color: var(--grey-7);
 	--category-link-hover: var(--grey-8);
-	--article-tag-bg: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
+	--article-tag-bg: linear-gradient(-45deg, #e2714a, #e64f67, #5aacda, #23d5ab);
 	--article-tag-color: #fff;
 	--article-tag-hover: rgba(255, 255, 255, 0.95);
 	--sidebar-card-bg: rgba(255, 255, 255, 0.2);
