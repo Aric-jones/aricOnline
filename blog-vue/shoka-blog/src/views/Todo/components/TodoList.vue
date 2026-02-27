@@ -469,7 +469,6 @@ $primary-light: #818cf8;
 	align-items: center;
 	perspective: 1200px;
 	margin-bottom: 1rem;
-	overflow: hidden;
 }
 
 .date-card {
