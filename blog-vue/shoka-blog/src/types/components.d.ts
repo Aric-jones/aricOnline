@@ -14,7 +14,6 @@ declare module '@vue/runtime-core' {
     Catalog: typeof import('./../components/Catalog/index.vue')['default']
     ChatRoom: typeof import('./../components/ChatRoom/index.vue')['default']
     CommentList: typeof import('./../components/Comment/CommentList.vue')['default']
-    CyberWave: typeof import('./../components/CyberWave/index.vue')['default']
     DailyRecommend: typeof import('./../components/DailyRecommend/index.vue')['default']
     Drawer: typeof import('./../components/Layout/Drawer/index.vue')['default']
     Echarts: typeof import('./../components/Echarts/index.vue')['default']

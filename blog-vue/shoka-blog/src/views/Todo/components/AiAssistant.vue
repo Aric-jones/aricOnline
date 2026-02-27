@@ -500,13 +500,8 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$primary: #6366f1;
-$primary-light: #818cf8;
-$primary-bg: rgba(99, 102, 241, 0.08);
 $card: rgba(255, 255, 255, 0.65);
 $card-border: rgba(255, 255, 255, 0.5);
-$glass-border: rgba(99, 102, 241, 0.15);
-$shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
 
 .ai-container { max-width: 800px; margin: 0 auto; color: var(--grey-7, #1e293b); }
 
@@ -515,26 +510,42 @@ $shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
 	display: flex; align-items: center; gap: 4px;
 	padding: 0.45rem 1rem; border-radius: 50px; font-size: 0.85rem;
 	cursor: pointer; font-weight: 500;
-	border: 1.5px solid $glass-border;
+	border: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.15);
 	background: var(--card-bg, $card); backdrop-filter: blur(16px);
 	color: var(--grey-6, #64748b); transition: all 0.25s ease;
 	&.active {
-		background: linear-gradient(135deg, $primary, $primary-light);
+		background: linear-gradient(135deg, var(--todo-primary, #6366f1), var(--todo-primary-light, #818cf8));
 		color: #fff; border-color: transparent;
-		box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+		box-shadow: 0 4px 14px rgba(var(--todo-primary-rgb, 99,102,241), 0.35);
 	}
-	&:hover:not(.active) { border-color: $primary; color: $primary; }
+	&:hover:not(.active) { border-color: var(--todo-primary, #6366f1); color: var(--todo-primary, #6366f1); }
 }
 .settings-tab { margin-left: auto; }
 
 .ai-panel {
 	padding: 1.25rem; border-radius: 16px; min-height: 200px;
 	background: var(--card-bg, $card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-	border: 1.5px solid var(--card-border, $card-border); box-shadow: $shadow;
+	border: 1.5px solid var(--glass-border, rgba(255,255,255,0.5)); box-shadow: var(--glass-shadow);
 }
 .panel-header {
 	display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
 	margin-bottom: 1rem; font-size: 0.85rem;
+
+	:deep(.n-base-selection) {
+		border-radius: 50px !important;
+		--n-border: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.15) !important;
+		--n-border-hover: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.4) !important;
+		--n-border-focus: 1.5px solid var(--todo-primary, #6366f1) !important;
+		--n-border-active: 1.5px solid var(--todo-primary, #6366f1) !important;
+		--n-color: var(--glass-bg, rgba(255, 255, 255, 0.45)) !important;
+		--n-color-active: var(--glass-bg, rgba(255, 255, 255, 0.55)) !important;
+		--n-color-focus: var(--glass-bg, rgba(255, 255, 255, 0.55)) !important;
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		background: transparent !important;
+		.n-base-selection-label, .n-base-selection-tags { border-radius: 50px !important; background: transparent !important; }
+		.n-base-selection__border, .n-base-selection__state-border { border-radius: 50px !important; }
+	}
 }
 .record-time { font-size: 0.75rem; color: var(--grey-5, #94a3b8); white-space: nowrap; }
 
@@ -544,7 +555,7 @@ $shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
 .ai-loading {
 	display: flex; align-items: center; gap: 0.5rem;
 	padding: 2rem 0; justify-content: center;
-	color: $primary; font-size: 0.9rem;
+	color: var(--todo-primary, #6366f1); font-size: 0.9rem;
 }
 .dot-anim {
 	display: inline-block;
@@ -563,7 +574,7 @@ $shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
 .chat-panel { display: flex; flex-direction: column; height: 500px; }
 .chat-range-bar {
 	display: flex; align-items: center; gap: 0.5rem;
-	padding-bottom: 0.5rem; border-bottom: 1px solid rgba(99, 102, 241, 0.06);
+	padding-bottom: 0.5rem; border-bottom: 1px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.06);
 	margin-bottom: 0.5rem; flex-shrink: 0;
 }
 .range-label { font-size: 0.8rem; color: var(--grey-5, #94a3b8); white-space: nowrap; }
@@ -581,40 +592,40 @@ $shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
 .msg-bubble {
 	max-width: 80%; padding: 0.6rem 0.85rem; border-radius: 16px; font-size: 0.9rem; line-height: 1.6;
 	.user & {
-		background: linear-gradient(135deg, $primary, $primary-light);
+		background: linear-gradient(135deg, var(--todo-primary, #6366f1), var(--todo-primary-light, #818cf8));
 		color: #fff; border-bottom-right-radius: 4px;
-		box-shadow: 0 2px 10px rgba(99, 102, 241, 0.2);
+		box-shadow: 0 2px 10px rgba(var(--todo-primary-rgb, 99,102,241), 0.2);
 	}
 	.assistant & {
 		background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px);
-		border: 1px solid rgba(99, 102, 241, 0.08); border-bottom-left-radius: 4px;
+		border: 1px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.08); border-bottom-left-radius: 4px;
 	}
 	:deep(.md-preview) { font-size: 0.85rem; background: transparent !important; padding: 0 !important; }
 }
 .chat-input-bar {
 	display: flex; gap: 0.5rem; margin-top: 0.75rem;
-	padding-top: 0.75rem; border-top: 1px solid rgba(99, 102, 241, 0.06);
+	padding-top: 0.75rem; border-top: 1px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.06);
 }
 
 .settings-panel { min-height: 300px; }
 .settings-desc {
 	font-size: 0.85rem; color: var(--grey-5, #94a3b8);
 	margin-bottom: 1rem; padding-bottom: 0.75rem;
-	border-bottom: 1px solid rgba(99, 102, 241, 0.06);
+	border-bottom: 1px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.06);
 }
 .prompt-list { display: flex; flex-direction: column; gap: 1rem; }
 .prompt-card {
 	padding: 1rem; border-radius: 16px;
-	border: 1.5px solid $glass-border;
-	background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(8px);
+	border: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.15);
+	backdrop-filter: blur(8px);
 	transition: box-shadow 0.2s;
-	&:hover { box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08); }
+	&:hover { box-shadow: 0 4px 16px rgba(var(--todo-primary-rgb, 99,102,241), 0.08); }
 }
 .prompt-card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
 .prompt-name { font-weight: 600; font-size: 0.9rem; }
 .prompt-key {
 	font-size: 0.7rem; color: var(--grey-5, #94a3b8); font-family: monospace;
-	background: $primary-bg; padding: 2px 8px; border-radius: 50px;
+	background: rgba(var(--todo-primary-rgb, 99,102,241), 0.08); padding: 2px 8px; border-radius: 50px;
 }
 .prompt-badge {
 	font-size: 0.65rem; padding: 2px 8px; border-radius: 50px; font-weight: 600;

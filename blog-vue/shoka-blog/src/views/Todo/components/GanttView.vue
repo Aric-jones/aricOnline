@@ -130,14 +130,27 @@ watch([startDate, rangeDays], loadGantt, { immediate: true });
 <style lang="scss" scoped>
 $card: rgba(255, 255, 255, 0.65);
 $card-border: rgba(255, 255, 255, 0.5);
-$shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
-$primary: #6366f1;
-$primary-bg: rgba(99, 102, 241, 0.08);
 
 .gantt-container { color: var(--grey-7, #1e293b); }
 .gantt-toolbar {
 	display: flex; justify-content: space-between; align-items: center;
 	margin-bottom: 1.25rem; gap: 0.5rem;
+
+	:deep(.n-base-selection) {
+		border-radius: 50px !important;
+		--n-border: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.15) !important;
+		--n-border-hover: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.4) !important;
+		--n-border-focus: 1.5px solid var(--todo-primary, #6366f1) !important;
+		--n-border-active: 1.5px solid var(--todo-primary, #6366f1) !important;
+		--n-color: var(--glass-bg, rgba(255, 255, 255, 0.45)) !important;
+		--n-color-active: var(--glass-bg, rgba(255, 255, 255, 0.55)) !important;
+		--n-color-focus: var(--glass-bg, rgba(255, 255, 255, 0.55)) !important;
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		background: transparent !important;
+		.n-base-selection-label, .n-base-selection-tags { border-radius: 50px !important; background: transparent !important; }
+		.n-base-selection__border, .n-base-selection__state-border { border-radius: 50px !important; }
+	}
 }
 .gantt-range-label { font-size: 0.9rem; font-weight: 600; min-width: 8rem; text-align: center; }
 .loading-tip, .empty-tip { text-align: center; padding: 3rem 0; color: var(--grey-5, #94a3b8); }
@@ -149,7 +162,7 @@ $primary-bg: rgba(99, 102, 241, 0.08);
 .gantt-header, .gantt-row { display: flex; min-width: fit-content; }
 .gantt-header {
 	font-size: 0.7rem; font-weight: 700; color: var(--grey-6, #64748b);
-	border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+	border-bottom: 1px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.08);
 	position: sticky; top: 0;
 	background: var(--glass-bg); backdrop-filter: blur(12px);
 	z-index: 1; letter-spacing: 0.3px;
@@ -158,7 +171,7 @@ $primary-bg: rgba(99, 102, 241, 0.08);
 	width: 140px; min-width: 140px; padding: 0.4rem 0.5rem;
 	display: flex; align-items: center; gap: 4px;
 	overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-	border-right: 1px solid rgba(99, 102, 241, 0.06); font-size: 0.8rem;
+	border-right: 1px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.06); font-size: 0.8rem;
 }
 .row-title {
 	overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
@@ -169,11 +182,11 @@ $primary-bg: rgba(99, 102, 241, 0.08);
 	width: 40px; min-width: 40px; text-align: center; padding: 0.3rem 0;
 	border-right: 1px solid rgba(0, 0, 0, 0.03);
 }
-.gantt-date-col.today { background: $primary-bg; color: $primary; font-weight: 700; }
+.gantt-date-col.today { background: rgba(var(--todo-primary-rgb, 99,102,241), 0.08); color: var(--todo-primary, #6366f1); font-weight: 700; }
 .gantt-row {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.03);
 	transition: background 0.2s;
-	&:hover { background: $primary-bg; }
+	&:hover { background: rgba(var(--todo-primary-rgb, 99,102,241), 0.08); }
 }
 .gantt-cell {
 	display: flex; align-items: center; justify-content: center; padding: 0.35rem 1px;

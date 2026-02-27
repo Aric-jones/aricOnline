@@ -222,10 +222,6 @@ watch([viewMode, currentDate], loadCalendar, { immediate: true });
 <style lang="scss" scoped>
 $card: rgba(255, 255, 255, 0.65);
 $card-border: rgba(255, 255, 255, 0.5);
-$shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
-$primary: #6366f1;
-$primary-light: #818cf8;
-$primary-bg: rgba(99, 102, 241, 0.08);
 
 .calendar-container { color: var(--grey-7, #1e293b); }
 .cal-header {
@@ -241,24 +237,31 @@ $primary-bg: rgba(99, 102, 241, 0.08);
 }
 .month-grid {
 	display: grid; grid-template-columns: repeat(7, 1fr); min-width: 500px;
-	gap: 1px; background: var(--grey-3, #e5e7eb); border-radius: 16px; overflow: hidden;
+	gap: 1px; border-radius: 16px; overflow: hidden;
+	background: var(--glass-bg, rgba(255, 255, 255, 0.5));
+	backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+	border: 1.5px solid var(--glass-border, rgba(255, 255, 255, 0.5));
+	box-shadow:
+		var(--todo-card-glow, 0 0 0 transparent),
+		0 8px 32px rgba(var(--todo-primary-rgb, 99,102,241), 0.1),
+		0 2px 8px rgba(0, 0, 0, 0.04);
 }
 .weekday-header {
 	text-align: center; padding: 0.5rem; font-size: 0.78rem; font-weight: 700;
-	background: var(--glass-bg); backdrop-filter: blur(12px);
+	background: rgba(var(--todo-primary-rgb, 99,102,241), 0.04);
 	color: var(--grey-6, #64748b); letter-spacing: 1px;
 }
 .month-cell {
 	min-height: 5rem; padding: 0.3rem;
-	background: var(--glass-bg); backdrop-filter: blur(8px);
+	background: transparent;
 	transition: background 0.2s;
-	&.today { background: $primary-bg; }
+	&.today { background: rgba(var(--todo-primary-rgb, 99,102,241), 0.08); }
 	&.other { opacity: 0.35; }
 }
 .cell-date { font-size: 0.75rem; font-weight: 600; margin-bottom: 2px; color: var(--grey-7); }
 .cell-todo-item {
 	font-size: 0.65rem; padding: 2px 6px; margin-bottom: 2px; border-radius: 50px;
-	background: $primary-bg; color: $primary;
+	background: rgba(var(--todo-primary-rgb, 99,102,241), 0.08); color: var(--todo-primary, #6366f1);
 	overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-weight: 500;
 	&.done { opacity: 0.45; text-decoration: line-through; }
 	&.high-p { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
@@ -271,16 +274,27 @@ $primary-bg: rgba(99, 102, 241, 0.08);
 }
 .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); min-width: 560px; gap: 0.6rem; }
 .week-cell {
-	border-radius: 16px; background: var(--glass-bg);
-	backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-	border: 1.5px solid var(--glass-border); box-shadow: var(--glass-shadow);
+	border-radius: 16px;
+	background: var(--todo-card-bg, var(--glass-bg, rgba(255, 255, 255, 0.5)));
+	backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+	border: 1.5px solid var(--glass-border, rgba(255, 255, 255, 0.5));
+	box-shadow:
+		var(--todo-card-glow, 0 0 0 transparent),
+		0 4px 16px rgba(var(--todo-primary-rgb, 99,102,241), 0.08),
+		0 1px 4px rgba(0, 0, 0, 0.04);
 	overflow: hidden; transition: transform 0.25s ease, box-shadow 0.25s ease;
-	&:hover { transform: scale(1.05); box-shadow: 0 8px 28px rgba(99, 102, 241, 0.15); z-index: 2; }
+	&:hover {
+		transform: scale(1.05); z-index: 2;
+		box-shadow:
+			var(--todo-card-glow, 0 0 0 transparent),
+			0 8px 28px rgba(var(--todo-primary-rgb, 99,102,241), 0.18),
+			0 2px 8px rgba(0, 0, 0, 0.06);
+	}
 }
 .week-cell-header {
 	text-align: center; padding: 0.45rem; font-size: 0.8rem; font-weight: 600;
 	background: var(--grey-2, rgba(0, 0, 0, 0.03)); color: var(--grey-7);
-	&.today { background: linear-gradient(135deg, $primary, $primary-light); color: #fff; }
+	&.today { background: linear-gradient(135deg, var(--todo-primary, #6366f1), var(--todo-primary-light, #818cf8)); color: #fff; }
 }
 .week-day-name { margin-right: 4px; }
 .week-cell-body { padding: 0.45rem; min-height: 4rem; }
@@ -295,11 +309,16 @@ $primary-bg: rgba(99, 102, 241, 0.08);
 .day-empty { text-align: center; padding: 3rem 0; color: var(--grey-5, #94a3b8); }
 .day-todo-item {
 	display: flex; gap: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.6rem;
-	border-radius: 16px; background: var(--glass-bg);
-	backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-	border: 1.5px solid var(--glass-border); box-shadow: var(--glass-shadow);
+	border-radius: 16px;
+	background: var(--todo-card-bg, var(--glass-bg, rgba(255, 255, 255, 0.5)));
+	backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+	border: 1.5px solid var(--glass-border, rgba(255, 255, 255, 0.5));
+	box-shadow:
+		var(--todo-card-glow, 0 0 0 transparent),
+		0 4px 16px rgba(var(--todo-primary-rgb, 99,102,241), 0.08),
+		0 1px 4px rgba(0, 0, 0, 0.04);
 	color: var(--grey-7, #1e293b); transition: all 0.3s ease;
-	&:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99, 102, 241, 0.12); }
+	&:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(var(--todo-primary-rgb, 99,102,241), 0.12); }
 }
 .day-todo-title { font-weight: 600; &.done { text-decoration: line-through; color: var(--grey-5, #94a3b8); } }
 .day-todo-desc { font-size: 0.8rem; color: var(--grey-5, #64748b); margin-top: 0.25rem; }
