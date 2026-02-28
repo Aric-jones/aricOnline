@@ -5,6 +5,7 @@
     <select id="selectTodoList" resultType="com.ican.entity.Todo">
         SELECT * FROM t_todo
         WHERE user_id = #{userId}
+        AND type = #{param.type}
         <if test="param.status != null">
             AND status = #{param.status}
         </if>
@@ -16,7 +17,8 @@
         </if>
         <if test="param.keyword != null and param.keyword != ''">
             AND (title LIKE CONCAT('%', #{param.keyword}, '%')
-                 OR description LIKE CONCAT('%', #{param.keyword}, '%'))
+                 OR description LIKE CONCAT('%', #{param.keyword}, '%')
+                 OR category LIKE CONCAT('%', #{param.keyword}, '%'))
         </if>
         <if test="param.startDate != null and param.startDate != ''">
             AND (end_time >= #{param.startDate} OR end_time IS NULL)
@@ -31,6 +33,7 @@
     <select id="selectTodoCount" resultType="java.lang.Long">
         SELECT COUNT(*) FROM t_todo
         WHERE user_id = #{userId}
+        AND type = #{param.type}
         <if test="param.status != null">
             AND status = #{param.status}
         </if>
@@ -42,7 +45,8 @@
         </if>
         <if test="param.keyword != null and param.keyword != ''">
             AND (title LIKE CONCAT('%', #{param.keyword}, '%')
-                 OR description LIKE CONCAT('%', #{param.keyword}, '%'))
+                 OR description LIKE CONCAT('%', #{param.keyword}, '%')
+                 OR category LIKE CONCAT('%', #{param.keyword}, '%'))
         </if>
         <if test="param.startDate != null and param.startDate != ''">
             AND (end_time >= #{param.startDate} OR end_time IS NULL)
@@ -55,6 +59,7 @@
     <select id="selectTodoByDateRange" resultType="com.ican.entity.Todo">
         SELECT * FROM t_todo
         WHERE user_id = #{userId}
+          AND (type IS NULL OR type = 0)
           AND ((start_time BETWEEN #{startDate} AND #{endDate})
                OR (end_time BETWEEN #{startDate} AND #{endDate})
                OR (start_time &lt;= #{startDate} AND end_time >= #{endDate}))

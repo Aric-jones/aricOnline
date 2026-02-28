@@ -10,22 +10,23 @@
 				clearable
 				round
 				style="width: 160px"
+				@update:value="debounceLoad"
 			/>
 		</div>
 
-		<div v-if="filteredTasks.length === 0" class="pool-empty">暂无任务，点击上方按钮添加想做的事</div>
+		<div v-if="!loading && tasks.length === 0" class="pool-empty">暂无任务，点击上方按钮添加想做的事</div>
 
 		<div class="pool-list">
 			<div
-				v-for="task in filteredTasks"
+				v-for="task in tasks"
 				:key="task.id"
 				class="pool-card"
 			>
 				<div class="pool-card-body" @click="showEdit(task)">
 					<div class="pool-card-title">{{ task.title }}</div>
 					<div v-if="task.description" class="pool-card-desc">{{ task.description }}</div>
-					<div v-if="task.tags.length" class="pool-card-tags">
-						<span v-for="tag in task.tags" :key="tag" class="pool-tag">{{ tag }}</span>
+				<div v-if="parseCategories(task.category).length" class="pool-card-tags">
+					<span v-for="cat in parseCategories(task.category)" :key="cat" class="pool-tag">{{ cat }}</span>
 					</div>
 				</div>
 				<div class="pool-card-actions">
@@ -46,15 +47,15 @@
 					<label class="form-label">描述</label>
 					<n-input v-model:value="form.description" type="textarea" placeholder="详细描述（可选）" :rows="3" />
 				</div>
-				<div class="form-group">
-					<label class="form-label">标签</label>
-					<div class="tag-input-row">
-						<n-input v-model:value="tagInput" placeholder="输入标签后回车" round @keyup.enter="addTag" />
-					</div>
-					<div v-if="form.tags.length" class="tag-list">
-						<span v-for="(tag, i) in form.tags" :key="i" class="pool-tag editable" @click="removeTag(i)">{{ tag }} ✕</span>
-					</div>
+			<div class="form-group">
+				<label class="form-label">分类</label>
+				<div class="tag-input-row">
+					<n-input v-model:value="catInput" placeholder="输入分类后回车" round @keyup.enter="addCategory" />
 				</div>
+				<div v-if="form.categories.length" class="tag-list">
+					<span v-for="(cat, i) in form.categories" :key="i" class="pool-tag editable" @click="removeCategory(i)">{{ cat }} ✕</span>
+				</div>
+			</div>
 				<div class="modal-footer">
 					<button class="btn-ghost" @click="dialogVisible = false">取消</button>
 					<button class="btn-add" @click="handleSubmit">确定</button>
@@ -65,116 +66,133 @@
 </template>
 
 <script setup lang="ts">
-interface PoolTask {
-	id: string;
-	title: string;
-	description: string;
-	tags: string[];
-	createTime: string;
-}
+import { getTodoList, addTodo, updateTodo, deleteTodo } from "@/api/todo";
+import type { TodoItem, TodoReq } from "@/api/todo/types";
 
-const STORAGE_KEY = "todo-task-pool";
-
+const loading = ref(false);
 const keyword = ref("");
 const dialogVisible = ref(false);
-const editingId = ref<string | null>(null);
-const tagInput = ref("");
+const editingId = ref<number | null>(null);
+const catInput = ref("");
 
 const form = reactive({
 	title: "",
 	description: "",
-	tags: [] as string[],
+	categories: [] as string[],
 });
 
-const tasks = ref<PoolTask[]>([]);
+const tasks = ref<TodoItem[]>([]);
 
-const loadTasks = () => {
-	try {
-		const raw = localStorage.getItem(STORAGE_KEY);
-		tasks.value = raw ? JSON.parse(raw) : [];
-	} catch { tasks.value = []; }
+const parseCategories = (str: string | null | undefined): string[] => {
+	if (!str) return [];
+	return str.split(",").filter(Boolean);
 };
 
-const saveTasks = () => {
-	localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks.value));
+let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+const debounceLoad = () => {
+	if (debounceTimer) clearTimeout(debounceTimer);
+	debounceTimer = setTimeout(loadData, 300);
 };
 
-const filteredTasks = computed(() => {
-	const kw = keyword.value.trim().toLowerCase();
-	if (!kw) return tasks.value;
-	return tasks.value.filter(
-		(t) => t.title.toLowerCase().includes(kw) || t.description.toLowerCase().includes(kw) || t.tags.some((tag) => tag.toLowerCase().includes(kw))
-	);
-});
+const loadData = () => {
+	loading.value = true;
+	getTodoList({
+		current: 1,
+		size: 500,
+		type: 1,
+		keyword: keyword.value.trim() || undefined,
+	})
+		.then(({ data }) => {
+			if (data.flag) {
+				tasks.value = data.data.recordList;
+			}
+		})
+		.finally(() => (loading.value = false));
+};
 
 const showAdd = () => {
 	editingId.value = null;
 	form.title = "";
 	form.description = "";
-	form.tags = [];
-	tagInput.value = "";
+	form.categories = [];
+	catInput.value = "";
 	dialogVisible.value = true;
 };
 
-const showEdit = (task: PoolTask) => {
+const showEdit = (task: TodoItem) => {
 	editingId.value = task.id;
 	form.title = task.title;
-	form.description = task.description;
-	form.tags = [...task.tags];
-	tagInput.value = "";
+	form.description = task.description || "";
+	form.categories = parseCategories(task.category);
+	catInput.value = "";
 	dialogVisible.value = true;
 };
 
-const addTag = () => {
-	const t = tagInput.value.trim();
-	if (t && !form.tags.includes(t)) form.tags.push(t);
-	tagInput.value = "";
+const addCategory = () => {
+	const t = catInput.value.trim();
+	if (t && !form.categories.includes(t)) form.categories.push(t);
+	catInput.value = "";
 };
 
-const removeTag = (i: number) => { form.tags.splice(i, 1); };
+const removeCategory = (i: number) => { form.categories.splice(i, 1); };
 
 const handleSubmit = () => {
 	if (!form.title.trim()) {
 		window.$message?.warning("标题不能为空");
 		return;
 	}
-	if (editingId.value) {
-		const idx = tasks.value.findIndex((t) => t.id === editingId.value);
-		if (idx >= 0) {
-			tasks.value[idx] = { ...tasks.value[idx], title: form.title, description: form.description, tags: [...form.tags] };
+	const req: TodoReq = {
+		title: form.title.trim(),
+		description: form.description.trim() || undefined,
+		category: form.categories.length ? form.categories.join(",") : undefined,
+		type: 1,
+	};
+	const promise = editingId.value
+		? updateTodo({ ...req, id: editingId.value })
+		: addTodo(req);
+	promise.then(({ data }) => {
+		if (data.flag) {
+			window.$message?.success(editingId.value ? "修改成功" : "添加成功");
+			dialogVisible.value = false;
+			loadData();
 		}
-	} else {
-		tasks.value.unshift({
-			id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-			title: form.title,
-			description: form.description,
-			tags: [...form.tags],
-			createTime: new Date().toISOString(),
-		});
-	}
-	saveTasks();
-	dialogVisible.value = false;
+	});
 };
 
-const handleDelete = (id: string) => {
+const handleDelete = (id: number) => {
 	window.$dialog?.warning({
 		title: "确认删除",
 		content: "删除后不可恢复，确认删除？",
 		positiveText: "删除",
 		negativeText: "取消",
 		onPositiveClick: () => {
-			tasks.value = tasks.value.filter((t) => t.id !== id);
-			saveTasks();
+			deleteTodo(id).then(({ data }) => {
+				if (data.flag) {
+					window.$message?.success("已删除");
+					loadData();
+				}
+			});
 		},
 	});
 };
 
-const convertToTodo = (task: PoolTask) => {
-	window.$message?.info("请前往「代办列表」新增代办，标题已复制到剪贴板");
-	navigator.clipboard.writeText(task.title).catch(() => {});
+const convertToTodo = (task: TodoItem) => {
+	const req: TodoReq = {
+		id: task.id,
+		title: task.title,
+		description: task.description,
+		category: task.category,
+		type: 0,
+	};
+	updateTodo(req).then(({ data }) => {
+		if (data.flag) {
+			window.$message?.success("已转为待办");
+			loadData();
+		}
+	});
 };
 
-onMounted(loadTasks);
+onMounted(loadData);
 </script>
 
 <style lang="scss" scoped>

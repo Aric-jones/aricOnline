@@ -58,6 +58,9 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
     }
 
     public PageResult<Todo> listTodo(TodoQuery query) {
+        if (query.getType() == null) {
+            query.setType(0);
+        }
         Integer userId = currentUserId();
         Long count = todoMapper.selectTodoCount(query, userId);
         if (count == 0) {
@@ -75,6 +78,7 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
                 .status(0)
                 .priority(req.getPriority() != null ? req.getPriority() : 1)
                 .category(req.getCategory())
+                .type(req.getType() != null ? req.getType() : 0)
                 .startTime(parseDateTime(req.getStartTime()))
                 .endTime(parseDateTime(req.getEndTime()))
                 .build();
@@ -90,6 +94,9 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         todo.setDescription(req.getDescription());
         todo.setPriority(req.getPriority() != null ? req.getPriority() : todo.getPriority());
         todo.setCategory(req.getCategory());
+        if (req.getType() != null) {
+            todo.setType(req.getType());
+        }
         todo.setStartTime(parseDateTime(req.getStartTime()));
         todo.setEndTime(parseDateTime(req.getEndTime()));
         this.updateById(todo);
@@ -125,6 +132,7 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         Integer userId = currentUserId();
         return this.lambdaQuery()
                 .eq(Todo::getUserId, userId)
+                .and(w -> w.isNull(Todo::getType).or().eq(Todo::getType, 0))
                 .isNotNull(Todo::getCategory)
                 .select(Todo::getCategory)
                 .list()
@@ -157,6 +165,7 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         List<Todo> todos = todoMapper.selectTodoByDateRange(userId, start + " 00:00:00", end + " 23:59:59");
         List<Todo> allInRange = this.lambdaQuery()
                 .eq(Todo::getUserId, userId)
+                .and(w -> w.isNull(Todo::getType).or().eq(Todo::getType, 0))
                 .ge(Todo::getCreateTime, start + " 00:00:00")
                 .le(Todo::getCreateTime, end + " 23:59:59")
                 .list();
@@ -208,6 +217,7 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         String end = now.toString();
         List<Todo> todos = this.lambdaQuery()
                 .eq(Todo::getUserId, userId)
+                .and(w -> w.isNull(Todo::getType).or().eq(Todo::getType, 0))
                 .ge(Todo::getCreateTime, start + " 00:00:00")
                 .le(Todo::getCreateTime, end + " 23:59:59")
                 .orderByDesc(Todo::getCreateTime)
@@ -285,6 +295,7 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         int todoLimit = days <= 30 ? 50 : 100;
         List<Todo> recentTodos = this.lambdaQuery()
                 .eq(Todo::getUserId, userId)
+                .and(w -> w.isNull(Todo::getType).or().eq(Todo::getType, 0))
                 .ge(Todo::getCreateTime, start + " 00:00:00")
                 .le(Todo::getCreateTime, end + " 23:59:59")
                 .orderByDesc(Todo::getCreateTime)

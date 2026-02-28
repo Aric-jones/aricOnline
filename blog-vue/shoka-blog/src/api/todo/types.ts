@@ -5,6 +5,7 @@ export interface TodoItem {
 	description: string;
 	status: number;
 	priority: number;
+	type: number;
 	category: string;
 	startTime: string;
 	endTime: string;
@@ -21,11 +22,13 @@ export interface TodoReq {
 	category?: string;
 	startTime?: string;
 	endTime?: string;
+	type?: number;
 }
 
 export interface TodoQuery {
 	current?: number;
 	size?: number;
+	type?: number;
 	status?: number | null;
 	priority?: number | null;
 	category?: string;

@@ -10,6 +10,9 @@ import lombok.EqualsAndHashCode;
 @ApiModel(description = "代办查询条件")
 public class TodoQuery extends PageQuery {
 
+    @ApiModelProperty(value = "类型 0待办 1任务池")
+    private Integer type;
+
     @ApiModelProperty(value = "状态 0未完成 1已完成")
     private Integer status;
 

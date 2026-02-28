@@ -228,16 +228,7 @@ $card-border: rgba(255, 255, 255, 0.5);
 	display: flex; justify-content: space-between; align-items: center;
 	margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;
 }
-.cal-nav {
-	display: flex; align-items: center; gap: 0.75rem;
-	:deep(.n-button--text-type) {
-		color: var(--todo-primary, #6366f1) !important;
-		--n-text-color: var(--todo-primary, #6366f1) !important;
-		--n-text-color-hover: var(--todo-primary-light, #818cf8) !important;
-		--n-text-color-pressed: var(--todo-primary, #6366f1) !important;
-		--n-text-color-focus: var(--todo-primary, #6366f1) !important;
-	}
-}
+.cal-nav { display: flex; align-items: center; gap: 0.75rem; }
 .cal-title { font-size: 1.1rem; font-weight: 700; min-width: 10rem; text-align: center; color: var(--grey-8, #1e293b); }
 
 .month-scroll-wrapper {

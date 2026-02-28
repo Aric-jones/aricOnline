@@ -183,6 +183,7 @@ function addDays(dateStr: string, days: number): string {
 const query = reactive<TodoQuery>({
 	current: 1,
 	size: 500,
+	type: 0,
 	status: null,
 	priority: null,
 	keyword: "",

@@ -155,6 +155,16 @@ $radius-sm: 10px;
 	transition: all 0.2s ease !important;
 }
 
+// ==================== Text 按钮（箭头等）主题色 ====================
+// Naive UI inline style 设置 --n-text-color* 变量，优先级高于 CSS
+// 必须用 color !important 直接覆盖渲染结果
+:deep(.n-button--text-type) {
+	color: var(--todo-primary, #6366f1) !important;
+	&:hover { color: var(--todo-primary-light, #818cf8) !important; }
+	&:active, &:focus { color: var(--todo-primary, #6366f1) !important; }
+	.n-button__content { color: inherit !important; }
+}
+
 // ==================== Error 按钮 ====================
 :deep(.n-button--error-type.n-button--quaternary-type) {
 	border-radius: 50px !important;

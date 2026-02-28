@@ -33,6 +33,9 @@ public class Todo {
     /** 0低 1中 2高 */
     private Integer priority;
 
+    /** 0待办 1任务池 */
+    private Integer type;
+
     private String category;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
