@@ -93,6 +93,7 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         todo.setTitle(req.getTitle());
         todo.setDescription(req.getDescription());
         todo.setPriority(req.getPriority() != null ? req.getPriority() : todo.getPriority());
+        // category 直接设置，允许空字符串
         todo.setCategory(req.getCategory());
         if (req.getType() != null) {
             todo.setType(req.getType());

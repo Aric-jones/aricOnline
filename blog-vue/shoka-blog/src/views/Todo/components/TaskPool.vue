@@ -25,8 +25,8 @@
 				<div class="pool-card-body" @click="showEdit(task)">
 					<div class="pool-card-title">{{ task.title }}</div>
 					<div v-if="task.description" class="pool-card-desc">{{ task.description }}</div>
-				<div v-if="parseCategories(task.category).length" class="pool-card-tags">
-					<span v-for="cat in parseCategories(task.category)" :key="cat" class="pool-tag">{{ cat }}</span>
+					<div v-if="task.category" class="pool-card-tags">
+						<span class="pool-tag">{{ task.category }}</span>
 					</div>
 				</div>
 				<div class="pool-card-actions">
@@ -49,12 +49,7 @@
 				</div>
 			<div class="form-group">
 				<label class="form-label">分类</label>
-				<div class="tag-input-row">
-					<n-input v-model:value="catInput" placeholder="输入分类后回车" round @keyup.enter="addCategory" />
-				</div>
-				<div v-if="form.categories.length" class="tag-list">
-					<span v-for="(cat, i) in form.categories" :key="i" class="pool-tag editable" @click="removeCategory(i)">{{ cat }} ✕</span>
-				</div>
+				<n-input v-model:value="form.category" placeholder="输入分类" round />
 			</div>
 				<div class="modal-footer">
 					<button class="btn-ghost" @click="dialogVisible = false">取消</button>
@@ -73,20 +68,14 @@ const loading = ref(false);
 const keyword = ref("");
 const dialogVisible = ref(false);
 const editingId = ref<number | null>(null);
-const catInput = ref("");
 
 const form = reactive({
 	title: "",
 	description: "",
-	categories: [] as string[],
+	category: "",
 });
 
 const tasks = ref<TodoItem[]>([]);
-
-const parseCategories = (str: string | null | undefined): string[] => {
-	if (!str) return [];
-	return str.split(",").filter(Boolean);
-};
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 const debounceLoad = () => {
@@ -114,8 +103,7 @@ const showAdd = () => {
 	editingId.value = null;
 	form.title = "";
 	form.description = "";
-	form.categories = [];
-	catInput.value = "";
+	form.category = "";
 	dialogVisible.value = true;
 };
 
@@ -123,28 +111,27 @@ const showEdit = (task: TodoItem) => {
 	editingId.value = task.id;
 	form.title = task.title;
 	form.description = task.description || "";
-	form.categories = parseCategories(task.category);
-	catInput.value = "";
+	form.category = task.category || "";
 	dialogVisible.value = true;
 };
-
-const addCategory = () => {
-	const t = catInput.value.trim();
-	if (t && !form.categories.includes(t)) form.categories.push(t);
-	catInput.value = "";
-};
-
-const removeCategory = (i: number) => { form.categories.splice(i, 1); };
 
 const handleSubmit = () => {
 	if (!form.title.trim()) {
 		window.$message?.warning("标题不能为空");
 		return;
 	}
+	if (!form.description.trim()) {
+		window.$message?.warning("描述不能为空");
+		return;
+	}
+	if (!form.category.trim()) {
+		window.$message?.warning("分类不能为空");
+		return;
+	}
 	const req: TodoReq = {
 		title: form.title.trim(),
-		description: form.description.trim() || undefined,
-		category: form.categories.length ? form.categories.join(",") : undefined,
+		description: form.description.trim(),
+		category: form.category.trim(),
 		type: 1,
 	};
 	const promise = editingId.value

@@ -351,17 +351,30 @@ const loadData = () => {
 		.finally(() => (loading.value = false));
 };
 
+const getCurrentTimeStr = (): string => {
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = String(now.getMonth() + 1).padStart(2, "0");
+	const day = String(now.getDate()).padStart(2, "0");
+	const hours = String(now.getHours()).padStart(2, "0");
+	const minutes = String(now.getMinutes()).padStart(2, "0");
+	const seconds = String(now.getSeconds()).padStart(2, "0");
+	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
 const showAdd = () => {
 	editingId.value = null;
 	const endTime = `${centerDate.value} 23:59:59`;
-	Object.assign(form, { title: "", description: "", priority: 1, category: "", startTime: null, endTime });
+	const startTime = getCurrentTimeStr();
+	Object.assign(form, { title: "", description: "", priority: 1, category: "", startTime, endTime });
 	dialogVisible.value = true;
 };
 
 const showAddForDate = (dateKey: string) => {
 	editingId.value = null;
 	const endTime = `${dateKey} 23:59:59`;
-	Object.assign(form, { title: "", description: "", priority: 1, category: "", startTime: null, endTime });
+	const startTime = getCurrentTimeStr();
+	Object.assign(form, { title: "", description: "", priority: 1, category: "", startTime, endTime });
 	dialogVisible.value = true;
 };
 

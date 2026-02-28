@@ -27,6 +27,7 @@
 				:key="idx"
 				class="month-cell"
 				:class="{ today: cell.isToday, other: cell.isOtherMonth }"
+				@click="goToDay(cell.date)"
 			>
 				<div class="cell-date">{{ cell.day }}</div>
 				<div class="cell-todos">
@@ -47,7 +48,7 @@
 		<!-- 周视图 -->
 		<div v-if="viewMode === 'week'" class="week-scroll-wrapper">
 		<div class="week-grid">
-			<div v-for="(cell, idx) in weekCells" :key="idx" class="week-cell">
+			<div v-for="(cell, idx) in weekCells" :key="idx" class="week-cell" @click="goToDay(cell.date)">
 				<div class="week-cell-header" :class="{ today: cell.isToday }">
 					<span class="week-day-name">{{ weekDays[idx] }}</span>
 					<span class="week-day-num">{{ cell.day }}</span>
@@ -180,6 +181,11 @@ const formatRange = (s: string, e: string) => {
 	return parts.join(" ~ ");
 };
 
+const goToDay = (date: Date) => {
+	currentDate.value = new Date(date);
+	viewMode.value = "day";
+};
+
 const prev = () => {
 	const d = new Date(currentDate.value);
 	if (viewMode.value === "month") d.setMonth(d.getMonth() - 1);
@@ -256,7 +262,10 @@ $card-border: rgba(255, 255, 255, 0.5);
 	background: transparent;
 	transition: background 0.2s;
 	border-radius: 15px;
+	cursor: pointer;
+	&:hover { background: rgba(var(--todo-primary-rgb, 99,102,241), 0.06); }
 	&.today { background: rgba(var(--todo-primary-rgb, 99,102,241), 0.3); }
+	&.today:hover { background: rgba(var(--todo-primary-rgb, 99,102,241), 0.35); }
 	&.other { opacity: 0.35; }
 }
 .cell-date { font-size: 0.75rem; font-weight: 600; margin-bottom: 2px; color: var(--grey-7); }
@@ -267,7 +276,10 @@ $card-border: rgba(255, 255, 255, 0.5);
 	&.done { opacity: 0.6; text-decoration: line-through; }
 	&.high-p { background: rgba(239, 68, 68, 0.5); color: var(--n-text-color); }
 }
-.cell-more { font-size: 0.6rem; color: var(--grey-5); padding-left: 4px; }
+.cell-more {
+	font-size: 0.6rem; color: var(--todo-primary, #6366f1); padding-left: 4px;
+	font-weight: 600; cursor: pointer;
+}
 
 .week-scroll-wrapper {
 	overflow-x: auto; -webkit-overflow-scrolling: touch;
@@ -283,7 +295,7 @@ $card-border: rgba(255, 255, 255, 0.5);
 		var(--todo-card-glow, 0 0 0 transparent),
 		0 4px 16px rgba(var(--todo-primary-rgb, 99,102,241), 0.08),
 		0 1px 4px rgba(0, 0, 0, 0.04);
-	overflow: hidden; transition: transform 0.25s ease, box-shadow 0.25s ease;
+	overflow: hidden; transition: transform 0.25s ease, box-shadow 0.25s ease; cursor: pointer;
 	&:hover {
 		transform: scale(1.05); z-index: 2;
 		box-shadow:
