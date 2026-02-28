@@ -421,8 +421,12 @@ const handleSubmit = () => {
 };
 
 const handleToggle = (id: number) => {
-	toggleTodoStatus(id).then(({ data }) => {
-		if (data.flag) loadData();
+	const todo = allTodos.value.find((t) => t.id === id);
+	if (todo) {
+		todo.status = todo.status === 0 ? 1 : 0;
+	}
+	toggleTodoStatus(id).catch(() => {
+		if (todo) todo.status = todo.status === 0 ? 1 : 0;
 	});
 };
 
