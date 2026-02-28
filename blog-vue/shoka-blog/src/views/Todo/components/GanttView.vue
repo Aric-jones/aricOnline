@@ -152,7 +152,14 @@ $card-border: rgba(255, 255, 255, 0.5);
 		.n-base-selection__border, .n-base-selection__state-border { border-radius: 50px !important; }
 	}
 }
-.gantt-range-label { font-size: 0.9rem; font-weight: 600; min-width: 8rem; text-align: center; }
+.gantt-range-label { font-size: 0.9rem; font-weight: 600; min-width: 8rem; text-align: center; color: var(--grey-8, #1e293b); }
+.gantt-toolbar :deep(.n-button--text-type) {
+	color: var(--todo-primary, #6366f1) !important;
+	--n-text-color: var(--todo-primary, #6366f1) !important;
+	--n-text-color-hover: var(--todo-primary-light, #818cf8) !important;
+	--n-text-color-pressed: var(--todo-primary, #6366f1) !important;
+	--n-text-color-focus: var(--todo-primary, #6366f1) !important;
+}
 .loading-tip, .empty-tip { text-align: center; padding: 3rem 0; color: var(--grey-5, #94a3b8); }
 .gantt-chart {
 	overflow-x: auto; border-radius: 16px;

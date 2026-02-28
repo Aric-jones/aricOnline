@@ -228,8 +228,17 @@ $card-border: rgba(255, 255, 255, 0.5);
 	display: flex; justify-content: space-between; align-items: center;
 	margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;
 }
-.cal-nav { display: flex; align-items: center; gap: 0.75rem; }
-.cal-title { font-size: 1.1rem; font-weight: 700; min-width: 10rem; text-align: center; }
+.cal-nav {
+	display: flex; align-items: center; gap: 0.75rem;
+	:deep(.n-button--text-type) {
+		color: var(--todo-primary, #6366f1) !important;
+		--n-text-color: var(--todo-primary, #6366f1) !important;
+		--n-text-color-hover: var(--todo-primary-light, #818cf8) !important;
+		--n-text-color-pressed: var(--todo-primary, #6366f1) !important;
+		--n-text-color-focus: var(--todo-primary, #6366f1) !important;
+	}
+}
+.cal-title { font-size: 1.1rem; font-weight: 700; min-width: 10rem; text-align: center; color: var(--grey-8, #1e293b); }
 
 .month-scroll-wrapper {
 	overflow-x: auto; -webkit-overflow-scrolling: touch;
@@ -255,16 +264,17 @@ $card-border: rgba(255, 255, 255, 0.5);
 	min-height: 5rem; padding: 0.3rem;
 	background: transparent;
 	transition: background 0.2s;
-	&.today { background: rgba(var(--todo-primary-rgb, 99,102,241), 0.08); }
+	border-radius: 15px;
+	&.today { background: rgba(var(--todo-primary-rgb, 99,102,241), 0.3); }
 	&.other { opacity: 0.35; }
 }
 .cell-date { font-size: 0.75rem; font-weight: 600; margin-bottom: 2px; color: var(--grey-7); }
 .cell-todo-item {
 	font-size: 0.65rem; padding: 2px 6px; margin-bottom: 2px; border-radius: 50px;
-	background: rgba(var(--todo-primary-rgb, 99,102,241), 0.08); color: var(--todo-primary, #6366f1);
-	overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-weight: 500;
-	&.done { opacity: 0.45; text-decoration: line-through; }
-	&.high-p { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+	background: rgba(var(--todo-primary-rgb, 99,102,241), 0.5); color: var(--n-text-color);
+	overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-weight: 600;
+	&.done { opacity: 0.6; text-decoration: line-through; }
+	&.high-p { background: rgba(239, 68, 68, 0.5); color: var(--n-text-color); }
 }
 .cell-more { font-size: 0.6rem; color: var(--grey-5); padding-left: 4px; }
 

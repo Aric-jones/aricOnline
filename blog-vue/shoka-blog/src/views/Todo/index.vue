@@ -12,18 +12,22 @@
 	</div>
 	<div class="bg">
 		<div class="todo-wrapper">
-			<!-- 主题色切换（单按钮循环） -->
-			<button
-				class="accent-cycle-btn"
-				:style="{ background: currentAccentColor }"
-				:title="'切换主题色：' + currentAccentLabel"
-				@click="cycleAccent"
-			></button>
 			<n-tabs v-model:value="activeTab" type="line">
-				<n-tab-pane name="list" tab="代办列表">
-					<TodoList />
-				</n-tab-pane>
-				<n-tab-pane name="calendar" tab="日历视图">
+			<template #suffix>
+				<button
+					class="accent-cycle-btn"
+					:style="{ background: currentAccentColor }"
+					:title="'切换主题色：' + currentAccentLabel"
+					@click="cycleAccent"
+				></button>
+			</template>
+			<n-tab-pane name="list" tab="代办列表">
+				<TodoList />
+			</n-tab-pane>
+			<n-tab-pane name="pool" tab="任务池">
+				<TaskPool />
+			</n-tab-pane>
+			<n-tab-pane name="calendar" tab="日历视图">
 					<CalendarView />
 				</n-tab-pane>
 				<n-tab-pane name="gantt" tab="甘特图">
@@ -45,6 +49,7 @@
 
 <script setup lang="ts">
 import TodoList from "./components/TodoList.vue";
+import TaskPool from "./components/TaskPool.vue";
 import CalendarView from "./components/CalendarView.vue";
 import GanttView from "./components/GanttView.vue";
 import DiaryView from "./components/DiaryView.vue";
@@ -75,14 +80,14 @@ $radius-sm: 10px;
 
 // ==================== 主题色切换按钮 ====================
 .accent-cycle-btn {
-	position: absolute; top: 4.75rem; right: 2.5rem;
-	width: 20px; height: 20px; border-radius: 50%;
+	width: 1.4rem; height: 1.4rem; border-radius: 50%;
 	border: 2px solid rgba(255, 255, 255, 0.7);
-	cursor: pointer; z-index: 5;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+	cursor: pointer; flex-shrink: 0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 	transition: all 0.3s ease;
-	&:hover { transform: scale(1.15); box-shadow: 0 3px 14px rgba(0, 0, 0, 0.18); }
-	&:active { transform: scale(0.95); }
+	margin-right: 0.25rem;
+	&:hover { transform: scale(1.2); box-shadow: 0 3px 14px rgba(0, 0, 0, 0.2); }
+	&:active { transform: scale(0.9); }
 }
 
 // ==================== 导航栏 ====================

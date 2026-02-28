@@ -468,7 +468,6 @@ onMounted(() => loadData());
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
 		background: transparent !important;
-		.n-base-selection-label, .n-base-selection-tags { border-radius: 50px !important; background: transparent !important; }
 		.n-base-selection__border, .n-base-selection__state-border { border-radius: 50px !important; }
 	}
 
@@ -724,9 +723,13 @@ onMounted(() => loadData());
 	:deep(.n-base-selection) {
 		border-radius: 50px !important;
 		--n-border: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.15) !important;
-		--n-border-hover: 1.5px solid var(--todo-primary, #6366f1) !important;
+		--n-border-hover: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.4) !important;
 		--n-border-focus: 1.5px solid var(--todo-primary, #6366f1) !important;
+		--n-border-active: 1.5px solid var(--todo-primary, #6366f1) !important;
 		--n-color: var(--glass-bg, rgba(255, 255, 255, 0.45)) !important;
+		--n-color-active: var(--glass-bg, rgba(255, 255, 255, 0.55)) !important;
+		--n-color-focus: var(--glass-bg, rgba(255, 255, 255, 0.55)) !important;
+		background: transparent !important;
 		.n-base-selection-label, .n-base-selection-tags { border-radius: 50px !important; }
 		.n-base-selection__border, .n-base-selection__state-border { border-radius: 50px !important; }
 	}
@@ -771,11 +774,18 @@ onMounted(() => loadData());
 		flex-wrap: wrap;
 		:deep(.n-select), :deep(.n-input) { width: 100% !important; flex: 1; min-width: 0; }
 	}
-	.carousel-stage { height: 420px; }
-	.date-card {
-		width: 220px !important; height: 360px !important;
-		&.active { width: 260px !important; height: 400px !important; }
+	.carousel-stage {
+		height: auto; min-height: 360px; perspective: none;
 	}
+	.date-card {
+		position: relative !important;
+		width: 100% !important; height: auto !important; min-height: 340px;
+		transform: none !important; opacity: 1 !important;
+		margin: 0 auto;
+		&:not(.active) { display: none !important; }
+		&.active { width: 100% !important; height: auto !important; min-height: 340px; }
+	}
+	.card-body { max-height: 50vh; overflow-y: auto; }
 	.form-row { grid-template-columns: 1fr; }
 	.modal-glass { padding: 1.5rem; }
 }

@@ -275,7 +275,7 @@ const iconList = [
 	// 生活/健康
 	"💧", "🍎", "😴", "🛁", "💊", "🦷", "🧴", "🌿", "🍳", "🥗", "🥛",
 	// 吃饭/饮食（新增分类）
-	"🍚", "🍜", "🍝", "🍲", "🍣", "🍤", "🍗", "🍖", "🍕", "🍔", "🥪", 
+	"🍚", "🍜", "🍝", "🍲", "🍣", "🍤", "🍗", "🍖", "🍕", "🍔", "🥪",
 	// 休闲/爱好
 	"🎸", "🎨", "📷", "🎮", "🎬", "🎤", "🎵", "✈️", "🏕️", "🧩",
 	// 社交/情感
@@ -578,13 +578,13 @@ onMounted(() => {
 		--n-border-hover: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.4) !important;
 		--n-border-focus: 1.5px solid var(--todo-primary, #6366f1) !important;
 		--n-border-active: 1.5px solid var(--todo-primary, #6366f1) !important;
-		--n-color: var(--glass-bg, rgba(255, 255, 255, 0.45)) !important;
+		--n-color: var(--glass-bg, rgba(255, 255, 255, 0.55)) !important;
 		--n-color-active: var(--glass-bg, rgba(255, 255, 255, 0.55)) !important;
 		--n-color-focus: var(--glass-bg, rgba(255, 255, 255, 0.55)) !important;
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
 		background: transparent !important;
-		.n-base-selection-label, .n-base-selection-tags { border-radius: 50px !important; background: transparent !important; }
+		.n-base-selection-placeholder__inner{color: var(--text-color) !important;}
 		.n-base-selection__border, .n-base-selection__state-border { border-radius: 50px !important; }
 	}
 }
@@ -605,6 +605,11 @@ onMounted(() => {
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 0.75rem;
+	:deep(.n-button) {
+		width: 80px !important;
+		height: 30px !important;
+		font-size: 12px !important;
+	}
 }
 .stats-title {
 	font-size: 0.95rem;

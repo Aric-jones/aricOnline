@@ -543,6 +543,7 @@ $card-border: rgba(255, 255, 255, 0.5);
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
 		background: transparent !important;
+		.n-base-selection-placeholder__inner{color: var(--text-color) !important;}
 		.n-base-selection-label, .n-base-selection-tags { border-radius: 50px !important; background: transparent !important; }
 		.n-base-selection__border, .n-base-selection__state-border { border-radius: 50px !important; }
 	}
