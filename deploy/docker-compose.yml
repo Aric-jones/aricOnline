@@ -91,8 +91,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      # HTTPS 证书（可选）
-      - /etc/ssl/certs:/etc/ssl/certs:ro
+      # SSL 证书（deploy/ 目录下的 pem/key 文件挂载到容器内）
+      - ./ariconline.top.pem:/etc/ssl/certs/ariconline.top.pem:ro
+      - ./ariconline.top.key:/etc/ssl/certs/ariconline.top.key:ro
       - upload-data:/usr/local/upload:ro
 
 volumes:

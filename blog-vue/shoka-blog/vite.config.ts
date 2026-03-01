@@ -30,6 +30,17 @@ export default defineConfig((configEnv) => {
 			host: "0.0.0.0",
 			port: 1314,
 			open: true,
+			// 本地 HTTPS：将 localhost 的自签名证书放在项目根目录的 ssl/ 目录下
+			// 使用 mkcert 生成：mkcert localhost 127.0.0.1
+			// 生成后文件路径：ssl/localhost+1.pem 和 ssl/localhost+1-key.pem
+			...(process.env.VITE_HTTPS === "true"
+				? {
+					https: {
+						cert: "./ssl/localhost.pem",
+						key: "./ssl/localhost-key.pem",
+					},
+				  }
+				: {}),
 			proxy: createViteProxy(viteEnv),
 		},
 		build: {

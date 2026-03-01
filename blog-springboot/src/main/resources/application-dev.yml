@@ -65,7 +65,7 @@ spring:
 
 # 博客链接
 blog:
-  url: ${BLOG_URL:http://localhost:1314/}
+  url: ${BLOG_URL:https://ariconline.top/}
 
 # 线程池
 thread:
@@ -136,20 +136,20 @@ oauth:
     client-id: ${OAUTH_GITEE_CLIENT_ID:}
     client-secret: ${OAUTH_GITEE_CLIENT_SECRET:}
     grant_type: authorization_code
-    redirect-uri: ${OAUTH_GITEE_REDIRECT:http://ariconline.top/oauth/login/gitee}
+    redirect-uri: ${OAUTH_GITEE_REDIRECT:https://ariconline.top/oauth/login/gitee}
     access-token-url: https://gitee.com/oauth/token
     user-info-url: https://gitee.com/api/v5/user?access_token={access_token}
   github:
     client-id: ${OAUTH_GITHUB_CLIENT_ID:}
     client-secret: ${OAUTH_GITHUB_CLIENT_SECRET:}
-    redirect-url: ${OAUTH_GITHUB_REDIRECT:http://ariconline.top/oauth/login/github}
+    redirect-url: ${OAUTH_GITHUB_REDIRECT:https://ariconline.top/oauth/login/github}
     access-token-url: https://github.com/login/oauth/access_token
     user-info-url: https://api.github.com/user
   qq:
     app-id: ${OAUTH_QQ_APP_ID:}
     app-key: ${OAUTH_QQ_APP_KEY:}
     grant_type: authorization_code
-    redirect-url: ${OAUTH_QQ_REDIRECT:http://ariconline.top/oauth/login/qq}
+    redirect-url: ${OAUTH_QQ_REDIRECT:https://ariconline.top/oauth/login/qq}
     access-token-url: https://graph.qq.com/oauth2.0/token
     user-openid-url: https://graph.qq.com/oauth2.0/me
     user-info-url: https://graph.qq.com/user/get_user_info
