@@ -262,9 +262,9 @@
 
 /* gradient：页面 .bg 动态渐变（background + background-size + animation 联动） */
 [theme="gradient"] .bg {
-	background: linear-gradient(-65deg,#db8769,#18d4a8,#2291cf, #cd5656);
+	background: linear-gradient(-65deg,#db8769,#db8769,#18d4a8,#cd5656,#2291cf, #cd5656);
 	background-size: 300% 300%;
-	animation: gradientBG 15s ease infinite;
+	animation: gradientBG 20s ease infinite;
 }
 
 /* gradient：第三方 markdown 组件内部背景，只能用 !important 覆盖 */

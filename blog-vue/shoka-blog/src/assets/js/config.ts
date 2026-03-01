@@ -4,7 +4,7 @@ export default {
   // gitee回调地址
   GITEE_REDIRECT_URL: "http://ariconline.top/oauth/login/gitee",
   // github的client-id
-  GITHUB_APP_ID: "Iv23liHQ5flTeS5iKcBf",
+  GITHUB_APP_ID: "2980584",
   // github回调地址
   GITHUB_REDIRECT_URL: "http://ariconline.top/oauth/login/github",
   // qq的app-id
