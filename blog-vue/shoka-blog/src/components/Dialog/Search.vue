@@ -1,6 +1,6 @@
 <template>
-  <n-modal class="dialog-wrapper bg" v-model:show="dialogVisible" preset="dialog" :show-icon="false"
-    transform-origin="center" :block-scroll="false">
+  <n-modal class="dialog-wrapper" v-model:show="dialogVisible" preset="dialog" :show-icon="false"
+    transform-origin="center" :block-scroll="false" display-directive="if">
     <template #header>
       <span class="title">本地搜索</span>
     </template>

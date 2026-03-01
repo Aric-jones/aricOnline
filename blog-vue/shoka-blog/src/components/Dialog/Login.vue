@@ -1,6 +1,6 @@
 <template>
-  <n-modal class="bg" v-model:show="dialogVisible" preset="dialog" :show-icon="false" transform-origin="center"
-    :block-scroll="false">
+  <n-modal v-model:show="dialogVisible" preset="dialog" :show-icon="false" transform-origin="center"
+    :block-scroll="false" display-directive="if">
     <n-input class="mt-11" v-model:value="loginForm.username" placeholder="邮箱号" @keyup.enter="handlelogin"></n-input>
     <n-input class="mt-11" v-model:value="loginForm.password" type="password" show-password-on="click" placeholder="密码"
       @keyup.enter="handlelogin"></n-input>
@@ -102,10 +102,10 @@ const handlelogin = () => {
     return;
   }
   loading.value = true;
-  login(loginForm.value).then(({ data }) => {
+  login(loginForm.value).then(async ({ data }) => {
     if (data.flag) {
       setToken(data.data);
-      user.GetUserInfo();
+      await user.GetUserInfo();
       window.$message?.success("登录成功");
       loginForm.value = {
         username: "",

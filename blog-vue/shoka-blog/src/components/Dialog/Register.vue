@@ -1,6 +1,6 @@
 <template>
-  <n-modal class="bg" v-model:show="dialogVisible" preset="dialog" :show-icon="false" transform-origin="center"
-    :block-scroll="false">
+  <n-modal v-model:show="dialogVisible" preset="dialog" :show-icon="false" transform-origin="center"
+    :block-scroll="false" display-directive="if">
     <n-input class="mt-11" placeholder="邮箱号" v-model:value="registerForm.username"></n-input>
     <n-input-group class="mt-11">
       <n-input placeholder="验证码" v-model:value="registerForm.code"></n-input>

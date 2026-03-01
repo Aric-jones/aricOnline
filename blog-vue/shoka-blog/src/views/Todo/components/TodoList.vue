@@ -12,24 +12,24 @@
 					clearable
 					:options="statusOptions"
 					style="width: 110px"
-					@update:value="loadData"
-				/>
-				<n-select
-					v-model:value="query.priority"
-					placeholder="优先级"
-					clearable
-					:options="priorityOptions"
-					style="width: 110px"
-					@update:value="loadData"
-				/>
-				<n-input
-					v-model:value="query.keyword"
-					placeholder="搜索..."
-					clearable
-					round
-					style="width: 160px"
-					@clear="loadData"
-					@keyup.enter="loadData"
+				@update:value="() => loadData(true)"
+			/>
+			<n-select
+				v-model:value="query.priority"
+				placeholder="优先级"
+				clearable
+				:options="priorityOptions"
+				style="width: 110px"
+				@update:value="() => loadData(true)"
+			/>
+			<n-input
+				v-model:value="query.keyword"
+				placeholder="搜索..."
+				clearable
+				round
+				style="width: 160px"
+				@clear="() => loadData(true)"
+				@keyup.enter="() => loadData(true)"
 				/>
 			</div>
 		</div>
@@ -108,7 +108,7 @@
 		<!-- 隐藏已完成 toggle -->
 		<div class="hide-toggle">
 			<label>
-				<input type="checkbox" v-model="hideCompleted" @change="loadData" />
+				<input type="checkbox" v-model="hideCompleted" @change="() => loadData(true)" />
 				隐藏已完成/已失败
 			</label>
 		</div>
@@ -339,8 +339,8 @@ const handleCardClick = (dateKey: string) => {
 	centerDate.value = dateKey;
 };
 
-const loadData = () => {
-	loading.value = true;
+const loadData = (silent = false) => {
+	if (!silent) loading.value = true;
 	query.current = 1;
 	getTodoList(query)
 		.then(({ data }) => {
@@ -414,7 +414,7 @@ const handleSubmit = () => {
 			if (data.flag) {
 				window.$message?.success(editingId.value ? "修改成功" : "添加成功");
 				dialogVisible.value = false;
-				loadData();
+				loadData(true);
 			}
 		})
 		.finally(() => (submitting.value = false));
@@ -437,12 +437,14 @@ const handleDelete = (id: number) => {
 		positiveText: "删除",
 		negativeText: "取消",
 		onPositiveClick: () => {
+			allTodos.value = allTodos.value.filter((t) => t.id !== id);
 			deleteTodo(id).then(({ data }) => {
 				if (data.flag) {
 					window.$message?.success("删除成功");
-					loadData();
+				} else {
+					loadData(true);
 				}
-			});
+			}).catch(() => loadData(true));
 		},
 	});
 };

@@ -16,60 +16,36 @@ import { setToken } from "@/utils/token";
 const user = useUserStore();
 const router = useRouter();
 const route = useRoute();
-onMounted(() => {
-  if (route.path == "/oauth/login/qq") {
-    qqLogin({ code: route.query.code as string }).then(
-      async ({ data }) => {
-        if (data.flag) {
-          // 设置Token
-          setToken(data.data);
-          // 获取用户信息
-          await user.GetUserInfo();
-          if (user.email === "") {
-            window.$message?.warning("请绑定邮箱以便及时收到回复");
-          } else {
-            window.$message?.success("登录成功");
-          }
-        }
+
+const handleOauthCallback = async (loginFn: Function) => {
+  try {
+    const { data } = await loginFn({ code: route.query.code as string });
+    if (data.flag) {
+      setToken(data.data);
+      await user.GetUserInfo();
+      if (user.email === "") {
+        window.$message?.warning("请绑定邮箱以便及时收到回复");
+      } else {
+        window.$message?.success("登录成功");
       }
-    );
-  } else if (route.path == "/oauth/login/gitee") {
-    giteeLogin({ code: route.query.code as string }).then(
-      async ({ data }) => {
-        if (data.flag) {
-          // 设置Token
-          setToken(data.data);
-          // 获取用户信息
-          await user.GetUserInfo();
-          if (user.email === "") {
-            window.$message?.warning("请绑定邮箱以便及时收到回复");
-          } else {
-            window.$message?.success("登录成功");
-          }
-        }
-      }
-    );
-  } else if (route.path == "/oauth/login/github") {
-    githubLogin({ code: route.query.code as string }).then(
-      async ({ data }) => {
-        if (data.flag) {
-          // 设置Token
-          setToken(data.data);
-          // 获取用户信息
-          await user.GetUserInfo();
-          if (user.email === "") {
-            window.$message?.warning("请绑定邮箱以便及时收到回复");
-          } else {
-            window.$message?.success("登录成功");
-          }
-        }
-      }
-    );
+    } else {
+      window.$message?.error("登录失败");
+    }
+  } catch {
+    window.$message?.error("登录失败，请重试");
   }
-  // 跳转回原页面
   const loginUrl = user.path;
-  if (loginUrl != null && loginUrl != "") {
-    router.push(loginUrl);
+  router.push(loginUrl && loginUrl !== "" ? loginUrl : "/");
+};
+
+onMounted(() => {
+  const path = route.path;
+  if (path === "/oauth/login/qq") {
+    handleOauthCallback(qqLogin);
+  } else if (path === "/oauth/login/gitee") {
+    handleOauthCallback(giteeLogin);
+  } else if (path === "/oauth/login/github") {
+    handleOauthCallback(githubLogin);
   } else {
     router.push("/");
   }

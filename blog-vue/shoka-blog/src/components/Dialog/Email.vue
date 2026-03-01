@@ -1,6 +1,6 @@
 <template>
-  <n-modal class="bg" v-model:show="dialogVisible" preset="dialog" :show-icon="false" transform-origin="center"
-    style="padding-bottom: 2rem;" :block-scroll="false">
+  <n-modal v-model:show="dialogVisible" preset="dialog" :show-icon="false" transform-origin="center"
+    style="padding-bottom: 2rem;" :block-scroll="false" display-directive="if">
     <n-input class="mt-11" placeholder="邮箱号" v-model:value="emailForm.email"></n-input>
     <n-input-group class="mt-11">
       <n-input placeholder="验证码" v-model:value="emailForm.code" />

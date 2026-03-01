@@ -23,7 +23,6 @@ router.beforeEach((to, from, next) => {
   const { user, permission } = store;
   const app = useAppStore();
   app.setRouteLoading(true);
-  // 判断是否有token
   if (getToken()) {
     if (to.path === "/login") {
       next({ path: "/" });
@@ -31,7 +30,6 @@ router.beforeEach((to, from, next) => {
     } else {
       if (user.roleList.length === 0) {
         isRelogin.show = true;
-        // 判断当前用户是否已拉取完user_info信息
         user
           .GetInfo()
           .then(() => {
@@ -40,10 +38,12 @@ router.beforeEach((to, from, next) => {
               accessRoutes.forEach((route) => {
                 router.addRoute(route);
               });
+              app.setRouteLoading(false);
               next({ ...to, replace: true });
             });
           })
           .catch((err) => {
+            app.setRouteLoading(false);
             user.LogOut().then(() => {
               ElMessage.error(err);
               next({ path: "/login" });
@@ -54,7 +54,6 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    // 未登录可以访问白名单页面(登录页面)
     if (whiteList.indexOf(to.path) !== -1) {
       next();
     } else {
