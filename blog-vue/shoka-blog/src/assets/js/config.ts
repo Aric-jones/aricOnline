@@ -16,7 +16,7 @@ export default {
   // github 回调地址
   GITHUB_REDIRECT_URL: `${BASE}/oauth/login/github`,
   // qq 的 app-id
-  QQ_APP_ID: "102044337",
+  QQ_APP_ID: "102885293",
   // qq 的回调地址
   QQ_REDIRECT_URL: `${BASE}/oauth/login/qq`,
 };
