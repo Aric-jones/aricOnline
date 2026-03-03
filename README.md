@@ -106,4 +106,4 @@ npm run build
 
 ## License
 
-见项目根目录 `LICENSE` 文件。
+见项目根目录 `LICENSE` 文件。..
