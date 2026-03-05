@@ -13,6 +13,8 @@ NProgress.configure({
 
 const defaultTitle = "博客";
 
+const needLogin = (path: string) => path.startsWith("/todo");
+
 router.beforeEach((to, from, next) => {
   NProgress.start();
   const user = useUserStore();
@@ -32,14 +34,18 @@ router.beforeEach((to, from, next) => {
         .catch(() => {
           user.LogOut().then(() => {
             window.$message?.warning("凭证失效，请重新登录");
-            next();
+            if (needLogin(to.path)) {
+              next("/");
+            } else {
+              next();
+            }
           });
         });
     } else {
       next();
     }
   } else {
-    if (to.path === "/todo") {
+    if (needLogin(to.path)) {
       window.$message?.warning("请先登录");
       next("/");
     } else {

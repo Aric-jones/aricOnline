@@ -54,11 +54,11 @@ export function getDiaryRange(startDate: string, endDate: string): AxiosPromise<
 // ================= AI =================
 
 export function aiSummary(type: string): AxiosPromise<Result<string>> {
-  return request({ url: "/user/todo/ai/summary", method: "post", data: { type } });
+  return request({ url: "/user/todo/ai/summary", method: "post", data: { type }, timeout: 180000 });
 }
 
 export function aiSuggest(): AxiosPromise<Result<string>> {
-  return request({ url: "/user/todo/ai/suggest", method: "post" });
+  return request({ url: "/user/todo/ai/suggest", method: "post", timeout: 180000 });
 }
 
 export function getAiRecord(type: string): AxiosPromise<Result<any>> {
@@ -84,11 +84,11 @@ export function resetAiPrompt(promptKey: string): AxiosPromise<Result<null>> {
 }
 
 export function optimizeAiPrompt(content: string): AxiosPromise<Result<string>> {
-  return request({ url: "/user/ai/prompt/optimize", method: "post", data: { content } });
+  return request({ url: "/user/ai/prompt/optimize", method: "post", data: { content }, timeout: 180000 });
 }
 
 // ================= 习惯洞察 =================
 
 export function aiHabitInsight(habitIds: number[]): AxiosPromise<Result<string>> {
-  return request({ url: "/user/todo/ai/habit-insight", method: "post", data: { habitIds } });
+  return request({ url: "/user/todo/ai/habit-insight", method: "post", data: { habitIds }, timeout: 180000 });
 }

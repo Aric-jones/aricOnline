@@ -203,8 +203,11 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         }
 
         String typeLabel = "daily".equals(type) ? "日" : "weekly".equals(type) ? "周" : "月";
-        String systemPrompt = aiPromptService.getPromptContent("summary")
-                .replace("{period}", typeLabel);
+        String promptContent = aiPromptService.getPromptContent("summary");
+        if (promptContent == null || promptContent.isEmpty()) {
+            promptContent = "你是一个时间管理助手，请根据用户的代办事项和日记，生成一份{period}度总结报告。";
+        }
+        String systemPrompt = promptContent.replace("{period}", typeLabel);
         String result = aiService.callAiSyncPublic(systemPrompt, context.toString(), 0.7, 2000);
         saveAiRecord("summary_" + type, result);
         return result;
@@ -236,6 +239,9 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         }
 
         String systemPrompt = aiPromptService.getPromptContent("suggest");
+        if (systemPrompt == null || systemPrompt.isEmpty()) {
+            systemPrompt = "你是一个时间管理助手，请根据用户的代办事项，给出具体的改进建议和时间管理技巧。";
+        }
         String result = aiService.callAiSyncPublic(systemPrompt, context.toString(), 0.7, 2000);
         saveAiRecord("suggest", result);
         return result;

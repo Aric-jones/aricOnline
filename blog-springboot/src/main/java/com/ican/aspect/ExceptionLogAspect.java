@@ -48,52 +48,39 @@ public class ExceptionLogAspect {
      */
     @AfterThrowing(pointcut = "exceptionLogPointCut()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        // 从切面织入点处通过反射机制获取织入点处的方法
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        // 获取切入点所在的方法
-        Method method = signature.getMethod();
-        // 获取request
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
-        // 获取操作
-        Api api = (Api) signature.getDeclaringType().getAnnotation(Api.class);
-        ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
-        ExceptionLog exceptionLog = new ExceptionLog();
-        // 异常模块
-        exceptionLog.setModule(api.tags()[0]);
-        // 请求URI
-        exceptionLog.setUri(request.getRequestURI());
-        // 异常名称
-        exceptionLog.setName(e.getClass().getName());
-        // 操作描述
-        exceptionLog.setDescription(apiOperation.value());
-        // 获取请求的类名
-        String className = joinPoint.getTarget().getClass().getName();
-        // 获取请求的方法名
-        String methodName = method.getName();
-        methodName = className + "." + methodName;
-        // 异常方法名称
-        exceptionLog.setErrorMethod(methodName);
-        // 异常信息
-        exceptionLog.setMessage(stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace()));
-        // 请求参数
-        if (joinPoint.getArgs()[0] instanceof MultipartFile) {
-            exceptionLog.setParams(((MultipartFile) joinPoint.getArgs()[0]).getOriginalFilename());
-        } else {
-            exceptionLog.setParams(JSON.toJSONString(joinPoint.getArgs()));
+        try {
+            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+            Method method = signature.getMethod();
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
+            Api api = (Api) signature.getDeclaringType().getAnnotation(Api.class);
+            ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
+            ExceptionLog exceptionLog = new ExceptionLog();
+            exceptionLog.setModule(api != null && api.tags().length > 0 ? api.tags()[0] : "未知模块");
+            exceptionLog.setUri(request.getRequestURI());
+            exceptionLog.setName(e.getClass().getName());
+            exceptionLog.setDescription(apiOperation != null ? apiOperation.value() : method.getName());
+            String className = joinPoint.getTarget().getClass().getName();
+            String methodName = method.getName();
+            methodName = className + "." + methodName;
+            exceptionLog.setErrorMethod(methodName);
+            exceptionLog.setMessage(stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace()));
+            if (joinPoint.getArgs().length > 0 && joinPoint.getArgs()[0] instanceof MultipartFile) {
+                exceptionLog.setParams(((MultipartFile) joinPoint.getArgs()[0]).getOriginalFilename());
+            } else {
+                exceptionLog.setParams(JSON.toJSONString(joinPoint.getArgs()));
+            }
+            exceptionLog.setRequestMethod(Objects.requireNonNull(request).getMethod());
+            String ip = ServletUtil.getClientIP(request);
+            exceptionLog.setIpAddress(ip);
+            exceptionLog.setIpSource(IpUtils.getIpSource(ip));
+            Map<String, String> userAgentMap = UserAgentUtils.parseOsAndBrowser(request.getHeader("User-Agent"));
+            exceptionLog.setOs(userAgentMap.get("os"));
+            exceptionLog.setBrowser(userAgentMap.get("browser"));
+            AsyncManager.getInstance().execute(AsyncFactory.recordException(exceptionLog));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        // 请求方式
-        exceptionLog.setRequestMethod(Objects.requireNonNull(request).getMethod());
-        // 操作ip和操作地址
-        String ip = ServletUtil.getClientIP(request);
-        exceptionLog.setIpAddress(ip);
-        exceptionLog.setIpSource(IpUtils.getIpSource(ip));
-        // 操作系统和浏览器
-        Map<String, String> userAgentMap = UserAgentUtils.parseOsAndBrowser(request.getHeader("User-Agent"));
-        exceptionLog.setOs(userAgentMap.get("os"));
-        exceptionLog.setBrowser(userAgentMap.get("browser"));
-        // 保存到数据库
-        AsyncManager.getInstance().execute(AsyncFactory.recordException(exceptionLog));
     }
 
     public String stackTraceToString(String exceptionName, String exceptionMessage, StackTraceElement[] elements) {

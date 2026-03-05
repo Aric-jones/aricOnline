@@ -11,6 +11,7 @@ import com.ican.service.HabitInsightService;
 import com.ican.service.TodoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Api(tags = "代办事项模块")
 @RestController
 public class TodoController {
@@ -82,13 +84,23 @@ public class TodoController {
     @PostMapping("/user/todo/ai/summary")
     public Result<String> aiSummary(@RequestBody Map<String, String> body) {
         String type = body.getOrDefault("type", "daily");
-        return Result.success(todoService.aiSummary(type));
+        try {
+            return Result.success(todoService.aiSummary(type));
+        } catch (Exception e) {
+            log.error("AI总结生成失败, type={}", type, e);
+            throw e;
+        }
     }
 
     @ApiOperation(value = "AI改进建议")
     @PostMapping("/user/todo/ai/suggest")
     public Result<String> aiSuggest() {
-        return Result.success(todoService.aiSuggest());
+        try {
+            return Result.success(todoService.aiSuggest());
+        } catch (Exception e) {
+            log.error("AI改进建议生成失败", e);
+            throw e;
+        }
     }
 
     @ApiOperation(value = "AI代办对话")
