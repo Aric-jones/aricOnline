@@ -3597,3 +3597,137 @@ INSERT INTO `t_visit_log` VALUES (4238, '首页', '0:0:0:0:0:0:0:1', '局域网|
 INSERT INTO `t_visit_log` VALUES (4239, '文章', '0:0:0:0:0:0:0:1', '局域网|局域网||', 'Windows NT ??', 'Chrome 144', '2026-02-09 20:40:42');
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE IF NOT EXISTS `t_ai_prompt` (
+                                             `id`           INT          NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                             `user_id`      INT          NOT NULL                COMMENT '用户ID',
+                                             `prompt_key`   VARCHAR(50)  NOT NULL                COMMENT '提示词标识（summary/suggest/chat/habit_insight/optimize_prompt）',
+                                             `name`         VARCHAR(100) NOT NULL                COMMENT '显示名称',
+                                             `content`      TEXT         NOT NULL                COMMENT '提示词内容',
+                                             `create_time`  DATETIME     NOT NULL                COMMENT '创建时间',
+                                             `update_time`  DATETIME              DEFAULT NULL   COMMENT '更新时间',
+                                             PRIMARY KEY (`id`),
+                                             UNIQUE KEY `uk_user_key` (`user_id`, `prompt_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='AI提示词配置表';
+
+-- 默认提示词（user_id=0 表示系统默认，新用户首次使用时复制到自己名下）
+INSERT INTO `t_ai_prompt` (`user_id`, `prompt_key`, `name`, `content`, `create_time`) VALUES
+                                                                                          (0, 'summary', '总结报告', '你是一位专注于个人能力提升的导师。请根据用户提供的代办事项和日记，生成一份{period}度总结报告。\n报告要求：\n1. 先总结本时段完成了什么、未完成什么\n2. 分析时间利用效率和工作重点\n3. 以「个人能力提升」为核心目标，给出 2-3 条具体的改进建议\n4. 语气亲切专业，像一位关心你成长的导师\n5. 使用 Markdown 格式，结构清晰', NOW()),
+
+                                                                                          (0, 'suggest', '改进建议', '你是一位个人能力提升导师，请根据用户近两周的代办完成情况，从以下维度给出具体的改进建议：\n1. 时间管理：是否有拖延、优先级分配是否合理\n2. 技能提升：根据代办内容推测用户的发展方向，建议学习路径\n3. 习惯养成：推荐有助于效率提升的小习惯\n4. 目标设定：建议短期（1周）和中期（1月）目标\n要求：语气亲切，建议具体可操作，使用 Markdown 格式', NOW()),
+
+                                                                                          (0, 'chat', '对话咨询', '你是用户的个人效能助手，能够访问用户的待办事项、日记和习惯数据。\n你的职责：\n1. 根据用户的真实数据回答问题，给出有针对性的分析和建议\n2. 擅长代办规划、时间管理、习惯养成、学习计划和个人成长\n3. 回答要具体、有条理、语气亲切专业\n4. 使用 Markdown 格式', NOW()),
+
+                                                                                          (0, 'habit_insight', '习惯洞察', '你是一位习惯养成与行为分析专家。请根据用户提供的习惯记录数据，从以下维度进行深度洞察分析：\n1. 坚持度分析：哪些习惯坚持得好，哪些容易中断\n2. 时间模式：发现执行习惯的时间规律和周期性\n3. 相关性：不同习惯之间是否存在关联（如运动和睡眠质量）\n4. 评分趋势：自我评价的变化趋势，反映状态波动\n5. 具体建议：针对每个习惯给出 1-2 条优化建议\n要求：数据驱动，语气鼓励正面，使用 Markdown 格式，配合 emoji 增加可读性', NOW()),
+
+                                                                                          (0, 'optimize_prompt', '提示词优化', '你是一位 AI 提示词工程专家。请优化用户提供的提示词，使其：\n1. 角色定位更清晰\n2. 输出要求更具体\n3. 格式和语气要求更明确\n4. 保持原始意图不变\n只输出优化后的提示词文本，不要加额外解释。', NOW());
+
+
+-- ============================================================
+--  习惯追踪 建表 SQL
+--  数据库: blog
+--  表前缀: t_
+-- ============================================================
+
+-- 习惯定义表（定义有哪些习惯）
+CREATE TABLE IF NOT EXISTS `t_habit` (
+                                         `id`          INT          NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                         `user_id`     INT          NOT NULL                COMMENT '用户ID',
+                                         `name`        VARCHAR(100) NOT NULL                COMMENT '习惯名称（如：跑步、阅读、喝水）',
+                                         `icon`        VARCHAR(50)           DEFAULT '⭐'   COMMENT '图标（emoji 或 svg-icon 名称）',
+                                         `color`       VARCHAR(20)           DEFAULT '#18a058' COMMENT '主题色（十六进制）',
+                                         `category`    VARCHAR(50)           DEFAULT NULL   COMMENT '分类（运动、学习、生活...）',
+                                         `unit`        VARCHAR(20)           DEFAULT NULL   COMMENT '单位（次、分钟、公里、页...）',
+                                         `sort`        INT          NOT NULL DEFAULT 0      COMMENT '排序（越小越靠前）',
+                                         `is_active`   TINYINT      NOT NULL DEFAULT 1      COMMENT '是否启用 0停用 1启用',
+                                         `create_time` DATETIME     NOT NULL                COMMENT '创建时间',
+                                         `update_time` DATETIME              DEFAULT NULL   COMMENT '更新时间',
+                                         PRIMARY KEY (`id`),
+                                         KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='习惯定义表';
+
+-- 习惯记录表（做了才记录，每次执行插入一条）
+CREATE TABLE IF NOT EXISTS `t_habit_record` (
+                                                `id`          INT          NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                                `habit_id`    INT          NOT NULL                COMMENT '关联习惯ID',
+                                                `user_id`     INT          NOT NULL                COMMENT '用户ID',
+                                                `record_date` DATE         NOT NULL                COMMENT '记录日期',
+                                                `value`       DECIMAL(10,2)         DEFAULT 1      COMMENT '数值（如：跑了5公里填5，默认1表示做了一次）',
+                                                `rating`      TINYINT               DEFAULT 3      COMMENT '自我评价 1差 2一般 3还行 4好 5很好',
+                                                `note`        VARCHAR(500)          DEFAULT NULL   COMMENT '备注',
+                                                `create_time` DATETIME     NOT NULL                COMMENT '创建时间',
+                                                `update_time` DATETIME              DEFAULT NULL   COMMENT '更新时间',
+                                                PRIMARY KEY (`id`),
+                                                KEY `idx_habit_id` (`habit_id`),
+                                                KEY `idx_user_date` (`user_id`, `record_date`),
+                                                KEY `idx_record_date` (`record_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='习惯记录表';
+
+
+CREATE TABLE IF NOT EXISTS `t_thinking` (
+                                            `id`          INT          NOT NULL AUTO_INCREMENT,
+                                            `user_id`     INT          NOT NULL COMMENT '用户ID',
+                                            `topic`       VARCHAR(200) NOT NULL COMMENT '思考主题',
+                                            `harvest`     TEXT         NOT NULL COMMENT '收获',
+                                            `remark`      VARCHAR(500) DEFAULT '' COMMENT '备注',
+                                            `create_time` DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                            `update_time` DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                            PRIMARY KEY (`id`),
+                                            INDEX `idx_user_id` (`user_id`),
+                                            INDEX `idx_create_time` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='思考沉淀表';
+
+
+
+-- ============================================================
+--  代办事项 + 日记 建表 SQL
+--  数据库: blog
+--  表前缀: t_
+-- ============================================================
+
+-- 代办事项表
+CREATE TABLE IF NOT EXISTS `t_todo` (
+                                        `id`             INT          NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                        `user_id`        INT          NOT NULL                COMMENT '用户ID',
+                                        `title`          VARCHAR(255) NOT NULL                COMMENT '标题',
+                                        `description`    TEXT                                 COMMENT '详细描述',
+                                        `status`         TINYINT      NOT NULL DEFAULT 0      COMMENT '状态 0未完成 1已完成',
+                                        `priority`       TINYINT      NOT NULL DEFAULT 1      COMMENT '优先级 0低 1中 2高',
+                                        `category`       VARCHAR(50)           DEFAULT NULL   COMMENT '分类标签',
+                                        `start_time`     DATETIME              DEFAULT NULL   COMMENT '开始时间',
+                                        `end_time`       DATETIME              DEFAULT NULL   COMMENT '截止时间',
+                                        `completed_time` DATETIME              DEFAULT NULL   COMMENT '完成时间',
+                                        `create_time`    DATETIME     NOT NULL                COMMENT '创建时间',
+                                        `update_time`    DATETIME              DEFAULT NULL   COMMENT '更新时间',
+                                        PRIMARY KEY (`id`),
+                                        KEY `idx_user_id` (`user_id`),
+                                        KEY `idx_status` (`status`),
+                                        KEY `idx_end_time` (`end_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='代办事项表';
+
+-- 日记表
+CREATE TABLE IF NOT EXISTS `t_diary` (
+                                         `id`          INT          NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                         `user_id`     INT          NOT NULL                COMMENT '用户ID',
+                                         `diary_date`  DATE         NOT NULL                COMMENT '日记日期',
+                                         `content`     TEXT                                 COMMENT '日记内容（Markdown）',
+                                         `mood`        VARCHAR(20)           DEFAULT NULL   COMMENT '心情标签',
+                                         `create_time` DATETIME     NOT NULL                COMMENT '创建时间',
+                                         `update_time` DATETIME              DEFAULT NULL   COMMENT '更新时间',
+                                         PRIMARY KEY (`id`),
+                                         KEY `idx_user_id` (`user_id`),
+                                         UNIQUE KEY `uk_user_date` (`user_id`, `diary_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='日记表';
+
+-- AI记录表（存储AI生成的总结/建议/对话，每种类型每用户保留一份，覆盖更新）
+CREATE TABLE IF NOT EXISTS `t_ai_record` (
+                                             `id`          INT          NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                             `user_id`     INT          NOT NULL                COMMENT '用户ID',
+                                             `record_type` VARCHAR(20)  NOT NULL                COMMENT '记录类型: summary_daily/summary_weekly/summary_monthly/suggest/chat',
+                                             `content`     MEDIUMTEXT                           COMMENT '内容（Markdown或JSON）',
+                                             `create_time` DATETIME     NOT NULL                COMMENT '创建时间',
+                                             `update_time` DATETIME              DEFAULT NULL   COMMENT '更新时间',
+                                             PRIMARY KEY (`id`),
+                                             UNIQUE KEY `uk_user_type` (`user_id`, `record_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='AI记录表';
+

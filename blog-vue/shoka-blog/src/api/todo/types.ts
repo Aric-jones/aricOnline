@@ -53,3 +53,20 @@ export interface DiaryReq {
 	content: string;
 	mood?: string;
 }
+
+export interface ThinkingItem {
+	id: number;
+	userId: number;
+	topic: string;
+	harvest: string;
+	remark: string;
+	createTime: string;
+	updateTime: string;
+}
+
+export interface ThinkingReq {
+	id?: number;
+	topic: string;
+	harvest: string;
+	remark?: string;
+}

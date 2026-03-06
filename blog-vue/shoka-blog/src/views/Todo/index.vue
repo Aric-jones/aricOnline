@@ -33,10 +33,13 @@
 				<n-tab-pane name="gantt" tab="甘特图">
 					<GanttView />
 				</n-tab-pane>
-				<n-tab-pane name="diary" tab="日记">
-					<DiaryView />
-				</n-tab-pane>
-				<n-tab-pane name="habit" tab="习惯追踪">
+			<n-tab-pane name="diary" tab="日记">
+				<DiaryView />
+			</n-tab-pane>
+			<n-tab-pane name="thinking" tab="思考沉淀">
+				<ThinkingView />
+			</n-tab-pane>
+			<n-tab-pane name="habit" tab="习惯追踪">
 					<HabitView />
 				</n-tab-pane>
 				<n-tab-pane name="ai" tab="AI 助手">
@@ -53,6 +56,7 @@ import TaskPool from "./components/TaskPool.vue";
 import CalendarView from "./components/CalendarView.vue";
 import GanttView from "./components/GanttView.vue";
 import DiaryView from "./components/DiaryView.vue";
+import ThinkingView from "./components/ThinkingView.vue";
 import AiAssistant from "./components/AiAssistant.vue";
 import HabitView from "./components/HabitView.vue";
 import { useAccentColor } from "@/composables/useAccentColor";

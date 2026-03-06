@@ -20,9 +20,9 @@ const CYCLE_ORDER: AccentColor[] = ['purple', 'blue', 'green'];
 const STORAGE_KEY = 'todo-accent-color';
 
 function getStored(): AccentColor {
-  if (typeof window === 'undefined') return 'purple';
+  if (typeof window === 'undefined') return 'green';
   const v = localStorage.getItem(STORAGE_KEY) as AccentColor | null;
-  return v && ACCENT_MAP[v] ? v : 'purple';
+  return v && ACCENT_MAP[v] ? v : 'green';
 }
 
 function applyToDOM(color: AccentColor) {

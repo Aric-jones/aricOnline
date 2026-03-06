@@ -9,10 +9,12 @@ import com.ican.entity.Diary;
 import com.ican.entity.Todo;
 import com.ican.entity.Habit;
 import com.ican.entity.HabitRecord;
+import com.ican.entity.Thinking;
 import com.ican.mapper.AiRecordMapper;
 import com.ican.mapper.DiaryMapper;
 import com.ican.mapper.HabitMapper;
 import com.ican.mapper.HabitRecordMapper;
+import com.ican.mapper.ThinkingMapper;
 import com.ican.mapper.TodoMapper;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.query.TodoQuery;
@@ -50,6 +52,9 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
 
     @Autowired
     private HabitRecordMapper habitRecordMapper;
+
+    @Autowired
+    private ThinkingMapper thinkingMapper;
 
     private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -202,10 +207,32 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
             }
         }
 
+        List<Thinking> thinkings = thinkingMapper.selectList(
+                new LambdaQueryWrapper<Thinking>()
+                        .eq(Thinking::getUserId, userId)
+                        .ge(Thinking::getCreateTime, start + " 00:00:00")
+                        .le(Thinking::getCreateTime, end + " 23:59:59")
+                        .orderByDesc(Thinking::getCreateTime));
+        context.append("\n== 思考沉淀 ==\n");
+        if (thinkings.isEmpty()) {
+            context.append("无思考记录。\n");
+        } else {
+            for (Thinking tk : thinkings) {
+                context.append("- 主题: ").append(tk.getTopic());
+                String harvest = tk.getHarvest();
+                if (harvest != null && harvest.length() > 200) harvest = harvest.substring(0, 200) + "...";
+                context.append(" | 收获: ").append(harvest);
+                if (tk.getRemark() != null && !tk.getRemark().isEmpty()) {
+                    context.append(" | 备注: ").append(tk.getRemark());
+                }
+                context.append("\n");
+            }
+        }
+
         String typeLabel = "daily".equals(type) ? "日" : "weekly".equals(type) ? "周" : "月";
         String promptContent = aiPromptService.getPromptContent("summary");
         if (promptContent == null || promptContent.isEmpty()) {
-            promptContent = "你是一个时间管理助手，请根据用户的代办事项和日记，生成一份{period}度总结报告。";
+            promptContent = "你是一个时间管理助手，请根据用户的代办事项、日记和思考沉淀，生成一份{period}度总结报告。";
         }
         String systemPrompt = promptContent.replace("{period}", typeLabel);
         String result = aiService.callAiSyncPublic(systemPrompt, context.toString(), 0.7, 2000);
@@ -238,9 +265,26 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
             context.append("\n");
         }
 
+        List<Thinking> thinkings = thinkingMapper.selectList(
+                new LambdaQueryWrapper<Thinking>()
+                        .eq(Thinking::getUserId, userId)
+                        .ge(Thinking::getCreateTime, start + " 00:00:00")
+                        .le(Thinking::getCreateTime, end + " 23:59:59")
+                        .orderByDesc(Thinking::getCreateTime)
+                        .last("LIMIT 30"));
+        if (!thinkings.isEmpty()) {
+            context.append("\n最近两周思考沉淀：\n");
+            for (Thinking tk : thinkings) {
+                context.append("- 主题: ").append(tk.getTopic());
+                String harvest = tk.getHarvest();
+                if (harvest != null && harvest.length() > 150) harvest = harvest.substring(0, 150) + "...";
+                context.append(" | 收获: ").append(harvest).append("\n");
+            }
+        }
+
         String systemPrompt = aiPromptService.getPromptContent("suggest");
         if (systemPrompt == null || systemPrompt.isEmpty()) {
-            systemPrompt = "你是一个时间管理助手，请根据用户的代办事项，给出具体的改进建议和时间管理技巧。";
+            systemPrompt = "你是一个时间管理助手，请根据用户的代办事项和思考沉淀，给出具体的改进建议和时间管理技巧。";
         }
         String result = aiService.callAiSyncPublic(systemPrompt, context.toString(), 0.7, 2000);
         saveAiRecord("suggest", result);
@@ -354,6 +398,35 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
             }
         }
 
+        // 思考沉淀
+        List<Thinking> thinkingList = thinkingMapper.selectList(
+                new LambdaQueryWrapper<Thinking>()
+                        .eq(Thinking::getUserId, userId)
+                        .ge(Thinking::getCreateTime, start + " 00:00:00")
+                        .le(Thinking::getCreateTime, end + " 23:59:59")
+                        .orderByDesc(Thinking::getCreateTime)
+                        .last("LIMIT 50"));
+        ctx.append("\n== ").append(label).append("思考沉淀 (共").append(thinkingList.size()).append("条) ==\n");
+        if (thinkingList.isEmpty()) {
+            ctx.append("无思考记录。\n");
+        } else {
+            for (Thinking tk : thinkingList) {
+                ctx.append("- 主题: ").append(tk.getTopic());
+                String harvest = tk.getHarvest();
+                if (harvest != null) {
+                    harvest = harvest.replaceAll("<[^>]+>", "").trim();
+                    if (harvest.length() > 100) harvest = harvest.substring(0, 100) + "...";
+                }
+                ctx.append(" | 收获: ").append(harvest);
+                if (tk.getRemark() != null && !tk.getRemark().isEmpty()) {
+                    String remark = tk.getRemark();
+                    if (remark.length() > 60) remark = remark.substring(0, 60) + "...";
+                    ctx.append(" | 备注: ").append(remark);
+                }
+                ctx.append("\n");
+            }
+        }
+
         // 习惯：统计打卡天数
         List<Habit> habits = habitMapper.selectList(
                 new LambdaQueryWrapper<Habit>()
@@ -398,8 +471,8 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
 
         String systemPrompt = chatPrompt + "\n\n" + userContext
                 + "\n\n【重要规则】\n"
-                + "1. 用户的问题如果和待办、日记、习惯、时间管理、个人成长相关，请结合上面的真实数据来回答，给出有针对性的建议。\n"
-                + "2. 如果用户询问的是完全无关的话题（如编程技术、天气、新闻、娱乐等），请友善地提醒：「这个问题超出了我的专业范围哦～我是你的个人效能助手，擅长帮你分析待办、日记、习惯数据，给出时间管理和个人成长建议。有什么关于你的计划或习惯想聊的吗？😊」\n"
+                + "1. 用户的问题如果和待办、日记、思考沉淀、习惯、时间管理、个人成长相关，请结合上面的真实数据来回答，给出有针对性的建议。\n"
+                + "2. 如果用户询问的是完全无关的话题（如编程技术、天气、新闻、娱乐等），请友善地提醒：「这个问题超出了我的专业范围哦～我是你的个人效能助手，擅长帮你分析待办、日记、思考沉淀、习惯数据，给出时间管理和个人成长建议。有什么关于你的计划或习惯想聊的吗？😊」\n"
                 + "3. 回答要具体、有条理、语气亲切专业，使用 Markdown 格式。";
 
         List<Map<String, String>> userMessages = new ArrayList<>();

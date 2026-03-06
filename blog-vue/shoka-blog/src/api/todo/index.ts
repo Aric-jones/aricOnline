@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
 import { PageResult, Result } from "@/model";
-import type { TodoItem, TodoReq, TodoQuery, DiaryItem, DiaryReq } from "./types";
+import type { TodoItem, TodoReq, TodoQuery, DiaryItem, DiaryReq, ThinkingItem, ThinkingReq } from "./types";
 
 // ================= 代办 =================
 
@@ -49,6 +49,24 @@ export function deleteDiary(id: number): AxiosPromise<Result<null>> {
 
 export function getDiaryRange(startDate: string, endDate: string): AxiosPromise<Result<DiaryItem[]>> {
   return request({ url: "/user/diary/range", method: "get", params: { startDate, endDate } });
+}
+
+// ================= 思考沉淀 =================
+
+export function getThinkingList(keyword?: string): AxiosPromise<Result<ThinkingItem[]>> {
+  return request({ url: "/user/thinking/list", method: "get", params: { keyword } });
+}
+
+export function addThinking(data: ThinkingReq): AxiosPromise<Result<null>> {
+  return request({ url: "/user/thinking", method: "post", data });
+}
+
+export function updateThinking(data: ThinkingReq): AxiosPromise<Result<null>> {
+  return request({ url: "/user/thinking", method: "put", data });
+}
+
+export function deleteThinking(id: number): AxiosPromise<Result<null>> {
+  return request({ url: `/user/thinking/${id}`, method: "delete" });
 }
 
 // ================= AI =================
