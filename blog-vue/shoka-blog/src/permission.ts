@@ -45,6 +45,9 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else {
+    if (user.id !== undefined) {
+      user.forceLogOut();
+    }
     if (needLogin(to.path)) {
       window.$message?.warning("请先登录");
       next("/");

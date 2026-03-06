@@ -3,12 +3,13 @@
 		v-if="articleList.length > 0"
 		class="swiper-container"
 		:modules="modules"
-		:loop="true"
+		:loop="articleList.length >= 2"
 		:slides-per-view="1"
-		navigation
-		mousewheel
-		:autoplay="{ delay: 5000, disableOnInteraction: false }"
+		:grab-cursor="true"
+		:navigation="true"
+		:autoplay="{ delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true }"
 		:pagination="{ clickable: true }"
+		@swiper="onSwiper"
 	>
 		<swiper-slide v-for="article in articleList" :key="article.id">
 			<div class="slide-content" :style="articleCover(article.articleCover)">
@@ -27,14 +28,20 @@
 import { getArticleRecommend } from "@/api/article";
 import { ArticleRecommend } from "@/api/article/types";
 import { formatDate } from "@/utils/date";
-import { Autoplay, Mousewheel, Navigation, Pagination } from "swiper";
+import { Autoplay, Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-// 自定义模块
-const modules = [Pagination, Navigation, Mousewheel, Autoplay];
+import type { Swiper as SwiperType } from "swiper";
+
+const modules = [Pagination, Navigation, Autoplay];
 const articleList = ref<ArticleRecommend[]>([]);
 const articleCover = computed(
 	() => (cover: string) => "background:url(" + cover + ")"
 );
+
+const onSwiper = (swiper: SwiperType) => {
+	swiper.update();
+};
+
 onMounted(() => {
 	getArticleRecommend().then(({ data }) => {
 		articleList.value = data.data;
