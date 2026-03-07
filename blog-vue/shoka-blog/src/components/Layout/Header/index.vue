@@ -3,7 +3,7 @@
 		<!-- 切换按钮 -->
 		<Toggle></Toggle>
 		<!-- 菜单 -->
-		<NavBar :class="{ sub: y > 0 }"></NavBar>
+		<NavBar :class="{ sub: y >=0 }"></NavBar>
 		<!-- 右侧按钮 -->
 		<ul class="right">
 			<li class="item">
@@ -13,25 +13,25 @@
 					@click="cycleTheme()"
 				></svg-icon>
 			</li>
-			<!--			<li class="item">-->
-			<!--				<svg-icon-->
-			<!--					style="cursor: pointer"-->
-			<!--					icon-class="search"-->
-			<!--					@click="app.searchFlag = true"-->
-			<!--				></svg-icon>-->
-			<!--			</li>-->
+<!--			<li class="item">-->
+<!--				<svg-icon-->
+<!--					style="cursor: pointer"-->
+<!--					icon-class="search"-->
+<!--					@click="app.searchFlag = true"-->
+<!--				></svg-icon>-->
+<!--			</li>-->
 		</ul>
 	</header>
 </template>
 
 <script setup lang="ts">
-import { useTheme } from "@/composables/useTheme";
-import { useAppStore } from "@/store";
-import { useScroll } from "@vueuse/core";
+import {useTheme} from "@/composables/useTheme";
+import {useAppStore} from "@/store";
+import {useScroll} from "@vueuse/core";
 
 const app = useAppStore();
-const { theme, cycleTheme } = useTheme();
-const { y } = useScroll(window);
+const {theme, cycleTheme} = useTheme();
+const {y} = useScroll(window);
 
 const themeIcon = computed(() => {
 	if (theme.value === "dark") return "moon";
@@ -40,17 +40,17 @@ const themeIcon = computed(() => {
 });
 
 const fixedClass = ref("");
-watch(y, (newValue, oldValue) => {
-	if (newValue > 0) {
-		if (newValue < oldValue) {
-			fixedClass.value = "show up";
-		} else {
-			fixedClass.value = "show down";
-		}
-	} else {
-		fixedClass.value = "";
-	}
-});
+// watch(y, (newValue, oldValue) => {
+// 	if (newValue > 0) {
+// 		if (newValue < oldValue) {
+// 			fixedClass.value = "show up";
+// 		} else {
+// 			fixedClass.value = "show down";
+// 		}
+// 	} else {
+// 		fixedClass.value = "";
+// 	}
+// });
 </script>
 
 <style lang="scss" scoped>
@@ -63,6 +63,7 @@ watch(y, (newValue, oldValue) => {
 	width: 100%;
 	height: 3.125rem;
 	padding: 0 1rem;
+	background: var(--nav-bg);
 	text-shadow: 0 0.2rem 0.3rem rgb(0 0 0 / 50%);
 	color: var(--header-text-color);
 	transition: all 0.2s ease-in-out 0s;

@@ -81,12 +81,7 @@
 		<div v-if="hasMore" class="load-more-wrapper">
 			<button class="load-more-btn" @click="loadMore">
 				<span v-if="loading">加载中...</span>
-				<span v-else>加载更多分类</span>
-				<svg-icon
-					icon-class="arrow-down"
-					size="0.9rem"
-					style="margin-left: 0.25rem"
-				></svg-icon>
+				<span v-else>MORE</span>
 			</button>
 		</div>
 	</div>
@@ -387,16 +382,16 @@ const loadMore = () => {
 	color: var(--grey-9);
 	background: var(--card-bg);
 	border: 1px solid var(--grey-4);
-	border-radius: 0.5rem;
+	border-radius: 1.5rem;
 	cursor: pointer;
 	transition: all 0.2s ease-in-out;
 	box-shadow: var(--card-shadow);
 
 	&:hover {
-		color: var(--primary-color);
-		border-color: var(--primary-color);
+		//color: var(--primary-color);
+		//border-color: var(--primary-color);
 		box-shadow: var(--card-shadow-hover);
-		transform: translateY(-2px);
+		transform: translateY(-3px);
 	}
 
 	&:active {

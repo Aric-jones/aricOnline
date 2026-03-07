@@ -434,7 +434,7 @@ const logout = () => {
 }
 
 .sub.menu .submenu {
-	background-color: var(--grey-1);
+	background-color:var(--drop-down-box-of-the-avatar);
 }
 
 .sub .search-input-container {

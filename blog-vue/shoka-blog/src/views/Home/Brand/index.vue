@@ -106,7 +106,7 @@ onUnmounted(() => {
 	width: 100%;
 	height: 70vh;
 	min-height: 10rem;
-	color: var(--header-text-color);
+	color: var(--typewriter-text-color);
 	overflow: hidden;
 }
 
