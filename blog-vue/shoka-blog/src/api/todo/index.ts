@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
 import { PageResult, Result } from "@/model";
-import type { TodoItem, TodoReq, TodoQuery, DiaryItem, DiaryReq, ThinkingItem, ThinkingReq, TimeBlockItem, TimeBlockReq, DistinctEvent, CategoryStat } from "./types";
+import type { TodoItem, TodoReq, TodoQuery, DiaryItem, DiaryReq, ThinkingItem, ThinkingReq, TimeBlockItem, TimeBlockReq, DistinctEvent, CategoryStat, TaskPoolItem, TaskPoolReq, TaskPoolAssignReq } from "./types";
 
 // ================= 代办 =================
 
@@ -93,6 +93,44 @@ export function getDistinctEvents(): AxiosPromise<Result<DistinctEvent[]>> {
 
 export function getTimeBlockStats(type: string): AxiosPromise<Result<CategoryStat[]>> {
   return request({ url: "/user/timeblock/stats", method: "get", params: { type } });
+}
+
+// ================= 任务池 =================
+
+export function getUnassignedTasks(keyword?: string): AxiosPromise<Result<TaskPoolItem[]>> {
+  return request({ url: "/user/taskpool/unassigned", method: "get", params: { keyword } });
+}
+
+export function getWeekTasks(weekStart: string): AxiosPromise<Result<TaskPoolItem[]>> {
+  return request({ url: "/user/taskpool/week", method: "get", params: { weekStart } });
+}
+
+export function getRangeTasks(start: string, end: string): AxiosPromise<Result<TaskPoolItem[]>> {
+  return request({ url: "/user/taskpool/range", method: "get", params: { start, end } });
+}
+
+export function addPoolTask(data: TaskPoolReq): AxiosPromise<Result<null>> {
+  return request({ url: "/user/taskpool", method: "post", data });
+}
+
+export function updatePoolTask(data: TaskPoolReq): AxiosPromise<Result<null>> {
+  return request({ url: "/user/taskpool", method: "put", data });
+}
+
+export function deletePoolTask(id: number): AxiosPromise<Result<null>> {
+  return request({ url: `/user/taskpool/${id}`, method: "delete" });
+}
+
+export function assignPoolTask(data: TaskPoolAssignReq): AxiosPromise<Result<null>> {
+  return request({ url: "/user/taskpool/assign", method: "put", data });
+}
+
+export function unassignPoolTask(id: number): AxiosPromise<Result<null>> {
+  return request({ url: `/user/taskpool/unassign/${id}`, method: "put" });
+}
+
+export function togglePoolTaskStatus(id: number): AxiosPromise<Result<null>> {
+  return request({ url: `/user/taskpool/status/${id}`, method: "put" });
 }
 
 // ================= AI =================

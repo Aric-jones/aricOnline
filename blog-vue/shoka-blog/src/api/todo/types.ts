@@ -106,3 +106,30 @@ export interface CategoryStat {
 	category: string;
 	total_minutes: number;
 }
+
+export interface TaskPoolItem {
+	id: number;
+	userId: number;
+	title: string;
+	description: string;
+	category: string;
+	priority: number;
+	status: number;
+	weekStartDate: string | null;
+	completedTime: string | null;
+	createTime: string;
+	updateTime: string;
+}
+
+export interface TaskPoolReq {
+	id?: number;
+	title: string;
+	description?: string;
+	category?: string;
+	priority?: number;
+}
+
+export interface TaskPoolAssignReq {
+	id: number;
+	weekStartDate: string;
+}

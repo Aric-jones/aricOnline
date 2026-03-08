@@ -618,7 +618,7 @@ onUnmounted(() => { if (nowTimer) clearInterval(nowTimer); });
 	border: 1.5px solid; font-size: 0.78rem; font-weight: 500;
 	cursor: pointer; transition: all 0.2s;
 	background: transparent;
-	&:hover { transform: scale(1.04); }
+	&:hover { transform: scale(1.04); background: rgba(255, 255, 255, 0.39);}
 	.chip-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 }
 
