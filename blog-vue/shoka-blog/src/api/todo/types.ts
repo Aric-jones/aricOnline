@@ -70,3 +70,39 @@ export interface ThinkingReq {
 	harvest: string;
 	remark?: string;
 }
+
+export interface TimeBlockItem {
+	id: number;
+	userId: number;
+	blockDate: string;
+	name: string;
+	category: string;
+	startTime: string;
+	endTime: string;
+	remark: string;
+	color: string;
+	createTime: string;
+	updateTime: string;
+}
+
+export interface TimeBlockReq {
+	id?: number;
+	name: string;
+	category: string;
+	blockDate: string;
+	startTime: string;
+	endTime: string;
+	remark?: string;
+	color?: string;
+}
+
+export interface DistinctEvent {
+	name: string;
+	category: string;
+	color: string;
+}
+
+export interface CategoryStat {
+	category: string;
+	total_minutes: number;
+}

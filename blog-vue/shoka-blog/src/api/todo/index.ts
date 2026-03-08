@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
 import { PageResult, Result } from "@/model";
-import type { TodoItem, TodoReq, TodoQuery, DiaryItem, DiaryReq, ThinkingItem, ThinkingReq } from "./types";
+import type { TodoItem, TodoReq, TodoQuery, DiaryItem, DiaryReq, ThinkingItem, ThinkingReq, TimeBlockItem, TimeBlockReq, DistinctEvent, CategoryStat } from "./types";
 
 // ================= 代办 =================
 
@@ -67,6 +67,32 @@ export function updateThinking(data: ThinkingReq): AxiosPromise<Result<null>> {
 
 export function deleteThinking(id: number): AxiosPromise<Result<null>> {
   return request({ url: `/user/thinking/${id}`, method: "delete" });
+}
+
+// ================= 时间管理 =================
+
+export function getTimeBlocks(date: string): AxiosPromise<Result<TimeBlockItem[]>> {
+  return request({ url: "/user/timeblock/list", method: "get", params: { date } });
+}
+
+export function addTimeBlock(data: TimeBlockReq): AxiosPromise<Result<null>> {
+  return request({ url: "/user/timeblock", method: "post", data });
+}
+
+export function updateTimeBlock(data: TimeBlockReq): AxiosPromise<Result<null>> {
+  return request({ url: "/user/timeblock", method: "put", data });
+}
+
+export function deleteTimeBlock(id: number): AxiosPromise<Result<null>> {
+  return request({ url: `/user/timeblock/${id}`, method: "delete" });
+}
+
+export function getDistinctEvents(): AxiosPromise<Result<DistinctEvent[]>> {
+  return request({ url: "/user/timeblock/events", method: "get" });
+}
+
+export function getTimeBlockStats(type: string): AxiosPromise<Result<CategoryStat[]>> {
+  return request({ url: "/user/timeblock/stats", method: "get", params: { type } });
 }
 
 // ================= AI =================

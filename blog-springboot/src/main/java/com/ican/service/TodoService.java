@@ -10,6 +10,7 @@ import com.ican.entity.Todo;
 import com.ican.entity.Habit;
 import com.ican.entity.HabitRecord;
 import com.ican.entity.Thinking;
+import com.ican.entity.TimeBlock;
 import com.ican.mapper.AiRecordMapper;
 import com.ican.mapper.DiaryMapper;
 import com.ican.mapper.HabitMapper;
@@ -55,6 +56,9 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
 
     @Autowired
     private ThinkingMapper thinkingMapper;
+
+    @Autowired
+    private TimeBlockService timeBlockService;
 
     private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -229,10 +233,23 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
             }
         }
 
+        List<TimeBlock> timeBlocks = timeBlockService.listByDateRange(userId, start, end);
+        context.append("\n== 时间安排 ==\n");
+        if (timeBlocks.isEmpty()) {
+            context.append("无时间安排记录。\n");
+        } else {
+            for (TimeBlock tb : timeBlocks) {
+                context.append("- [").append(tb.getBlockDate()).append("] ")
+                        .append(tb.getStartTime()).append("-").append(tb.getEndTime())
+                        .append(" ").append(tb.getName())
+                        .append(" (").append(tb.getCategory()).append(")\n");
+            }
+        }
+
         String typeLabel = "daily".equals(type) ? "日" : "weekly".equals(type) ? "周" : "月";
         String promptContent = aiPromptService.getPromptContent("summary");
         if (promptContent == null || promptContent.isEmpty()) {
-            promptContent = "你是一个时间管理助手，请根据用户的代办事项、日记和思考沉淀，生成一份{period}度总结报告。";
+            promptContent = "你是一个时间管理助手，请根据用户的代办事项、日记、思考沉淀和时间安排，生成一份{period}度总结报告。";
         }
         String systemPrompt = promptContent.replace("{period}", typeLabel);
         String result = aiService.callAiSyncPublic(systemPrompt, context.toString(), 0.7, 2000);
@@ -282,9 +299,20 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
             }
         }
 
+        List<TimeBlock> recentBlocks = timeBlockService.listByDateRange(userId, start, end);
+        if (!recentBlocks.isEmpty()) {
+            context.append("\n最近两周时间安排：\n");
+            for (TimeBlock tb : recentBlocks) {
+                context.append("- [").append(tb.getBlockDate()).append("] ")
+                        .append(tb.getStartTime()).append("-").append(tb.getEndTime())
+                        .append(" ").append(tb.getName())
+                        .append(" (").append(tb.getCategory()).append(")\n");
+            }
+        }
+
         String systemPrompt = aiPromptService.getPromptContent("suggest");
         if (systemPrompt == null || systemPrompt.isEmpty()) {
-            systemPrompt = "你是一个时间管理助手，请根据用户的代办事项和思考沉淀，给出具体的改进建议和时间管理技巧。";
+            systemPrompt = "你是一个时间管理助手，请根据用户的代办事项、思考沉淀和时间安排，给出具体的改进建议和时间管理技巧。";
         }
         String result = aiService.callAiSyncPublic(systemPrompt, context.toString(), 0.7, 2000);
         saveAiRecord("suggest", result);
@@ -427,6 +455,28 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
             }
         }
 
+        // 时间安排
+        List<TimeBlock> timeBlockList = timeBlockService.listByDateRange(userId, start, end);
+        ctx.append("\n== ").append(label).append("时间安排 (共").append(timeBlockList.size()).append("条) ==\n");
+        if (timeBlockList.isEmpty()) {
+            ctx.append("无时间安排记录。\n");
+        } else {
+            Map<String, Long> categoryMinutes = new LinkedHashMap<>();
+            for (TimeBlock tb : timeBlockList) {
+                ctx.append("- [").append(tb.getBlockDate()).append("] ")
+                        .append(tb.getStartTime()).append("-").append(tb.getEndTime())
+                        .append(" ").append(tb.getName())
+                        .append(" (").append(tb.getCategory()).append(")\n");
+                int startMin = parseMinutes(tb.getStartTime());
+                int endMin = parseMinutes(tb.getEndTime());
+                categoryMinutes.merge(tb.getCategory(), (long)(endMin - startMin), Long::sum);
+            }
+            ctx.append("分类耗时统计: ");
+            categoryMinutes.forEach((cat, mins) ->
+                    ctx.append(cat).append("=").append(mins / 60).append("h").append(mins % 60).append("m "));
+            ctx.append("\n");
+        }
+
         // 习惯：统计打卡天数
         List<Habit> habits = habitMapper.selectList(
                 new LambdaQueryWrapper<Habit>()
@@ -471,8 +521,8 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
 
         String systemPrompt = chatPrompt + "\n\n" + userContext
                 + "\n\n【重要规则】\n"
-                + "1. 用户的问题如果和待办、日记、思考沉淀、习惯、时间管理、个人成长相关，请结合上面的真实数据来回答，给出有针对性的建议。\n"
-                + "2. 如果用户询问的是完全无关的话题（如编程技术、天气、新闻、娱乐等），请友善地提醒：「这个问题超出了我的专业范围哦～我是你的个人效能助手，擅长帮你分析待办、日记、思考沉淀、习惯数据，给出时间管理和个人成长建议。有什么关于你的计划或习惯想聊的吗？😊」\n"
+                + "1. 用户的问题如果和待办、日记、思考沉淀、时间安排、习惯、时间管理、个人成长相关，请结合上面的真实数据来回答，给出有针对性的建议。\n"
+                + "2. 如果用户询问的是完全无关的话题（如编程技术、天气、新闻、娱乐等），请友善地提醒：「这个问题超出了我的专业范围哦～我是你的个人效能助手，擅长帮你分析待办、日记、思考沉淀、时间安排、习惯数据，给出时间管理和个人成长建议。有什么关于你的计划或习惯想聊的吗？😊」\n"
                 + "3. 回答要具体、有条理、语气亲切专业，使用 Markdown 格式。";
 
         List<Map<String, String>> userMessages = new ArrayList<>();
@@ -483,6 +533,15 @@ public class TodoService extends ServiceImpl<TodoMapper, Todo> {
         }
 
         return aiService.chatStream(systemPrompt, userMessages);
+    }
+
+    private static int parseMinutes(String hhmm) {
+        try {
+            String[] parts = hhmm.split(":");
+            return Integer.parseInt(parts[0]) * 60 + Integer.parseInt(parts[1]);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     private LocalDateTime parseDateTime(String str) {

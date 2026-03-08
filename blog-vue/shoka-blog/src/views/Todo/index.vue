@@ -39,6 +39,9 @@
 			<n-tab-pane name="thinking" tab="思考沉淀">
 				<ThinkingView />
 			</n-tab-pane>
+			<n-tab-pane name="timeblock" tab="时间管理">
+				<TimeBlockView />
+			</n-tab-pane>
 			<n-tab-pane name="habit" tab="习惯追踪">
 					<HabitView />
 				</n-tab-pane>
@@ -57,6 +60,7 @@ import CalendarView from "./components/CalendarView.vue";
 import GanttView from "./components/GanttView.vue";
 import DiaryView from "./components/DiaryView.vue";
 import ThinkingView from "./components/ThinkingView.vue";
+import TimeBlockView from "./components/TimeBlockView.vue";
 import AiAssistant from "./components/AiAssistant.vue";
 import HabitView from "./components/HabitView.vue";
 import { useAccentColor } from "@/composables/useAccentColor";
@@ -529,6 +533,20 @@ $radius-sm: 10px;
 		--n-text-color-hover: var(--todo-primary, #6366f1) !important;
 		--n-text-color-pressed: var(--todo-primary, #6366f1) !important;
 		--n-text-color-focus: var(--todo-primary, #6366f1) !important;
+	}
+}
+
+// gradient 主题下输入框 placeholder 文字太淡，加重颜色
+[theme="gradient"] {
+	.n-input {
+		--n-placeholder-color: rgba(0, 0, 0, 0.45) !important;
+		--n-placeholder-color-disabled: rgba(0, 0, 0, 0.3) !important;
+	}
+	.n-base-selection {
+		--n-placeholder-color: rgba(0, 0, 0, 0.45) !important;
+	}
+	.n-input--textarea {
+		--n-placeholder-color: rgba(0, 0, 0, 0.45) !important;
 	}
 }
 </style>
