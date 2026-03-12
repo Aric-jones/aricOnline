@@ -338,6 +338,10 @@ onMounted(() => {
 		articleLoaded.value = true;
 		nextTick(() => {
 			articlePreviewRef.value = articleRef.value;
+			// 设置文章封面图片作为背景
+			if (article.value.articleCover) {
+				document.documentElement.style.setProperty('--page-bg-image', `url(${article.value.articleCover})`);
+			}
 		});
 		fetchQuickRead();
 	});
@@ -487,7 +491,7 @@ onUnmounted(() => {
 	font-size: 2.5rem;
 	letter-spacing: 0.125rem;
 	text-align: center;
-	color: var(--header-text-color);
+	color: var(--page-header-text-calor);
 }
 
 .article-meta {

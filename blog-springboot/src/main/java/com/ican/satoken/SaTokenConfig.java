@@ -43,6 +43,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
             "/admin/login",
             "/client/login",
             "/oauth/*",
+            "/user/password",
     };
 
     private final long timeout = 86400;

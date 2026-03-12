@@ -51,13 +51,7 @@ onMounted(() => {
 	min-height: 100vh;
 }
 
-.app-wrapper.has-custom-bg {
-	background-image: url('https://big-event0611.oss-cn-beijing.aliyuncs.com/article/b01e4495e1acf8e6b0b968d99dc5886b.jpg');
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-}
+
 
 .main-wrapper {
 	display: flex;

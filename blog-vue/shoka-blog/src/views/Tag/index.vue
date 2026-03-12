@@ -1,7 +1,7 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">标签</h1>
-    <img class="page-cover" src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
+    <img class="page-cover" src="https://big-event0611.oss-cn-beijing.aliyuncs.com/article/b01e4495e1acf8e6b0b968d99dc5886b.jpg"
       alt="">
 		<Bubble/>
     <!-- 波浪 -->
