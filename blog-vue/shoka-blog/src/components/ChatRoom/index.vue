@@ -194,7 +194,7 @@ const getWebSocketUrl = (): string => {
 	}
 	// 自动推导：本地开发直连后端，线上通过 Nginx 代理
 	if (import.meta.env.DEV) {
-		return "ws://localhost:8080/websocket";
+		return "ws://localhost:9000/websocket";
 	}
 	const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 	return `${protocol}//${window.location.host}/websocket`;

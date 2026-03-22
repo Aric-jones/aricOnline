@@ -36,4 +36,10 @@ public class GitUserInfoDTO {
      */
     @ApiModelProperty(value = "登录")
     private String login;
+
+    /**
+     * 邮箱
+     */
+    @ApiModelProperty(value = "邮箱")
+    private String email;
 }

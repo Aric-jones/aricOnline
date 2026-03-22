@@ -205,9 +205,19 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     @Transactional(rollbackFor = Exception.class)
     public void updateUserEmail(EmailReq email) {
         verifyCode(email.getEmail(), email.getCode());
+        int userId = StpUtil.getLoginIdAsInt();
+        User currentUser = userMapper.selectOne(new LambdaQueryWrapper<User>()
+                .select(User::getId, User::getEmail)
+                .eq(User::getId, userId));
+        Assert.isFalse(email.getEmail().equals(currentUser.getEmail()), "该邮箱已是当前绑定邮箱，无需修改");
+        User existUser = userMapper.selectOne(new LambdaQueryWrapper<User>()
+                .select(User::getId)
+                .eq(User::getEmail, email.getEmail()));
+        Assert.isNull(existUser, "该邮箱已被注册");
         User newUser = User.builder()
-                .id(StpUtil.getLoginIdAsInt())
+                .id(userId)
                 .email(email.getEmail())
+                .username(email.getEmail())
                 .build();
         userMapper.updateById(newUser);
     }

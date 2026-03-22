@@ -63,7 +63,8 @@ public class GithubLoginStrategyImpl extends AbstractLoginStrategyImpl {
         return SocialUserInfoDTO.builder()
                 .avatar(Objects.requireNonNull(gitUserInfoDTO).getAvatar_url())
                 .id(gitUserInfoDTO.getId())
-                .nickname(gitUserInfoDTO.getLogin()).build();
+                .nickname(gitUserInfoDTO.getLogin())
+                .email(gitUserInfoDTO.getEmail()).build();
     }
 
     /**

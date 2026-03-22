@@ -11,6 +11,7 @@ import com.ican.model.dto.SocialTokenDTO;
 import com.ican.model.dto.SocialUserInfoDTO;
 import com.ican.model.vo.request.CodeReq;
 import com.ican.strategy.SocialLoginStrategy;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,24 +34,25 @@ public abstract class AbstractLoginStrategyImpl implements SocialLoginStrategy {
     @Override
     public String login(CodeReq data) {
         User user;
-        // 获取token
         SocialTokenDTO socialToken = getSocialToken(data);
-        // 获取用户信息
         SocialUserInfoDTO socialUserInfoDTO = getSocialUserInfo(socialToken);
-        // 判断是否已注册
+        // 先按第三方ID + 登录方式查找
         User existUser = userMapper.selectOne(new LambdaQueryWrapper<User>()
                 .select(User::getId)
                 .eq(User::getUsername, socialUserInfoDTO.getId())
                 .eq(User::getLoginType, socialToken.getLoginType()));
-        // 用户未登录过
+        if (Objects.isNull(existUser) && StringUtils.isNotBlank(socialUserInfoDTO.getEmail())) {
+            // 第三方返回了邮箱，按邮箱匹配已有账号
+            existUser = userMapper.selectOne(new LambdaQueryWrapper<User>()
+                    .select(User::getId)
+                    .eq(User::getEmail, socialUserInfoDTO.getEmail()));
+        }
         if (Objects.isNull(existUser)) {
             user = saveLoginUser(socialToken, socialUserInfoDTO);
         } else {
             user = existUser;
         }
-        // 校验指定账号是否已被封禁，如果被封禁则抛出异常 `DisableServiceException`
         StpUtil.checkDisable(user.getId());
-        // 通过校验后，再进行登录
         StpUtil.login(user.getId());
         return StpUtil.getTokenValue();
     }
@@ -78,11 +80,13 @@ public abstract class AbstractLoginStrategyImpl implements SocialLoginStrategy {
      * @return {@link User} 登录用户身份权限
      */
     private User saveLoginUser(SocialTokenDTO socialToken, SocialUserInfoDTO socialUserInfoDTO) {
-        // 新增用户信息
+        String email = socialUserInfoDTO.getEmail();
+        String username = StringUtils.isNotBlank(email) ? email : socialUserInfoDTO.getId();
         User newUser = User.builder()
                 .avatar(socialUserInfoDTO.getAvatar())
                 .nickname(socialUserInfoDTO.getNickname())
-                .username(socialUserInfoDTO.getId())
+                .username(username)
+                .email(email)
                 .password(socialToken.getAccessToken())
                 .loginType(socialToken.getLoginType())
                 .build();

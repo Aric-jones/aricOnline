@@ -357,12 +357,16 @@ const heatmapDays = computed(() => {
 	const start = dayjs(`${yr}-01-01`);
 	const end = dayjs(`${yr}-12-31`);
 	const days: { date: string; count: number; color: string }[] = [];
-	const statsMap = new Map<string, number>();
-	stats.value.forEach(s => statsMap.set(s.recordDate, s.count));
+	const countMap = new Map<string, number>();
+	records.value.forEach(r => {
+		if (visibleHabitIds.value.has(r.habitId)) {
+			countMap.set(r.recordDate, (countMap.get(r.recordDate) || 0) + 1);
+		}
+	});
 	let d = start;
 	while (d.isBefore(end) || d.isSame(end, "day")) {
 		const dateStr = d.format("YYYY-MM-DD");
-		const count = statsMap.get(dateStr) || 0;
+		const count = countMap.get(dateStr) || 0;
 		let color = "var(--grey-3, #ebedf0)";
 		if (count === 1) color = "#9be9a8";
 		else if (count === 2) color = "#40c463";

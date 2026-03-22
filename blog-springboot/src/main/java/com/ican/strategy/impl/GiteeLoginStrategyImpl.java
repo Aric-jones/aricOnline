@@ -57,7 +57,8 @@ public class GiteeLoginStrategyImpl extends AbstractLoginStrategyImpl {
         return SocialUserInfoDTO.builder()
                 .avatar(Objects.requireNonNull(gitUserInfoDTO).getAvatar_url())
                 .id(gitUserInfoDTO.getId())
-                .nickname(gitUserInfoDTO.getName()).build();
+                .nickname(gitUserInfoDTO.getName())
+                .email(gitUserInfoDTO.getEmail()).build();
     }
 
     /**

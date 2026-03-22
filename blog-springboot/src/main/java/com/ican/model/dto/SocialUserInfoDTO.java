@@ -32,4 +32,10 @@ public class SocialUserInfoDTO {
      */
     @ApiModelProperty(value = "昵称")
     private String nickname;
+
+    /**
+     * 邮箱
+     */
+    @ApiModelProperty(value = "邮箱")
+    private String email;
 }
