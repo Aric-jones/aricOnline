@@ -118,13 +118,14 @@
 						v-for="(day, idx) in heatmapDays"
 						:key="idx"
 						class="heatmap-cell"
-						:style="{ background: day.color }"
+						:class="{ 'heatmap-cell--empty': !day.color }"
+						:style="day.color ? { background: day.color } : {}"
 						:title="`${day.date}: ${day.count} 条记录`"
 					></div>
 				</div>
 				<div class="heatmap-legend">
 					<span class="legend-label">少</span>
-					<span class="legend-cell" :style="{ background: 'var(--grey-3, #ebedf0)' }"></span>
+					<span class="legend-cell heatmap-cell--empty"></span>
 					<span class="legend-cell" style="background: #9be9a8"></span>
 					<span class="legend-cell" style="background: #40c463"></span>
 					<span class="legend-cell" style="background: #216e39"></span>
@@ -367,7 +368,7 @@ const heatmapDays = computed(() => {
 	while (d.isBefore(end) || d.isSame(end, "day")) {
 		const dateStr = d.format("YYYY-MM-DD");
 		const count = countMap.get(dateStr) || 0;
-		let color = "var(--grey-3, #ebedf0)";
+		let color = "";
 		if (count === 1) color = "#9be9a8";
 		else if (count === 2) color = "#40c463";
 		else if (count >= 3) color = "#216e39";
@@ -817,6 +818,10 @@ onMounted(() => {
 	cursor: pointer;
 	transition: transform 0.15s;
 	&:hover { transform: scale(1.3); outline: 1px solid var(--grey-6, #666); }
+	&--empty {
+		background: var(--grey-4, #ccc);
+		opacity: 0.45;
+	}
 }
 
 .heatmap-legend {
