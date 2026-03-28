@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
@@ -73,8 +73,14 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
     @Autowired
     private BlogFileService blogFileService;
 
+    /**
+     * 查看后台文章列表
+     * 先从数据库查询文章基本信息，再从 Redis ZSet/Hash 中补充浏览量和点赞量
+     *
+     * @param articleQuery 查询条件（状态、分类、关键词等）
+     * @return 分页结果
+     */
     public PageResult<ArticleBackResp> listArticleBackVO(ArticleQuery articleQuery) {
-        // 查询文章数量
         Long count = articleMapper.selectBackArticleCount(articleQuery);
         if (count == 0) {
             return new PageResult<>();
@@ -95,11 +101,16 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         return new PageResult<>(articleBackRespList, count);
     }
 
+    /**
+     * 添加文章（事务方法）
+     * 流程：保存/获取分类ID → 构建文章实体并插入 → 保存文章-标签关联关系
+     * 如果前端未上传封面图，则使用站点配置中的默认封面
+     *
+     * @param article 文章请求体（含分类名、标签名列表等）
+     */
     @Transactional(rollbackFor = Exception.class)
     public void addArticle(ArticleReq article) {
-        // 保存文章分类
         Integer categoryId = saveArticleCategory(article);
-        // 添加文章
         Article newArticle = BeanCopyUtils.copyBean(article, Article.class);
         if (StringUtils.isBlank(newArticle.getArticleCover())) {
             SiteConfig siteConfig = redisService.getObject(RedisConstant.SITE_SETTING);
@@ -198,8 +209,14 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         return new PageResult<>(articleHomeVOList, count);
     }
 
+    /**
+     * 查看文章详情（前台）
+     * 流程：查询文章信息 → Redis ZSet 浏览量+1 → 查询上下篇文章 → 从 Redis 获取浏览量和点赞量
+     *
+     * @param articleId 文章ID
+     * @return 文章详情（含上/下篇、浏览量、点赞量）
+     */
     public ArticleResp getArticleHomeById(Integer articleId) {
-        // 查询文章信息
         ArticleResp article = articleMapper.selectArticleHomeById(articleId);
         if (Objects.isNull(article)) {
             return null;

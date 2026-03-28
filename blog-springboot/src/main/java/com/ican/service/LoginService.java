@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.captcha.generator.RandomGenerator;
@@ -60,6 +60,13 @@ public class LoginService {
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
+    /**
+     * 前台用户登录
+     * 流程：用户名+SHA256密码查库 → 校验账号是否被封禁 → Sa-Token 登录 → 返回 Token
+     *
+     * @param login 登录请求（用户名、密码）
+     * @return Token 字符串
+     */
     public String login(LoginReq login) {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
                 .select(User::getId)
@@ -99,6 +106,12 @@ public class LoginService {
         return StpUtil.getTokenValue();
     }
 
+    /**
+     * 发送邮箱验证码
+     * 流程：校验邮箱格式 → 生成6位随机数字验证码 → 异步发送邮件 → 验证码存入 Redis（5分钟过期）
+     *
+     * @param username 邮箱地址
+     */
     public void sendCode(String username) {
         Assert.isTrue(Validator.isEmail(username), "请输入正确的邮箱！");
         RandomGenerator randomGenerator = new RandomGenerator("0123456789", 6);
@@ -115,6 +128,12 @@ public class LoginService {
         redisService.setObject(RedisConstant.CODE_KEY + username, code, RedisConstant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
     }
 
+    /**
+     * 用户注册（事务方法）
+     * 流程：校验验证码 → 判断邮箱是否已注册 → 创建用户(SHA256加密密码) → 绑定默认用户角色
+     *
+     * @param register 注册请求（邮箱、密码、验证码）
+     */
     @Transactional(rollbackFor = Exception.class)
     public void register(RegisterReq register) {
         verifyCode(register.getUsername(), register.getCode());

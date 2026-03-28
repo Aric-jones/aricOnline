@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
@@ -60,6 +60,12 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     @Autowired
     private UploadStrategyContext uploadStrategyContext;
 
+    /**
+     * 获取后台登录用户信息
+     * 返回用户头像、角色列表、权限标识列表，供前端动态渲染菜单和控制按钮权限
+     *
+     * @return 后台用户信息（含角色和权限列表）
+     */
     public UserBackInfoResp getUserBackInfo() {
         Integer userId = StpUtil.getLoginIdAsInt();
         // 查询用户信息
@@ -80,6 +86,12 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .build();
     }
 
+    /**
+     * 获取前台用户信息
+     * 包含用户基本信息和从 Redis Set 中获取的文章/评论/说说点赞记录
+     *
+     * @return 前台用户信息（含点赞记录集合）
+     */
     public UserInfoResp getUserInfo() {
         Integer userId = StpUtil.getLoginIdAsInt();
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
@@ -131,6 +143,12 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return roleMapper.selectUserRoleList();
     }
 
+    /**
+     * 修改用户（后台管理）
+     * 流程：更新昵称 → 删除旧角色关联 → 重建角色关联 → 清除 Redis 中的角色缓存使权限立即生效
+     *
+     * @param user 用户信息（含新的角色ID列表）
+     */
     public void updateUser(UserRoleReq user) {
         // 更新用户信息
         User newUser = User.builder()
@@ -147,6 +165,13 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         Optional.ofNullable(sessionByLoginId).ifPresent(saSession -> saSession.delete("Role_List"));
     }
 
+    /**
+     * 修改用户状态（禁用/启用）
+     * 禁用流程：更新数据库状态 → 踢用户下线 → Sa-Token 封禁账号24小时
+     * 启用流程：更新数据库状态 → 解除 Sa-Token 封禁
+     *
+     * @param disable 禁用请求
+     */
     public void updateUserStatus(DisableReq disable) {
         // 更新用户状态
         User newUser = User.builder()
@@ -165,6 +190,14 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         }
     }
 
+    /**
+     * 查看在线用户列表
+     * 通过 Sa-Token 的 searchTokenSessionId 获取所有活跃 Session，
+     * 从中提取在线用户信息，支持关键词过滤和按登录时间倒序排列，最后在内存中执行分页
+     *
+     * @param onlineUserQuery 查询条件（关键词、分页）
+     * @return 在线用户分页结果
+     */
     public PageResult<OnlineUserResp> listOnlineUser(OnlineUserQuery onlineUserQuery) {
         // 查询所有会话token
         List<String> tokenList = StpUtil.searchTokenSessionId("", 0, -1, false);

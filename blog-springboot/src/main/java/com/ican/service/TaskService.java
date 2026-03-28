@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -57,6 +57,13 @@ public class TaskService extends ServiceImpl<TaskMapper, Task> {
         }
     }
 
+    /**
+     * 查看后台定时任务列表
+     * 分页查询任务列表后，根据 Cron 表达式计算每个任务的下次执行时间
+     *
+     * @param taskQuery 查询条件
+     * @return 定时任务分页结果（含下次执行时间）
+     */
     public PageResult<TaskBackResp> listTaskBackVO(TaskQuery taskQuery) {
         // 查询定时任务数量
         Long count = taskMapper.selectTaskCount(taskQuery);
@@ -76,6 +83,12 @@ public class TaskService extends ServiceImpl<TaskMapper, Task> {
         return new PageResult<>(taskBackRespList, count);
     }
 
+    /**
+     * 新增定时任务
+     * 流程：校验 Cron 表达式 → 插入数据库 → 在 Quartz 调度器中创建任务
+     *
+     * @param task 任务信息
+     */
     public void addTask(TaskReq task) {
         Assert.isTrue(CronUtils.isValid(task.getCronExpression()), "Cron表达式无效");
         Task newTask = BeanCopyUtils.copyBean(task, Task.class);
@@ -119,6 +132,12 @@ public class TaskService extends ServiceImpl<TaskMapper, Task> {
         }
     }
 
+    /**
+     * 更新定时任务状态（暂停/恢复）
+     * 状态与 Quartz 调度器同步：RUNNING → scheduler.resumeJob / PAUSE → scheduler.pauseJob
+     *
+     * @param taskStatus 任务状态请求
+     */
     public void updateTaskStatus(StatusReq taskStatus) {
         Task task = taskMapper.selectById(taskStatus.getId());
         // 相同不用更新

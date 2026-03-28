@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
@@ -64,6 +64,11 @@ public class BlogInfoService {
     @Autowired
     private HttpServletRequest request;
 
+    /**
+     * 上报访客信息（UV 去重统计）
+     * 将 IP+浏览器+OS 拼接后 MD5 哈希生成唯一标识，存入 Redis Set 判断今日是否已访问过
+     * 如果是新访客则博客总访问量 +1
+     */
     public void report() {
         // 获取用户ip
         String ipAddress = ServletUtil.getClientIP(request);
@@ -83,6 +88,12 @@ public class BlogInfoService {
         }
     }
 
+    /**
+     * 获取博客前台信息
+     * 聚合文章数、分类数、标签数、访问量和站点配置
+     *
+     * @return 博客前台信息
+     */
     public BlogInfoResp getBlogInfo() {
         // 文章数量
         Long articleCount = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
@@ -105,6 +116,13 @@ public class BlogInfoService {
                 .build();
     }
 
+    /**
+     * 获取后台仪表盘信息
+     * 聚合访问量、留言量、用户量、文章量、分类/标签分布、
+     * 近7日访问趋势、文章统计数据、Redis 浏览量 Top5 排行
+     *
+     * @return 后台仪表盘数据
+     */
     public BlogBackInfoResp getBlogBackInfo() {
         // 访问量
         Integer viewCount = redisService.getObject(RedisConstant.BLOG_VIEW_COUNT);

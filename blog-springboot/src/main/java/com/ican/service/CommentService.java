@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
@@ -81,8 +81,14 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
         return new PageResult<>(commentBackRespList, count);
     }
 
+    /**
+     * 添加评论
+     * 流程：校验评论合法性 → HTML 标签过滤(防XSS) → 根据站点配置决定是否需要审核
+     * → 保存评论 → 如果开启邮件通知则异步发送邮件提醒被回复用户
+     *
+     * @param comment 评论请求体
+     */
     public void addComment(CommentReq comment) {
-        // 校验评论参数
         verifyComment(comment);
         SiteConfig siteConfig = siteConfigService.getSiteConfig();
         Integer commentCheck = siteConfig.getCommentCheck();
@@ -121,8 +127,19 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
         return commentMapper.selectRecentComment();
     }
 
+    /**
+     * 查看评论列表（前台，二级结构）
+     * 查询流程：
+     * 1. 统计并分页查询已审核的父评论（parent_id IS NULL）
+     * 2. 批量查询每个父评论下的前3条子评论（避免 N+1 查询）
+     * 3. 从 Redis Hash 中获取评论点赞数
+     * 4. 统计每个父评论的子评论总数
+     * 5. 组装父评论 + 子评论列表 + 回复数 + 点赞数
+     *
+     * @param commentQuery 查询条件（评论类型、关联ID等）
+     * @return 二级评论分页结果
+     */
     public PageResult<CommentResp> listCommentVO(CommentQuery commentQuery) {
-        // 查询父评论数量
         Long count = commentMapper.selectCount(new LambdaQueryWrapper<Comment>()
                 .eq(Objects.nonNull(commentQuery.getTypeId()), Comment::getTypeId, commentQuery.getTypeId())
                 .eq(Comment::getCommentType, commentQuery.getCommentType())
@@ -168,6 +185,10 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
         return replyRespList;
     }
 
+    /**
+     * 校验评论参数的合法性
+     * 检查项：评论关联的文章/说说是否存在；子评论的父评论/回复评论/被回复用户是否存在且一致
+     */
     private void verifyComment(CommentReq comment) {
         if (comment.getCommentType().equals(CommentTypeEnum.ARTICLE.getType())) {
             Article article = articleMapper.selectOne(new LambdaQueryWrapper<Article>().select(Article::getId).eq(Article::getId, comment.getTypeId()));
