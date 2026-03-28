@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 操作日志业务接口实现类
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class OperationLogService extends ServiceImpl<OperationLogMapper, OperationLog> {

@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Friend;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 友链 Mapper
  *
- * @author ican
+ * @author Aric
  */
 @Repository
 public interface FriendMapper extends BaseMapper<Friend> {

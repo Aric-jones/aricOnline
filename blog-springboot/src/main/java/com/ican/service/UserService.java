@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 /**
  * 用户业务服务
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/05 15:32
  **/
 @Service

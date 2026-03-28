@@ -1,4 +1,4 @@
-package com.ican.strategy.context;
+﻿package com.ican.strategy.context;
 
 import com.ican.enums.LikeTypeEnum;
 import com.ican.strategy.LikeStrategy;
@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 点赞策略上下文
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class LikeStrategyContext {

@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import com.ican.config.properties.CosProperties;
 import com.qcloud.cos.COSClient;
@@ -20,7 +20,7 @@ import java.io.InputStream;
 /**
  * cos上传策略
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 @Service("cosUploadStrategyImpl")

@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -27,7 +27,7 @@ import java.util.Objects;
 /**
  * 标签服务
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/02 22:06
  **/
 @Service

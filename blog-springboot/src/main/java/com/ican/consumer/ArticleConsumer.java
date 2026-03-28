@@ -1,4 +1,4 @@
-//package com.ican.consumer;
+﻿//package com.ican.consumer;
 //
 //import cn.hutool.json.JSONUtil;
 //import com.ican.model.dto.CanalDTO;
@@ -21,7 +21,7 @@
 ///**
 // * 文章消费者
 // *
-// * @author ican
+// * @author Aric
 // **/
 //@Component
 //public class ArticleConsumer {

@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Diary;
@@ -8,6 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * DiaryMapper
+ *
+ * @author Aric
+ */
 @Repository
 public interface DiaryMapper extends BaseMapper<Diary> {
 

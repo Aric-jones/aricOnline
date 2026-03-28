@@ -1,4 +1,4 @@
-package com.ican.config.properties;
+﻿package com.ican.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 线程池参数
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/05 11:33
  **/
 @Data

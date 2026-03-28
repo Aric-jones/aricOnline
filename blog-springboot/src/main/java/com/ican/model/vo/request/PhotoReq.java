@@ -1,4 +1,4 @@
-package com.ican.model.vo.request;
+﻿package com.ican.model.vo.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 照片Request
  *
- * @author ican
+ * @author Aric
  **/
 @Data
 @ApiModel(description = "照片Request")

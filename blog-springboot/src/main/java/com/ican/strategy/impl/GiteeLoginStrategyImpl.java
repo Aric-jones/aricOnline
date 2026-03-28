@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import com.ican.config.properties.GiteeProperties;
 import com.ican.constant.SocialLoginConstant;
@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * Gitee登录策略
  *
- * @author ican
+ * @author Aric
  */
 @Service("giteeLoginStrategyImpl")
 public class GiteeLoginStrategyImpl extends AbstractLoginStrategyImpl {

@@ -1,4 +1,4 @@
-package com.ican.model.vo.request;
+﻿package com.ican.model.vo.request;
 
 import com.ican.annotation.EnumValid;
 import com.ican.validator.CommentProvider;
@@ -20,7 +20,7 @@ import javax.validation.constraints.Null;
 /**
  * 评论Request
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @NoArgsConstructor

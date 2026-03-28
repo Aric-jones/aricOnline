@@ -1,4 +1,4 @@
-package com.ican.quartz.execution;
+﻿package com.ican.quartz.execution;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.ican.constant.ScheduleConstant;
@@ -20,7 +20,7 @@ import static com.ican.constant.CommonConstant.TRUE;
 /**
  * 抽象quartz调用
  *
- * @author ican
+ * @author Aric
  */
 @SuppressWarnings(value = "all")
 public abstract class AbstractQuartzJob implements Job {

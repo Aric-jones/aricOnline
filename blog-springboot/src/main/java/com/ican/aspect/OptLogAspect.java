@@ -29,7 +29,7 @@ import java.util.Objects;
 /**
  * AOP记录操作日志
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/02 17:55
  **/
 @Aspect
@@ -106,7 +106,7 @@ public class OptLogAspect {
         // 请求用户ID
         operationLog.setUserId(StpUtil.getLoginIdAsInt());
         // 请求用户昵称
-        operationLog.setNickname("牧羊人");
+        operationLog.setNickname("Aric");
         // 操作ip和操作地址
         String ip = ServletUtil.getClientIP(request);
         operationLog.setIpAddress(ip);

@@ -1,4 +1,4 @@
-package com.ican.annotation.serialize;
+﻿package com.ican.annotation.serialize;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.DesensitizedUtil;
@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * 脱敏序列化类
  *
- * @author ican
+ * @author Aric
  * @date 2024/01/14 16:11
  * @see <a href="https://juejin.cn/post/7265630149324144674">脱敏</a>
  **/

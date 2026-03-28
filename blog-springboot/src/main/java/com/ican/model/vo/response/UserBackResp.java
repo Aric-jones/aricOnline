@@ -1,4 +1,4 @@
-package com.ican.model.vo.response;
+﻿package com.ican.model.vo.response;
 
 import com.ican.annotation.Desensitization;
 import com.ican.enums.DesensitizationTypeEnum;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 用户后台Response
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/10 10:40
  **/
 @Data

@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 访问日志Mapper
  *
- * @author ican
+ * @author Aric
  */
 @Repository
 public interface VisitLogMapper extends BaseMapper<VisitLog> {

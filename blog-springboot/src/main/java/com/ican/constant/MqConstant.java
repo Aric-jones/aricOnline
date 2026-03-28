@@ -1,9 +1,9 @@
-package com.ican.constant;
+﻿package com.ican.constant;
 
 /**
  * MQ常量
  *
- * @author ican
+ * @author Aric
  */
 public class MqConstant {
 

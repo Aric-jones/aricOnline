@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 路由Response
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/11 19:41
  **/
 @Data
@@ -43,6 +43,7 @@ public class RouterResp {
     /**
      * 路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式--如组件页面
      */
+    @ApiModelProperty(value = "是否始终显示根菜单")
     private Boolean alwaysShow;
 
     /**

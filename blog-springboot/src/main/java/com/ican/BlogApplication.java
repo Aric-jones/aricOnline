@@ -1,4 +1,4 @@
-package com.ican;
+﻿package com.ican;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 /**
  * 博客启动类
  *
- * @author ican
+ * @author Aric
  * @date 2022/11/28 18:54
  **/
 @EnableAsync

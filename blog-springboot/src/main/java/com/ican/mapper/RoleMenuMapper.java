@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.RoleMenu;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 角色菜单 Mapper
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/07 11:16
  **/
 @Repository

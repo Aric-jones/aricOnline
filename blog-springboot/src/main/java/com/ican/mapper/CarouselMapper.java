@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Carousel;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 轮播图Mapper
  *
- * @author ican
+ * @author Aric
  */
 @Repository
 public interface CarouselMapper extends BaseMapper<Carousel> {

@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -26,7 +26,7 @@ import java.util.Objects;
 /**
  * 相册服务
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class AlbumService extends ServiceImpl<AlbumMapper, Album> {

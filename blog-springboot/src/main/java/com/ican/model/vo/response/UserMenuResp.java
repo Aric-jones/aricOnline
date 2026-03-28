@@ -1,4 +1,4 @@
-package com.ican.model.vo.response;
+﻿package com.ican.model.vo.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 用户菜单Response
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/06 16:41
  **/
 @Data

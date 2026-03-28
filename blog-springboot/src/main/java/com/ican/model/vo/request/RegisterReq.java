@@ -1,4 +1,4 @@
-package com.ican.model.vo.request;
+﻿package com.ican.model.vo.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 /**
  * 用户注册信息Request
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @ApiModel(description = "用户注册信息Request")

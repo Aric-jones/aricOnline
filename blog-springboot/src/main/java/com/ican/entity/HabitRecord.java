@@ -1,4 +1,4 @@
-package com.ican.entity;
+﻿package com.ican.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -14,6 +14,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * HabitRecord
+ *
+ * @author Aric
+ */
 @Data
 @Builder
 @NoArgsConstructor

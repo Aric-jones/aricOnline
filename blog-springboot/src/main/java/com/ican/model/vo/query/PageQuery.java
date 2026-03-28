@@ -1,4 +1,4 @@
-package com.ican.model.vo.query;
+﻿package com.ican.model.vo.query;
 
 import com.ican.constant.PageConstant;
 import io.swagger.annotations.ApiModel;
@@ -8,7 +8,7 @@ import lombok.Data;
 /**
  * 分页查询条件
  *
- * @author ican
+ * @author Aric
  * @date 2023/07/29 16:20
  **/
 @Data

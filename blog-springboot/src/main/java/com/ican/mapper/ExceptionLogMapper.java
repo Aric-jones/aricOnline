@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.ExceptionLog;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 异常日志Mapper
  *
- * @author ican
+ * @author Aric
  */
 @Repository
 public interface ExceptionLogMapper extends BaseMapper<ExceptionLog> {

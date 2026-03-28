@@ -1,9 +1,9 @@
-package com.ican.constant;
+﻿package com.ican.constant;
 
 /**
  * 公共常量
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/07 15:46
  **/
 public class CommonConstant {

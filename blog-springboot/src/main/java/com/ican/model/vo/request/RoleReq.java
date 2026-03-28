@@ -1,4 +1,4 @@
-package com.ican.model.vo.request;
+﻿package com.ican.model.vo.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 角色Request
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/07 15:36
  **/
 @Data

@@ -1,4 +1,4 @@
-package com.ican.manager.factory;
+﻿package com.ican.manager.factory;
 
 
 import cn.hutool.extra.spring.SpringUtil;
@@ -14,7 +14,7 @@ import java.util.TimerTask;
 /**
  * 异步工厂（产生任务用）
  *
- * @author ican
+ * @author Aric
  */
 public class AsyncFactory {
 

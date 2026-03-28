@@ -1,4 +1,4 @@
-package com.ican.entity;
+﻿package com.ican.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * 访问日志
  *
- * @author ican
+ * @author Aric
  */
 @Data
 public class VisitLog {

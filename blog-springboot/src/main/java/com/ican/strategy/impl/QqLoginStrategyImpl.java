@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import com.ican.config.properties.QqProperties;
 import com.ican.constant.SocialLoginConstant;
@@ -21,7 +21,7 @@ import java.util.Objects;
 /**
  * Qq登录策略
  *
- * @author ican
+ * @author Aric
  * @date 2023/04/06 18:43
  **/
 @Slf4j

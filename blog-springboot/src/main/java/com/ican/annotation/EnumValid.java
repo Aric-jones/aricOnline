@@ -1,4 +1,4 @@
-package com.ican.annotation;
+﻿package com.ican.annotation;
 
 import com.ican.validator.EnumValidator;
 
@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 /**
  * 评论类型注解
  *
- * @author ican
+ * @author Aric
  **/
 @Documented
 @Constraint(validatedBy = {EnumValidator.class})

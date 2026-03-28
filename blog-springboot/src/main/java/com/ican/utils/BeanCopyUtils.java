@@ -1,4 +1,4 @@
-package com.ican.utils;
+﻿package com.ican.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 拷贝工具
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 public class BeanCopyUtils {

@@ -1,4 +1,4 @@
-package com.ican.model.vo.request;
+﻿package com.ican.model.vo.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * 相册Request
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/30 15:42
  **/
 @Data

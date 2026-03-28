@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.OptLogger;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 轮播图控制器
  *
- * @author ican
+ * @author Aric
  * @date 2024/02/03 12:02
  **/
 @Api(tags = "轮播图模块")

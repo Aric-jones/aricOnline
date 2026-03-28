@@ -1,4 +1,4 @@
-package com.ican.config.properties;
+﻿package com.ican.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * cos配置属性
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @Configuration

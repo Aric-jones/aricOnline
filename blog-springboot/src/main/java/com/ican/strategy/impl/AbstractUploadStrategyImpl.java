@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import com.ican.exception.ServiceException;
 import com.ican.strategy.UploadStrategy;
@@ -13,7 +13,7 @@ import java.io.InputStream;
 /**
  * 抽象上传模板
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 @Service

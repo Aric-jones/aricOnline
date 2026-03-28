@@ -1,4 +1,4 @@
-package com.ican.model.dto;
+﻿package com.ican.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 /**
  * websocket聊天室DTO
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @Builder

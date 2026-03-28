@@ -1,4 +1,4 @@
-package com.ican.strategy.context;
+﻿package com.ican.strategy.context;
 
 import com.ican.model.vo.response.ArticleSearchResp;
 import com.ican.strategy.SearchStrategy;
@@ -14,7 +14,7 @@ import static com.ican.enums.SearchModeEnum.getStrategy;
 /**
  * 搜索策略上下文
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class SearchStrategyContext {

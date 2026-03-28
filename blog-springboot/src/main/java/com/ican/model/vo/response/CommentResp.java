@@ -1,4 +1,4 @@
-package com.ican.model.vo.response;
+﻿package com.ican.model.vo.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 评论Response
  *
- * @author ican
+ * @author Aric
  **/
 @Data
 @ApiModel(description = "评论Response")

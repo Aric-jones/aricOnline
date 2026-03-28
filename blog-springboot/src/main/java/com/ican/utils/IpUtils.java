@@ -1,4 +1,4 @@
-package com.ican.utils;
+﻿package com.ican.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *     <li>所有 API 都失败时返回 "未知"</li>
  * </ol>
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 public class IpUtils {

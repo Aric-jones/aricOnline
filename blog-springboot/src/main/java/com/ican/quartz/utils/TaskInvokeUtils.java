@@ -1,4 +1,4 @@
-package com.ican.quartz.utils;
+﻿package com.ican.quartz.utils;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.ican.entity.Task;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 任务执行工具
  *
- * @author ican
+ * @author Aric
  */
 public class TaskInvokeUtils {
 

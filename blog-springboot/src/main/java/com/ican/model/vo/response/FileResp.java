@@ -1,4 +1,4 @@
-package com.ican.model.vo.response;
+﻿package com.ican.model.vo.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 /**
  * 文件后台Response
  *
- * @author ican
+ * @author Aric
  * @date 2023/03/08 12:40
  **/
 @Data

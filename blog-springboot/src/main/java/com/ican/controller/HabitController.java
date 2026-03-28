@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 习惯追踪控制器
+ *
+ * @author Aric
+ */
 @Api(tags = "习惯追踪模块")
 @RestController
 public class HabitController {

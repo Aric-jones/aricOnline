@@ -1,4 +1,4 @@
-package com.ican.entity;
+﻿package com.ican.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * 聊天记录
  *
- * @author ican
+ * @author Aric
  * @date 2023/06/12 10:40
  **/
 @Data

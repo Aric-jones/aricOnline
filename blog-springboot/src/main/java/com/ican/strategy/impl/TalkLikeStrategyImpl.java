@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 /**
  * 说说点赞策略
  *
- * @author ican
+ * @author Aric
  */
 @Service("talkLikeStrategyImpl")
 public class TalkLikeStrategyImpl implements LikeStrategy {

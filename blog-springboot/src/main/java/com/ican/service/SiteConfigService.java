@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.constant.RedisConstant;
@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * 网站配置服务
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 @Service

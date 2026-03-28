@@ -1,4 +1,4 @@
-package com.ican.validator;
+﻿package com.ican.validator;
 
 import com.ican.annotation.EnumValid;
 
@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * 枚举类型校验器
  *
- * @author ican
+ * @author Aric
  **/
 public class EnumValidator implements ConstraintValidator<EnumValid, Integer> {
 

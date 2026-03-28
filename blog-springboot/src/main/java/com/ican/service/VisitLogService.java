@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 访问服务
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class VisitLogService extends ServiceImpl<VisitLogMapper, VisitLog> {

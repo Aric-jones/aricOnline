@@ -1,4 +1,4 @@
-//package com.ican.consumer;
+﻿//package com.ican.consumer;
 //
 //import com.ican.model.dto.MailDTO;
 //import com.ican.service.EmailService;
@@ -16,7 +16,7 @@
 ///**
 // * 邮件消费者
 // *
-// * @author ican
+// * @author Aric
 // */
 //@Component
 //public class EmailConsumer {

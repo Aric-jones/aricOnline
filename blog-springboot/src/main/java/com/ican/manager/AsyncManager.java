@@ -1,4 +1,4 @@
-package com.ican.manager;
+﻿package com.ican.manager;
 
 
 import cn.hutool.extra.spring.SpringUtil;
@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 异步任务管理器
  *
- * @author ican
+ * @author Aric
  */
 public class AsyncManager {
 

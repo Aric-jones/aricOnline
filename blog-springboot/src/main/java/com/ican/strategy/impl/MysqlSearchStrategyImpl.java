@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import com.ican.constant.ElasticConstant;
 import com.ican.mapper.ArticleMapper;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * MySQL搜索策略
  *
- * @author ican
+ * @author Aric
  */
 @Service("mySqlSearchStrategyImpl")
 public class MysqlSearchStrategyImpl implements SearchStrategy {

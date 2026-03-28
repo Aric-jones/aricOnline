@@ -1,4 +1,4 @@
-package com.ican.handler;
+﻿package com.ican.handler;
 
 import cn.dev33.satoken.exception.DisableServiceException;
 import cn.dev33.satoken.exception.NotLoginException;
@@ -17,7 +17,7 @@ import static com.ican.enums.StatusCodeEnum.*;
 /**
  * 全局异常处理
  *
- * @author ican
+ * @author Aric
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {

@@ -1,4 +1,4 @@
-//package com.ican.service;
+﻿//package com.ican.service;
 //
 //import co.elastic.clients.elasticsearch.ElasticsearchClient;
 //import co.elastic.clients.elasticsearch.core.IndexRequest;
@@ -13,7 +13,7 @@
 ///**
 // * es文章服务
 // *
-// * @author ican
+// * @author Aric
 // **/
 //@Slf4j
 //@Service

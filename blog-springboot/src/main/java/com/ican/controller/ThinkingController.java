@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 思考沉淀控制器
+ *
+ * @author Aric
+ */
 @Api(tags = "思考沉淀模块")
 @RestController
 public class ThinkingController {

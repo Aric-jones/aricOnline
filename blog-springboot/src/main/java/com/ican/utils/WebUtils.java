@@ -1,4 +1,4 @@
-package com.ican.utils;
+﻿package com.ican.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 /**
  * 前端返回工具
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 public class WebUtils {

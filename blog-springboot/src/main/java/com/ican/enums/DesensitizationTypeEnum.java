@@ -1,9 +1,9 @@
-package com.ican.enums;
+﻿package com.ican.enums;
 
 /**
  * 脱敏策略枚举
  *
- * @author ican
+ * @author Aric
  * @date 2024/01/14 16:04
  **/
 public enum DesensitizationTypeEnum {

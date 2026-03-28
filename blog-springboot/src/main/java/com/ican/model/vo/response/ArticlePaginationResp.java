@@ -1,4 +1,4 @@
-package com.ican.model.vo.response;
+﻿package com.ican.model.vo.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 文章上下篇
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @ApiModel(description = "文章上下篇")

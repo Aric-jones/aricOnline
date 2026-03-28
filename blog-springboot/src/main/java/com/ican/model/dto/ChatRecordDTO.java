@@ -1,4 +1,4 @@
-package com.ican.model.dto;
+﻿package com.ican.model.dto;
 
 import com.ican.entity.ChatRecord;
 import io.swagger.annotations.ApiModel;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 聊天记录DTO
  *
- * @author ican
+ * @author Aric
  * @date 2023/06/12 10:50
  **/
 @Data

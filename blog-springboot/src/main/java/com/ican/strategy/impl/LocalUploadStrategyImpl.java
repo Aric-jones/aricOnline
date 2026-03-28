@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import com.ican.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +9,7 @@ import java.io.*;
 /**
  * 本地上传策略
  *
- * @author ican
+ * @author Aric
  */
 @Service("localUploadStrategyImpl")
 public class LocalUploadStrategyImpl extends AbstractUploadStrategyImpl {

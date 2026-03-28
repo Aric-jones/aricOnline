@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * DiaryService
+ *
+ * @author Aric
+ */
 @Slf4j
 @Service
 public class DiaryService extends ServiceImpl<DiaryMapper, Diary> {

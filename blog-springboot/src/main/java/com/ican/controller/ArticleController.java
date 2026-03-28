@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
@@ -31,7 +31,7 @@ import static com.ican.constant.OptTypeConstant.*;
 /**
  * 文章控制器
  *
- * @author ican
+ * @author Aric
  **/
 @Api(tags = "文章模块")
 @RestController

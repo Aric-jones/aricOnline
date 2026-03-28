@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -18,7 +18,7 @@ import java.net.URI;
 /**
  * B站服务
  *
- * @author ican
+ * @author Aric
  * @date 2023/06/09 17:47
  **/
 @Slf4j

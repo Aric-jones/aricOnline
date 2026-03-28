@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.AccessLimit;
@@ -26,7 +26,7 @@ import static com.ican.constant.OptTypeConstant.UPDATE;
 /**
  * 留言控制器
  *
- * @author ican
+ * @author Aric
  */
 @Api(tags = "留言模块")
 @RestController

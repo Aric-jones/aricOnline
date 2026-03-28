@@ -1,4 +1,4 @@
-package com.ican.model.vo.request;
+﻿package com.ican.model.vo.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 /**
  * 用户密码
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @NoArgsConstructor

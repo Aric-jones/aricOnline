@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  * 留言业务接口实现类
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class MessageService extends ServiceImpl<MessageMapper, Message> {

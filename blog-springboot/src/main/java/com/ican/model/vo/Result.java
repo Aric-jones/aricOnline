@@ -1,4 +1,4 @@
-package com.ican.model.vo;
+﻿package com.ican.model.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@ import static com.ican.enums.StatusCodeEnum.SUCCESS;
 /**
  * 结果返回类
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @ApiModel(description = "结果返回类")

@@ -1,4 +1,4 @@
-package com.ican.utils;
+﻿package com.ican.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 公共工具类
  *
- * @author ican
+ * @author Aric
  */
 public class CommonUtils {
 

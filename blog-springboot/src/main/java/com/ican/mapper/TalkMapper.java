@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Talk;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 说说 Mapper
  *
- * @author ican
+ * @author Aric
  */
 @Repository
 public interface TalkMapper extends BaseMapper<Talk> {

@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 /**
  * 分类服务
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/02 17:35
  **/
 @Service

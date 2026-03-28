@@ -1,4 +1,4 @@
-package com.ican.entity;
+﻿package com.ican.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 /**
  * 文章标签
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/04 21:46
  **/
 @Data

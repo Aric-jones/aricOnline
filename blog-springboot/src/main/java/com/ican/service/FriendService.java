@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 友链服务
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class FriendService extends ServiceImpl<FriendMapper, Friend> {

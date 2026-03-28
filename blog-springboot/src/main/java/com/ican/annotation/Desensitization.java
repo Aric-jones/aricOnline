@@ -1,4 +1,4 @@
-package com.ican.annotation;
+﻿package com.ican.annotation;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 /**
  * 脱敏注解
  *
- * @author ican
+ * @author Aric
  */
 @Documented
 @Target(ElementType.FIELD)

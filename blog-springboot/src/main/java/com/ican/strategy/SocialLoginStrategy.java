@@ -1,11 +1,11 @@
-package com.ican.strategy;
+﻿package com.ican.strategy;
 
 import com.ican.model.vo.request.CodeReq;
 
 /**
  * 第三方登录策略
  *
- * @author ican
+ * @author Aric
  */
 public interface SocialLoginStrategy {
 

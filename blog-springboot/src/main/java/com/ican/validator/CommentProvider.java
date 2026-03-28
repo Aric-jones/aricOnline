@@ -1,4 +1,4 @@
-package com.ican.validator;
+﻿package com.ican.validator;
 
 import com.ican.model.vo.request.CommentReq;
 import com.ican.validator.groups.ArticleTalk;
@@ -16,7 +16,7 @@ import static com.ican.enums.CommentTypeEnum.*;
 /**
  * 评论分组校验器
  *
- * @author ican
+ * @author Aric
  **/
 public class CommentProvider implements DefaultGroupSequenceProvider<CommentReq> {
     @Override

@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -39,7 +39,7 @@ import static com.ican.constant.CommonConstant.TRUE;
 /**
  * 文件服务
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 @Service

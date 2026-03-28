@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -20,7 +20,7 @@ import java.util.Objects;
 /**
  * 抽象登录模板
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public abstract class AbstractLoginStrategyImpl implements SocialLoginStrategy {

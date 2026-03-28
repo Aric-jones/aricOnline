@@ -1,4 +1,4 @@
-//package com.ican.model.dto;
+﻿//package com.ican.model.dto;
 //
 //import io.swagger.annotations.ApiModel;
 //import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@
 ///**
 // * Canal监听数据DTO
 // *
-// * @author ican
+// * @author Aric
 // * @see <a href="https://www.bookstack.cn/read/tidb-6.1-zh/ticdc-ticdc-canal-json.md">消息格式</a>
 // **/
 //@Data

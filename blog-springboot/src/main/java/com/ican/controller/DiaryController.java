@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 日记控制器
+ *
+ * @author Aric
+ */
 @Api(tags = "日记模块")
 @RestController
 public class DiaryController {

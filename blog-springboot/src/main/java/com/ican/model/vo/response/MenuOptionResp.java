@@ -1,4 +1,4 @@
-package com.ican.model.vo.response;
+﻿package com.ican.model.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 菜单选项树Response
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/23 16:35
  **/
 @Data

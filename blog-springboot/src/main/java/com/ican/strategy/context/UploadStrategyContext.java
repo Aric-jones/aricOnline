@@ -1,4 +1,4 @@
-package com.ican.strategy.context;
+﻿package com.ican.strategy.context;
 
 import com.ican.strategy.UploadStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import static com.ican.enums.UploadModeEnum.getStrategy;
 /**
  * 上传策略上下文
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class UploadStrategyContext {

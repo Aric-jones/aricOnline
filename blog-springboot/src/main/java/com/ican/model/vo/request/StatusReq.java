@@ -1,4 +1,4 @@
-package com.ican.model.vo.request;
+﻿package com.ican.model.vo.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 状态Request
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @ApiModel(description = "状态Request")

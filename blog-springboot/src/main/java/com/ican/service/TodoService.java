@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
@@ -30,6 +30,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * TodoService
+ *
+ * @author Aric
+ */
 @Service
 public class TodoService extends ServiceImpl<TodoMapper, Todo> {
 

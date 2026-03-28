@@ -1,4 +1,4 @@
-package com.ican.model.vo.response;
+﻿package com.ican.model.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.Api;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 分类后台Response
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/03 21:43
  **/
 @Data

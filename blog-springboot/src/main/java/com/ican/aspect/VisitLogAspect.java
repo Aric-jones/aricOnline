@@ -1,4 +1,4 @@
-package com.ican.aspect;
+﻿package com.ican.aspect;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.ican.annotation.VisitLogger;
@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * AOP记录访问日志
  *
- * @author ican
+ * @author Aric
  **/
 @Aspect
 @Component

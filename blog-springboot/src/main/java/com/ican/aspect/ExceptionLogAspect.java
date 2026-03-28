@@ -1,4 +1,4 @@
-package com.ican.aspect;
+﻿package com.ican.aspect;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson2.JSON;
@@ -27,7 +27,7 @@ import java.util.Objects;
 /**
  * AOP记录异常日志
  *
- * @author ican
+ * @author Aric
  */
 @Aspect
 @Component

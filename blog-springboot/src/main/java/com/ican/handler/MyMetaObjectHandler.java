@@ -1,4 +1,4 @@
-package com.ican.handler;
+﻿package com.ican.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.log4j.Log4j2;
@@ -14,7 +14,7 @@ import static com.ican.enums.ZoneEnum.SHANGHAI;
 /**
  * mybatis plus自动填充
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 @Component

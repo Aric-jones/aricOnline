@@ -1,4 +1,4 @@
-package com.ican.model.dto;
+﻿package com.ican.model.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * Token
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @ApiModel(description = "Token")

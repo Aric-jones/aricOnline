@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * AI提示词控制器
+ *
+ * @author Aric
+ */
 @Api(tags = "AI提示词模块")
 @RestController
 public class AiPromptController {

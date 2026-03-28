@@ -1,9 +1,9 @@
-package com.ican.validator.groups;
+﻿package com.ican.validator.groups;
 
 /**
  * 友链组
  *
- * @author ican
+ * @author Aric
  **/
 public interface Link {
 }

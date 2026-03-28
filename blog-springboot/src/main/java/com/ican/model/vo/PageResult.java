@@ -1,4 +1,4 @@
-package com.ican.model.vo;
+﻿package com.ican.model.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 分页返回类
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/03 21:44
  **/
 @Data

@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * 评论点赞策略
  *
- * @author ican
+ * @author Aric
  */
 @Service("commentLikeStrategyImpl")
 public class CommentLikeStrategyImpl implements LikeStrategy {

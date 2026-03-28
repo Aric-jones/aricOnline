@@ -1,4 +1,4 @@
-package com.ican.satoken;
+﻿package com.ican.satoken;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotLoginException;
@@ -24,7 +24,7 @@ import static com.ican.enums.StatusCodeEnum.UNAUTHORIZED;
 /**
  * SaToken配置
  *
- * @author ican
+ * @author Aric
  * @date 2022/11/28 22:12
  **/
 @Slf4j

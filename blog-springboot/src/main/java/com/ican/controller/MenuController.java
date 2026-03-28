@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.OptLogger;
@@ -22,7 +22,7 @@ import static com.ican.constant.OptTypeConstant.*;
 /**
  * 菜单控制器
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/05 09:57
  **/
 @Api(tags = "菜单模块")

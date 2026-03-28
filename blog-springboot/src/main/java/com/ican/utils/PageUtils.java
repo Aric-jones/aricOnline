@@ -1,4 +1,4 @@
-package com.ican.utils;
+﻿package com.ican.utils;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * 分页工具类
  *
- * @author ican
+ * @author Aric
  */
 public class PageUtils {
 

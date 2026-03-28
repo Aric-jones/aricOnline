@@ -1,4 +1,4 @@
-package com.ican.quartz.utils;
+﻿package com.ican.quartz.utils;
 
 import com.ican.constant.ScheduleConstant;
 import com.ican.entity.Task;
@@ -13,7 +13,7 @@ import static com.ican.constant.CommonConstant.TRUE;
 /**
  * 定时任务工具类
  *
- * @author ican
+ * @author Aric
  */
 public class ScheduleUtils {
 

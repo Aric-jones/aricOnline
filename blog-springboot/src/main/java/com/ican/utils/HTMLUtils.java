@@ -1,4 +1,4 @@
-package com.ican.utils;
+﻿package com.ican.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * HTML工具
  *
- * @author ican
+ * @author Aric
  */
 @SuppressWarnings(value = "all")
 public class HTMLUtils {

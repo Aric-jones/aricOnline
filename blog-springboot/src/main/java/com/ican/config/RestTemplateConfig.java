@@ -1,4 +1,4 @@
-package com.ican.config;
+﻿package com.ican.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * RestTemplate配置
  *
- * @author ican
+ * @author Aric
  * @date 2024/01/14 17:21
  **/
 @Configuration

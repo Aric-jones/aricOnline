@@ -1,4 +1,4 @@
-package com.ican.websocket;
+﻿package com.ican.websocket;
 
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson2.JSON;
@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * WebSocket服务
  *
- * @author ican
+ * @author Aric
  * @date 2023/06/12 09:11
  **/
 @Slf4j

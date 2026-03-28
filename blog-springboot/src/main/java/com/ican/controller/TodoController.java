@@ -20,8 +20,13 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 待办事项控制器
+ *
+ * @author Aric
+ */
 @Slf4j
-@Api(tags = "代办事项模块")
+@Api(tags = "待办事项模块")
 @RestController
 public class TodoController {
 

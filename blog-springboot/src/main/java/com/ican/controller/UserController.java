@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaCheckRole;
@@ -26,7 +26,7 @@ import static com.ican.constant.OptTypeConstant.UPDATE;
 /**
  * 用户控制器
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/05 10:03
  **/
 @Api(tags = "用户模块")

@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.captcha.generator.RandomGenerator;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 登录服务
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/04 11:24
  **/
 @Service

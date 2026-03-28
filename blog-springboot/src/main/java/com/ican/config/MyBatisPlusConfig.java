@@ -1,4 +1,4 @@
-package com.ican.config;
+﻿package com.ican.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * MybatisPlus配置
  *
- * @author ican
+ * @author Aric
  */
 @Configuration
 @MapperScan("com.ican.mapper")

@@ -1,4 +1,4 @@
-package com.ican.quartz.execution;
+﻿package com.ican.quartz.execution;
 
 import com.ican.entity.Task;
 import com.ican.quartz.utils.TaskInvokeUtils;
@@ -8,7 +8,7 @@ import org.quartz.JobExecutionContext;
 /**
  * 定时任务处理（禁止并发执行）
  *
- * @author ican
+ * @author Aric
  */
 @DisallowConcurrentExecution
 public class QuartzDisallowConcurrentExecution extends AbstractQuartzJob {

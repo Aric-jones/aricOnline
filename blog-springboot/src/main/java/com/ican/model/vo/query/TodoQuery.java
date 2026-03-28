@@ -1,10 +1,15 @@
-package com.ican.model.vo.query;
+﻿package com.ican.model.vo.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * TodoQuery
+ *
+ * @author Aric
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(description = "代办查询条件")

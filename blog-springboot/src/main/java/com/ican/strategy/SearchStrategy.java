@@ -1,4 +1,4 @@
-package com.ican.strategy;
+﻿package com.ican.strategy;
 
 import com.ican.model.vo.response.ArticleSearchResp;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 文章搜索策略
  *
- * @author ican
+ * @author Aric
  */
 public interface SearchStrategy {
 

@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.OptLogger;
@@ -26,7 +26,7 @@ import static com.ican.constant.OptTypeConstant.*;
 /**
  * 分类控制器
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/02 17:32
  **/
 @Api(tags = "分类模块")

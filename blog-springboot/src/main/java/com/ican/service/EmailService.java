@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import com.ican.model.dto.MailDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import javax.mail.internet.MimeMessage;
 /**
  * 邮件服务
  *
- * @author ican
+ * @author Aric
  **/
 @Slf4j
 @Service

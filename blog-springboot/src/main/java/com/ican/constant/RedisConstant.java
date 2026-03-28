@@ -1,9 +1,9 @@
-package com.ican.constant;
+﻿package com.ican.constant;
 
 /**
  * Redis常量
  *
- * @author ican
+ * @author Aric
  */
 public class RedisConstant {
 

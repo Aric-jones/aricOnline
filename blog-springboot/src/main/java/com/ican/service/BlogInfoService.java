@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * 博客服务
  *
- * @author ican
+ * @author Aric
  **/
 @Service
 public class BlogInfoService {

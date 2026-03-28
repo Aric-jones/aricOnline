@@ -1,11 +1,11 @@
-package com.ican.annotation;
+﻿package com.ican.annotation;
 
 import java.lang.annotation.*;
 
 /**
  * 操作日志注解
  *
- * @author ican
+ * @author Aric
  */
 @Documented
 @Target(ElementType.METHOD)

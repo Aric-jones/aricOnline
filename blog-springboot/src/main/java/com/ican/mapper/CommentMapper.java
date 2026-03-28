@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Comment;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 评论Mapper
  *
- * @author ican
+ * @author Aric
  */
 @Repository
 public interface CommentMapper extends BaseMapper<Comment> {

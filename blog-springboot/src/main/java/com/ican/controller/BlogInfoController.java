@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import com.ican.annotation.VisitLogger;
 import com.ican.model.vo.response.BlogBackInfoResp;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 博客控制器
  *
- * @author ican
+ * @author Aric
  **/
 @Api(tags = "博客模块")
 @RestController

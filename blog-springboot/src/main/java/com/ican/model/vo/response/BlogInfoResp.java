@@ -1,4 +1,4 @@
-package com.ican.model.vo.response;
+﻿package com.ican.model.vo.response;
 
 import com.ican.entity.SiteConfig;
 import io.swagger.annotations.ApiModel;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 /**
  * 博客信息Response
  *
- * @author ican
+ * @author Aric
  **/
 @Data
 @Builder

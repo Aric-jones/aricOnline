@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Album;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 相册 Mapper
  *
- * @author ican
+ * @author Aric
  */
 @Repository
 public interface AlbumMapper extends BaseMapper<Album> {

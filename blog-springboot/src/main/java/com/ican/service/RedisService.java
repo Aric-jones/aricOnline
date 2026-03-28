@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Redis服务接口实现类
  *
- * @author ican
+ * @author Aric
  */
 @Service
 @SuppressWarnings("all")

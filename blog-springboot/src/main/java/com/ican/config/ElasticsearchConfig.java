@@ -1,4 +1,4 @@
-package com.ican.config;
+﻿package com.ican.config;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Elasticsearch配置
  *
- * @author ican
+ * @author Aric
  */
 @Configuration
 @EnableConfigurationProperties(ElasticsearchProperties.class)

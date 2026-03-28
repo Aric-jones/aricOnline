@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 用户信息控制器
  *
- * @author ican
+ * @author Aric
  **/
 @Api(tags = "用户信息模块")
 @RestController

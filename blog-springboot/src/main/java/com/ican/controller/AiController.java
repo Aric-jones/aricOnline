@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import com.ican.exception.ServiceException;
 import com.ican.model.vo.Result;
@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * AI 对话控制器
  *
- * @author ican
+ * @author Aric
  */
 @Api(tags = "AI 模块")
 @RestController

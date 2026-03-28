@@ -1,4 +1,4 @@
-package com.ican.model.vo.request;
+﻿package com.ican.model.vo.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 定时任务运行Request
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @ApiModel(description = "定时任务运行Request")

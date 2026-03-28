@@ -26,7 +26,7 @@ import static com.ican.constant.OptTypeConstant.*;
 /**
  * 标签控制器
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/02 21:58
  **/
 @Api(tags = "标签模块")
@@ -71,7 +71,7 @@ public class TagController {
      * @return {@link Result<>}
      */
     @OptLogger(value = DELETE)
-    @ApiOperation(value = "删除分类")
+    @ApiOperation(value = "删除标签")
     @SaCheckPermission("blog:tag:delete")
     @DeleteMapping("/admin/tag/delete")
     public Result<?> deleteTag(@RequestBody List<Integer> tagIdList) {

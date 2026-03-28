@@ -1,4 +1,4 @@
-package com.ican.config;
+﻿package com.ican.config;
 
 import com.ican.config.properties.ThreadPoolProperties;
 import com.ican.utils.ThreadUtils;
@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * 线程池配置
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/05 11:12
  **/
 @Configuration

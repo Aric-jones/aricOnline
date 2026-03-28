@@ -1,4 +1,4 @@
-package com.ican.interceptor;
+﻿package com.ican.interceptor;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson2.JSON;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Redis拦截器
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 @Component

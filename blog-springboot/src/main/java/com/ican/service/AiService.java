@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * 通过 OkHttp SSE 调用 DeepSeek API，将流式结果转发给前端 SseEmitter。
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 @Service

@@ -1,4 +1,4 @@
-package com.ican.model.dto;
+﻿package com.ican.model.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,7 +8,7 @@ import lombok.Data;
 /**
  * 第三方token
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @Builder

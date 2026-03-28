@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import com.ican.config.properties.QiniuProperties;
 import com.qiniu.http.Response;
@@ -14,7 +14,7 @@ import java.io.InputStream;
 /**
  * qiniu上传策略
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 @Service("qiniuUploadStrategyImpl")

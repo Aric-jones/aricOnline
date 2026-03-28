@@ -1,4 +1,4 @@
-package com.ican.model.dto;
+﻿package com.ican.model.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * B站IP地址返回DTO
  *
- * @author ican
+ * @author Aric
  * @date 2024/06/21 22:52
  **/
 @Data

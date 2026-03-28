@@ -1,4 +1,4 @@
-package com.ican.model.vo.response;
+﻿package com.ican.model.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 说说后台Response
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @ApiModel(description = "说说后台Response")

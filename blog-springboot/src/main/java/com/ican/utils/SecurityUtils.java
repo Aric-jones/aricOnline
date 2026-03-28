@@ -1,4 +1,4 @@
-package com.ican.utils;
+﻿package com.ican.utils;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * 密码加密
  *
- * @author ican
+ * @author Aric
  **/
 public class SecurityUtils {
 

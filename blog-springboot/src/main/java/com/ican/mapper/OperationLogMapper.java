@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.OperationLog;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 操作日志 Mapper
  *
- * @author ican
+ * @author Aric
  */
 @Repository
 public interface OperationLogMapper extends BaseMapper<OperationLog> {

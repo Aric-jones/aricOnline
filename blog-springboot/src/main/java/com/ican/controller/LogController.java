@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.entity.ExceptionLog;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * 日志控制器
  *
- * @author ican
+ * @author Aric
  */
 @Api(tags = "日志模块")
 @RestController

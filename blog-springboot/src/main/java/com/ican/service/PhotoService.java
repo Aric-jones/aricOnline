@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 /**
  * 照片业务接口实现类
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class PhotoService extends ServiceImpl<PhotoMapper, Photo> {

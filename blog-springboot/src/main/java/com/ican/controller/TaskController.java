@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
@@ -24,7 +24,7 @@ import static com.ican.constant.OptTypeConstant.*;
 /**
  * 定时任务控制器
  *
- * @author ican
+ * @author Aric
  */
 @Api(tags = "定时任务模块")
 @RestController

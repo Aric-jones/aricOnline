@@ -1,4 +1,4 @@
-package com.ican.utils;
+﻿package com.ican.utils;
 
 
 import nl.basjes.parse.useragent.UserAgent;
@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 浏览器工具
  *
- * @author ican
+ * @author Aric
  */
 public class UserAgentUtils {
 

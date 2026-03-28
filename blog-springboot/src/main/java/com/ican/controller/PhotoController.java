@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.OptLogger;
@@ -28,7 +28,7 @@ import static com.ican.constant.OptTypeConstant.*;
 /**
  * 照片控制器
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/30 16:35
  **/
 @Api(tags = "照片模块")

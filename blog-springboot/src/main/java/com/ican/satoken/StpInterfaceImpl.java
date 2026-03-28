@@ -1,4 +1,4 @@
-package com.ican.satoken;
+﻿package com.ican.satoken;
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.session.SaSessionCustomUtil;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 自定义权限验证接口扩展
  *
- * @author ican
+ * @author Aric
  */
 @Component
 public class StpInterfaceImpl implements StpInterface {

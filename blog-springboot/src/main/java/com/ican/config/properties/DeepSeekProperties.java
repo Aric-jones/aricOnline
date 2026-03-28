@@ -1,4 +1,4 @@
-package com.ican.config.properties;
+﻿package com.ican.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * DeepSeek AI 配置属性
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @Component

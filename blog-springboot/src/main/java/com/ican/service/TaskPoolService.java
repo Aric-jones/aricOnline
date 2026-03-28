@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
@@ -14,6 +14,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * TaskPoolService
+ *
+ * @author Aric
+ */
 @Service
 public class TaskPoolService extends ServiceImpl<TaskPoolMapper, TaskPool> {
 

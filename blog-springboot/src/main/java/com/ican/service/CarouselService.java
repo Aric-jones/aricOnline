@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.entity.Carousel;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * 轮播图服务
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class CarouselService extends ServiceImpl<CarouselMapper, Carousel> {

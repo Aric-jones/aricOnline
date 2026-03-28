@@ -1,4 +1,4 @@
-package com.ican.model.vo.request;
+﻿package com.ican.model.vo.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,8 +6,13 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * TodoReq
+ *
+ * @author Aric
+ */
 @Data
-@ApiModel(description = "??????")
+@ApiModel(description = "待办事项Request")
 public class TodoReq {
 
     @ApiModelProperty(value = "ID")

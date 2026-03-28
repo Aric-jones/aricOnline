@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 /**
  * 文章服务
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/04 22:31
  **/
 @Service

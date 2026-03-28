@@ -1,4 +1,4 @@
-package com.ican.strategy.context;
+﻿package com.ican.strategy.context;
 
 import com.ican.enums.LoginTypeEnum;
 import com.ican.model.vo.request.CodeReq;
@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * 登录策略上下文
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class SocialLoginStrategyContext {

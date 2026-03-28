@@ -1,4 +1,4 @@
-package com.ican.quartz.utils;
+﻿package com.ican.quartz.utils;
 
 import org.quartz.CronExpression;
 
@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * cron表达式工具类
  *
- * @author ican
+ * @author Aric
  */
 public class CronUtils {
 

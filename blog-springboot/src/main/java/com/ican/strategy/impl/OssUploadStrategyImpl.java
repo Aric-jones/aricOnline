@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
@@ -14,7 +14,7 @@ import java.io.InputStream;
 /**
  * oss上传策略
  *
- * @author ican
+ * @author Aric
  */
 @Slf4j
 @Service("ossUploadStrategyImpl")

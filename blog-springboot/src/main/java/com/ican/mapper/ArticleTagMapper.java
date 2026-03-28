@@ -1,4 +1,4 @@
-package com.ican.mapper;
+﻿package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.ArticleTag;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 文章标签 Mapper
  *
- * @author ican
+ * @author Aric
  */
 @Repository
 public interface ArticleTagMapper extends BaseMapper<ArticleTag> {

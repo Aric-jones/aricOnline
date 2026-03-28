@@ -1,4 +1,4 @@
-package com.ican.config;
+﻿package com.ican.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -15,7 +15,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 /**
  * Redis配置
  *
- * @author ican
+ * @author Aric
  * @date 2022/12/02 15:40
  **/
 @Configuration

@@ -1,11 +1,11 @@
-package com.ican.annotation;
+﻿package com.ican.annotation;
 
 import java.lang.annotation.*;
 
 /**
  * Redis限流注解
  *
- * @author ican
+ * @author Aric
  */
 @Documented
 @Target(ElementType.METHOD)

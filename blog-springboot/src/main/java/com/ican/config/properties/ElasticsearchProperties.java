@@ -1,4 +1,4 @@
-package com.ican.config.properties;
+﻿package com.ican.config.properties;
 
 
 import lombok.Data;
@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * Elasticsearch配置属性
  *
- * @author ican
+ * @author Aric
  */
 @Data
 @ConfigurationProperties(prefix = "elasticsearch")

@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * ThinkingService
+ *
+ * @author Aric
+ */
 @Service
 public class ThinkingService extends ServiceImpl<ThinkingMapper, Thinking> {
 

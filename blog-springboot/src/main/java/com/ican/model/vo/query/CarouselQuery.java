@@ -1,4 +1,4 @@
-package com.ican.model.vo.query;
+﻿package com.ican.model.vo.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 轮播图查询条件
  *
- * @author ican
+ * @author Aric
  * @date 2024/02/03 12:07
  **/
 @Data

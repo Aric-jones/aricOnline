@@ -1,11 +1,11 @@
-package com.ican.strategy;
+﻿package com.ican.strategy;
 
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 上传策略
  *
- * @author ican
+ * @author Aric
  */
 public interface UploadStrategy {
     /**

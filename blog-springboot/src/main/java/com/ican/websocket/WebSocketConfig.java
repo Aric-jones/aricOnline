@@ -1,4 +1,4 @@
-package com.ican.websocket;
+﻿package com.ican.websocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +7,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 /**
  * websocket 配置
  *
- * @author ican
+ * @author Aric
  * @date 2023/06/11 22:55
  **/
 @Configuration

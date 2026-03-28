@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 /**
  * 评论服务
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class CommentService extends ServiceImpl<CommentMapper, Comment> {

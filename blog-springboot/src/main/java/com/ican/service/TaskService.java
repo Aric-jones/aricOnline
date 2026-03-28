@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * 定时任务服务
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class TaskService extends ServiceImpl<TaskMapper, Task> {

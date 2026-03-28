@@ -16,7 +16,7 @@ import java.util.Collections;
 /**
  * Knife4j配置
  *
- * @author ican
+ * @author Aric
  */
 @Configuration
 @EnableSwagger2WebMvc
@@ -39,7 +39,7 @@ public class Knife4jConfig {
                 .title("博客API文档")
                 .description("基于SpringBoot + Vue开发的博客项目")
                 .termsOfServiceUrl("https://localhost/api")
-                .contact(new Contact("牧羊人", "https://github.com/ICAN1999", "1632167813@qq.com"))
+                .contact(new Contact("Aric", "https://github.com/Aric", ""))
                 .version("2.0")
                 .build();
     }

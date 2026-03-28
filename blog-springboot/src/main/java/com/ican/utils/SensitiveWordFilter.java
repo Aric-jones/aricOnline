@@ -1,4 +1,4 @@
-package com.ican.utils;
+﻿package com.ican.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Queue;
  * AC自动机敏感词过滤器
  * 基于AC自动机算法实现，性能优于DFA
  *
- * @author ican
+ * @author Aric
  */
 public class SensitiveWordFilter {
 

@@ -1,11 +1,11 @@
-package com.ican.model.dto;
+﻿package com.ican.model.dto;
 
 import lombok.Data;
 
 /**
  * QQ token信息
  *
- * @author ican
+ * @author Aric
  * @date 2023/04/06 23:31
  **/
 @Data

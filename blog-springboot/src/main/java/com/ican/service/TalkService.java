@@ -1,4 +1,4 @@
-package com.ican.service;
+﻿package com.ican.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson2.JSON;
@@ -37,7 +37,7 @@ import static com.ican.enums.CommentTypeEnum.TALK;
 /**
  * 说说服务
  *
- * @author ican
+ * @author Aric
  */
 @Service
 public class TalkService extends ServiceImpl<TalkMapper, Talk> {

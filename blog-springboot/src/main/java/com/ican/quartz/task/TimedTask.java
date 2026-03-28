@@ -1,4 +1,4 @@
-package com.ican.quartz.task;
+﻿package com.ican.quartz.task;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
@@ -14,7 +14,7 @@ import static com.ican.constant.RedisConstant.UNIQUE_VISITOR;
 /**
  * 执行定时任务
  *
- * @author ican
+ * @author Aric
  */
 @SuppressWarnings(value = "all")
 @Component("timedTask")

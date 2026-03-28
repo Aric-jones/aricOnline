@@ -1,4 +1,4 @@
-package com.ican.model.dto;
+﻿package com.ican.model.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 /**
  * B站图片上传返回DTO
  *
- * @author ican
+ * @author Aric
  * @date 2024/06/21 21:43
  **/
 @Data

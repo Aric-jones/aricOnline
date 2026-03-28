@@ -1,4 +1,4 @@
-package com.ican.strategy.impl;
+﻿package com.ican.strategy.impl;
 
 import com.ican.config.properties.GithubProperties;
 import com.ican.constant.SocialLoginConstant;
@@ -26,7 +26,7 @@ import java.util.Objects;
 /**
  * Github登录策略
  *
- * @author ican
+ * @author Aric
  **/
 @Service("githubLoginStrategyImpl")
 public class GithubLoginStrategyImpl extends AbstractLoginStrategyImpl {

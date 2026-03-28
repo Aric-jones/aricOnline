@@ -1,4 +1,4 @@
-package com.ican.satoken;
+﻿package com.ican.satoken;
 
 import cn.dev33.satoken.listener.SaTokenListener;
 import cn.dev33.satoken.session.SaSession;
@@ -25,7 +25,7 @@ import static com.ican.enums.ZoneEnum.SHANGHAI;
 /**
  * 自定义侦听器的实现
  *
- * @author ican
+ * @author Aric
  */
 @Component
 public class MySaTokenListener implements SaTokenListener {

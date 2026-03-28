@@ -1,4 +1,4 @@
-package com.ican.enums;
+﻿package com.ican.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 登录方式枚举
  *
- * @author ican
+ * @author Aric
  */
 @Getter
 @AllArgsConstructor

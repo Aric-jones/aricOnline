@@ -1,4 +1,4 @@
-//package com.ican.config;
+﻿//package com.ican.config;
 //
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.amqp.core.Binding;
@@ -15,7 +15,7 @@
 ///**
 // * RabbitMQ配置
 // *
-// * @author ican
+// * @author Aric
 // **/
 //@Slf4j
 //@Configuration

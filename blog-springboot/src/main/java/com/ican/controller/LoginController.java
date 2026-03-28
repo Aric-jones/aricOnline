@@ -1,4 +1,4 @@
-package com.ican.controller;
+﻿package com.ican.controller;
 
 import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.annotation.SaCheckLogin;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 登录控制器
  *
- * @author ican
+ * @author Aric
  */
 @Api(tags = "登录模块")
 @RestController
