@@ -1,4 +1,4 @@
-﻿package com.ican.aspect;
+package com.ican.aspect;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.ican.annotation.VisitLogger;

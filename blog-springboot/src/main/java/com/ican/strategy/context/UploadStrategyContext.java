@@ -1,4 +1,4 @@
-﻿package com.ican.strategy.context;
+package com.ican.strategy.context;
 
 import com.ican.strategy.UploadStrategy;
 import org.springframework.beans.factory.annotation.Autowired;

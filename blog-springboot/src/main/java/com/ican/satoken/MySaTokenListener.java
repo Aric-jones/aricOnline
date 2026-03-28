@@ -1,4 +1,4 @@
-﻿package com.ican.satoken;
+package com.ican.satoken;
 
 import cn.dev33.satoken.listener.SaTokenListener;
 import cn.dev33.satoken.session.SaSession;

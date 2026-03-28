@@ -1,4 +1,4 @@
-﻿//package com.ican.consumer;
+//package com.ican.consumer;
 //
 //import cn.hutool.json.JSONUtil;
 //import com.ican.model.dto.CanalDTO;

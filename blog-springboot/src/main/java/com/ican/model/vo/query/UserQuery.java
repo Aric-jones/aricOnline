@@ -1,4 +1,4 @@
-﻿package com.ican.model.vo.query;
+package com.ican.model.vo.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

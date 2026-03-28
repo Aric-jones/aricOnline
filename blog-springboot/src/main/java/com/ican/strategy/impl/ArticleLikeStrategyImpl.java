@@ -1,4 +1,4 @@
-﻿package com.ican.strategy.impl;
+package com.ican.strategy.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;

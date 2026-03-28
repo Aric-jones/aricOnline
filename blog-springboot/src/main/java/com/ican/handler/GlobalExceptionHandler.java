@@ -1,4 +1,4 @@
-﻿package com.ican.handler;
+package com.ican.handler;
 
 import cn.dev33.satoken.exception.DisableServiceException;
 import cn.dev33.satoken.exception.NotLoginException;

@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import com.ican.model.dto.MailDTO;
 import lombok.extern.slf4j.Slf4j;

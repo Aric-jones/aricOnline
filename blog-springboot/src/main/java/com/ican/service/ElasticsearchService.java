@@ -1,4 +1,4 @@
-﻿//package com.ican.service;
+//package com.ican.service;
 //
 //import co.elastic.clients.elasticsearch.ElasticsearchClient;
 //import co.elastic.clients.elasticsearch.core.IndexRequest;

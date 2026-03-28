@@ -1,4 +1,4 @@
-﻿package com.ican.handler;
+package com.ican.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.log4j.Log4j2;

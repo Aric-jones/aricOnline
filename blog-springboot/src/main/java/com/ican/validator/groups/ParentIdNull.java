@@ -1,4 +1,4 @@
-﻿package com.ican.validator.groups;
+package com.ican.validator.groups;
 
 /**
  * 父评论id为空

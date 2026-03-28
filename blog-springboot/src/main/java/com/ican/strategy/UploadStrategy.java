@@ -1,4 +1,4 @@
-﻿package com.ican.strategy;
+package com.ican.strategy;
 
 import org.springframework.web.multipart.MultipartFile;
 

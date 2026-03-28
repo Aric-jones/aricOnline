@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.constant.RedisConstant;

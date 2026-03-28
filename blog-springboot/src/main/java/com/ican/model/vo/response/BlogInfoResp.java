@@ -1,4 +1,4 @@
-﻿package com.ican.model.vo.response;
+package com.ican.model.vo.response;
 
 import com.ican.entity.SiteConfig;
 import io.swagger.annotations.ApiModel;

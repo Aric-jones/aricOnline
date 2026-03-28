@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;

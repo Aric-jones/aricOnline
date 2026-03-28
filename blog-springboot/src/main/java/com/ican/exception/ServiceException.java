@@ -1,4 +1,4 @@
-﻿package com.ican.exception;
+package com.ican.exception;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-﻿package com.ican.controller;
+package com.ican.controller;
 
 import com.ican.annotation.VisitLogger;
 import com.ican.model.vo.response.BlogBackInfoResp;

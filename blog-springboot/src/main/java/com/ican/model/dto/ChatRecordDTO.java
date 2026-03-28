@@ -1,4 +1,4 @@
-﻿package com.ican.model.dto;
+package com.ican.model.dto;
 
 import com.ican.entity.ChatRecord;
 import io.swagger.annotations.ApiModel;

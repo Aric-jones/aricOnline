@@ -1,4 +1,4 @@
-﻿package com.ican.quartz.task;
+package com.ican.quartz.task;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;

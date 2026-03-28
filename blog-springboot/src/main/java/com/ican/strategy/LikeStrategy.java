@@ -1,4 +1,4 @@
-﻿package com.ican.strategy;
+package com.ican.strategy;
 
 /**
  * 点赞策略

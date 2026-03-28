@@ -1,4 +1,4 @@
-﻿//package com.ican.strategy.impl;
+//package com.ican.strategy.impl;
 //
 //import co.elastic.clients.elasticsearch.ElasticsearchClient;
 //import co.elastic.clients.elasticsearch._types.FieldValue;

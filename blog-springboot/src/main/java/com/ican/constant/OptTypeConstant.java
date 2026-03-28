@@ -1,4 +1,4 @@
-﻿package com.ican.constant;
+package com.ican.constant;
 
 /**
  * 日志操作类型常量

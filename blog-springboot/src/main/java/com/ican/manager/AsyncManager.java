@@ -1,4 +1,4 @@
-﻿package com.ican.manager;
+package com.ican.manager;
 
 
 import cn.hutool.extra.spring.SpringUtil;

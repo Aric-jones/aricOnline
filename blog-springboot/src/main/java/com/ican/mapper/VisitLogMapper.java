@@ -1,4 +1,4 @@
-﻿package com.ican.mapper;
+package com.ican.mapper;
 
 import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

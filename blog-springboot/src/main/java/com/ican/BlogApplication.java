@@ -1,4 +1,4 @@
-﻿package com.ican;
+package com.ican;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

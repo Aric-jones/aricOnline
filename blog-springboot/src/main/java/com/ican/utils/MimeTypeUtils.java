@@ -1,4 +1,4 @@
-﻿package com.ican.utils;
+package com.ican.utils;
 
 /**
  * 媒体类型工具类

@@ -1,4 +1,4 @@
-﻿package com.ican.constant;
+package com.ican.constant;
 
 /**
  * 公共常量

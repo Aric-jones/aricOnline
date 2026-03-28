@@ -1,4 +1,4 @@
-﻿package com.ican.annotation.serialize;
+package com.ican.annotation.serialize;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.DesensitizedUtil;

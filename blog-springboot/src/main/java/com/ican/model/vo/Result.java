@@ -1,4 +1,4 @@
-﻿package com.ican.model.vo;
+package com.ican.model.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

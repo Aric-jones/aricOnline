@@ -1,4 +1,4 @@
-﻿package com.ican.utils;
+package com.ican.utils;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 

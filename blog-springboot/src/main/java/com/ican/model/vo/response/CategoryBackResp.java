@@ -1,4 +1,4 @@
-﻿package com.ican.model.vo.response;
+package com.ican.model.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.Api;

@@ -1,4 +1,4 @@
-﻿package com.ican.strategy.impl;
+package com.ican.strategy.impl;
 
 import com.ican.config.properties.CosProperties;
 import com.qcloud.cos.COSClient;

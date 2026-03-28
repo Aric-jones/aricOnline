@@ -1,4 +1,4 @@
-﻿package com.ican.validator;
+package com.ican.validator;
 
 import com.ican.model.vo.request.CommentReq;
 import com.ican.validator.groups.ArticleTalk;

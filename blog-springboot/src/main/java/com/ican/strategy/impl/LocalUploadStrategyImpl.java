@@ -1,4 +1,4 @@
-﻿package com.ican.strategy.impl;
+package com.ican.strategy.impl;
 
 import com.ican.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Value;

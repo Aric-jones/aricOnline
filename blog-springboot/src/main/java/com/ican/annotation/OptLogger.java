@@ -1,4 +1,4 @@
-﻿package com.ican.annotation;
+package com.ican.annotation;
 
 import java.lang.annotation.*;
 

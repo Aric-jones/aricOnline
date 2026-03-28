@@ -1,4 +1,4 @@
-﻿package com.ican.config;
+package com.ican.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;

@@ -1,4 +1,4 @@
-﻿package com.ican.interceptor;
+package com.ican.interceptor;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ican.constant.PageConstant;

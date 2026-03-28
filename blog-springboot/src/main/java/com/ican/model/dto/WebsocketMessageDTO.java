@@ -1,4 +1,4 @@
-﻿package com.ican.model.dto;
+package com.ican.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

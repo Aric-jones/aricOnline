@@ -1,4 +1,4 @@
-﻿package com.ican.strategy.context;
+package com.ican.strategy.context;
 
 import com.ican.enums.LikeTypeEnum;
 import com.ican.strategy.LikeStrategy;

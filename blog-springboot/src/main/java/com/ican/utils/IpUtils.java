@@ -1,4 +1,4 @@
-﻿package com.ican.utils;
+package com.ican.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;

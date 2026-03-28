@@ -1,4 +1,4 @@
-﻿package com.ican.websocket;
+package com.ican.websocket;
 
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson2.JSON;

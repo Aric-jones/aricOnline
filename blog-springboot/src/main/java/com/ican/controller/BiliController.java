@@ -1,4 +1,4 @@
-﻿package com.ican.controller;
+package com.ican.controller;
 
 import com.ican.model.vo.Result;
 import com.ican.service.BiliService;

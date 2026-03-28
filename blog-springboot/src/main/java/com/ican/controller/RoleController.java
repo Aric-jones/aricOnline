@@ -1,4 +1,4 @@
-﻿package com.ican.controller;
+package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;

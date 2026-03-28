@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;

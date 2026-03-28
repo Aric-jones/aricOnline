@@ -1,4 +1,4 @@
-﻿package com.ican.model.vo.query;
+package com.ican.model.vo.query;
 
 import com.ican.constant.PageConstant;
 import io.swagger.annotations.ApiModel;

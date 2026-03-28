@@ -1,4 +1,4 @@
-﻿package com.ican.satoken;
+package com.ican.satoken;
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.session.SaSessionCustomUtil;

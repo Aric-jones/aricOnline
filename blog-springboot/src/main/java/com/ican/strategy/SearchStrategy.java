@@ -1,4 +1,4 @@
-﻿package com.ican.strategy;
+package com.ican.strategy;
 
 import com.ican.model.vo.response.ArticleSearchResp;
 

@@ -1,4 +1,4 @@
-﻿package com.ican.quartz.execution;
+package com.ican.quartz.execution;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.ican.constant.ScheduleConstant;

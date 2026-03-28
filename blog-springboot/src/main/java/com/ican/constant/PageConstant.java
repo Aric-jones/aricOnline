@@ -1,4 +1,4 @@
-﻿package com.ican.constant;
+package com.ican.constant;
 
 /**
  * 分页常量

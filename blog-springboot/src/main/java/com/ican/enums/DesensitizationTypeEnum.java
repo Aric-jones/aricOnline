@@ -1,4 +1,4 @@
-﻿package com.ican.enums;
+package com.ican.enums;
 
 /**
  * 脱敏策略枚举

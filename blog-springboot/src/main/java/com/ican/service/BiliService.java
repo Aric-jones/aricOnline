@@ -1,4 +1,4 @@
-﻿package com.ican.service;
+package com.ican.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

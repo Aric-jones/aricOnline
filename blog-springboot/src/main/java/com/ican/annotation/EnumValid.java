@@ -1,4 +1,4 @@
-﻿package com.ican.annotation;
+package com.ican.annotation;
 
 import com.ican.validator.EnumValidator;
 

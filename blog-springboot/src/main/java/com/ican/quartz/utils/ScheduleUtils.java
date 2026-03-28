@@ -1,4 +1,4 @@
-﻿package com.ican.quartz.utils;
+package com.ican.quartz.utils;
 
 import com.ican.constant.ScheduleConstant;
 import com.ican.entity.Task;

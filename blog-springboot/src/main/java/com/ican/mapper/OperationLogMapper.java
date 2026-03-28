@@ -1,4 +1,4 @@
-﻿package com.ican.mapper;
+package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.OperationLog;

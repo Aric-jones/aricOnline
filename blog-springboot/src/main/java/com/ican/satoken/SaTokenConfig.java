@@ -1,4 +1,4 @@
-﻿package com.ican.satoken;
+package com.ican.satoken;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotLoginException;

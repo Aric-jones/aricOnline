@@ -1,4 +1,4 @@
-﻿package com.ican.config.properties;
+package com.ican.config.properties;
 
 
 import lombok.Data;

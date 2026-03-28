@@ -1,4 +1,4 @@
-﻿package com.ican.strategy.impl;
+package com.ican.strategy.impl;
 
 import com.ican.constant.ElasticConstant;
 import com.ican.mapper.ArticleMapper;

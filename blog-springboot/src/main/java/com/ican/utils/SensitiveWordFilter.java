@@ -1,4 +1,4 @@
-﻿package com.ican.utils;
+package com.ican.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

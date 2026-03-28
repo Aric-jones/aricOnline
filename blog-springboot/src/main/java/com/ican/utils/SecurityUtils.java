@@ -1,4 +1,4 @@
-﻿package com.ican.utils;
+package com.ican.utils;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import org.apache.commons.lang3.StringUtils;

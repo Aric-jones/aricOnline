@@ -1,4 +1,4 @@
-﻿package com.ican.config;
+package com.ican.config;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;

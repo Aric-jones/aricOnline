@@ -1,4 +1,4 @@
-﻿package com.ican.model.vo.response;
+package com.ican.model.vo.response;
 
 import com.ican.annotation.Desensitization;
 import com.ican.enums.DesensitizationTypeEnum;

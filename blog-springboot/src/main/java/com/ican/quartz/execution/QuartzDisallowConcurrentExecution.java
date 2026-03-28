@@ -1,4 +1,4 @@
-﻿package com.ican.quartz.execution;
+package com.ican.quartz.execution;
 
 import com.ican.entity.Task;
 import com.ican.quartz.utils.TaskInvokeUtils;

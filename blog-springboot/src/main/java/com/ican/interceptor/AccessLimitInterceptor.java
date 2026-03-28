@@ -1,4 +1,4 @@
-﻿package com.ican.interceptor;
+package com.ican.interceptor;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson2.JSON;

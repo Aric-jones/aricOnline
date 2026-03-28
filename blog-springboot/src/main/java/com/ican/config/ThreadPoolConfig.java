@@ -1,4 +1,4 @@
-﻿package com.ican.config;
+package com.ican.config;
 
 import com.ican.config.properties.ThreadPoolProperties;
 import com.ican.utils.ThreadUtils;
