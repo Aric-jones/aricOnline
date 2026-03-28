@@ -87,13 +87,24 @@ $radius-sm: 10px;
 }
 
 // ==================== 主题色切换按钮 ====================
+:deep(.n-tabs-nav__suffix) {
+	display: flex !important;
+	align-items: center !important;
+	padding: 0 0.4rem !important;
+	flex-shrink: 0 !important;
+}
 .accent-cycle-btn {
+	appearance: none;
+	-webkit-appearance: none;
+	outline: none;
 	width: 1.4rem; height: 1.4rem; border-radius: 50%;
 	border: 2px solid rgba(255, 255, 255, 0.7);
 	cursor: pointer; flex-shrink: 0;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 	transition: all 0.3s ease;
 	margin-right: 0.25rem;
+	position: relative;
+	z-index: 2;
 	&:hover { transform: scale(1.2); box-shadow: 0 3px 14px rgba(0, 0, 0, 0.2); }
 	&:active { transform: scale(0.9); }
 }

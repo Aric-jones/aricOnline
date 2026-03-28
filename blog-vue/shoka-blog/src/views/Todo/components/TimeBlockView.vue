@@ -83,16 +83,15 @@
 					<h4 class="section-title">📋 常用事件</h4>
 					<div v-if="distinctEvents.length === 0" class="empty-hint">暂无历史事件</div>
 					<div class="event-chips">
-						<div
-							v-for="ev in distinctEvents"
-							:key="ev.name"
-							class="event-chip"
-							:style="{ borderColor: ev.color, color: ev.color }"
-							@click="quickAdd(ev)"
-						>
-							<span class="chip-dot" :style="{ background: ev.color }"></span>
-							{{ ev.name }}
-						</div>
+					<div
+						v-for="ev in distinctEvents"
+						:key="ev.name"
+						class="event-chip"
+						:style="{ background: ev.color, color: '#fff' }"
+						@click="quickAdd(ev)"
+					>
+						{{ ev.name }}
+					</div>
 					</div>
 				</div>
 
@@ -156,25 +155,34 @@
 					/>
 				</div>
 			</div>
-			<div class="form-group">
-				<label class="form-label">颜色</label>
-				<div class="color-picker">
-					<span
-						v-for="c in presetColors"
-						:key="c"
-						class="color-swatch"
-						:class="{ active: form.color === c }"
-						:style="{ background: c }"
-						@click="form.color = c"
-					></span>
-					<n-color-picker
-						v-model:value="form.color"
-						:modes="['hex']"
-						size="small"
-						style="width: 80px"
-					/>
-				</div>
+		<div class="form-group">
+			<label class="form-label">颜色</label>
+			<div class="theme-switcher">
+				<span
+					v-for="(theme, key) in colorThemes"
+					:key="key"
+					class="theme-tag"
+					:class="{ active: activeTheme === key }"
+					@click="switchTheme(key)"
+				>{{ theme.label }}</span>
 			</div>
+			<div class="color-picker">
+				<span
+					v-for="c in presetColors"
+					:key="c"
+					class="color-swatch"
+					:class="{ active: form.color === c }"
+					:style="{ background: c }"
+					@click="form.color = c"
+				></span>
+				<n-color-picker
+					v-model:value="form.color"
+					:modes="['hex']"
+					size="small"
+					style="width: 80px"
+				/>
+			</div>
+		</div>
 			<div class="form-group">
 				<label class="form-label">备注</label>
 				<n-input v-model:value="form.remark" type="textarea" placeholder="补充说明（可选）" :rows="2" maxlength="500" />
@@ -220,11 +228,35 @@ const statsTabs = [
 	{ label: "今年", value: "yearly" },
 ];
 
-const presetColors = [
-	"#10b981", "#3b82f6", "#8b5cf6", "#f59e0b",
-	"#ef4444", "#ec4899", "#06b6d4", "#84cc16",
-	"#f97316", "#6366f1", "#14b8a6", "#a855f7",
-];
+const colorThemes: Record<string, { label: string; colors: string[] }> = {
+	classic: {
+		label: "经典",
+		colors: [
+			"#10b981", "#3b82f6", "#8b5cf6", "#f59e0b",
+			"#ef4444", "#ec4899", "#06b6d4", "#84cc16",
+			"#f97316", "#6366f1", "#14b8a6", "#a855f7",
+		],
+	},
+	luxury: {
+		label: "星夜",
+		colors: [
+			"#1e3a5f", "#4a306d", "#0d7377", "#c06014",
+			"#6b2737", "#1a535c", "#7b2d8e", "#b08d57",
+			"#2d3436", "#6c5ce7", "#e17055", "#00b894",
+		],
+	},
+	aurora: {
+		label: "极光",
+		colors: [
+			"#667eea", "#764ba2", "#f093fb", "#43e97b",
+			"#fa709a", "#fee140", "#a18cd1", "#fbc2eb",
+			"#4facfe", "#00f2fe", "#ff9a9e", "#fad0c4",
+		],
+	},
+};
+const activeTheme = ref("classic");
+const presetColors = computed(() => colorThemes[activeTheme.value].colors);
+function switchTheme(key: string | number) { activeTheme.value = String(key); }
 
 const hourRange = Array.from({ length: 24 }, (_, i) => i);
 const minuteRange = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
@@ -613,13 +645,14 @@ onUnmounted(() => { if (nowTimer) clearInterval(nowTimer); });
 	max-height: 200px; overflow-y: auto;
 }
 .event-chip {
-	display: flex; align-items: center; gap: 0.3rem;
-	padding: 0.25rem 0.6rem; border-radius: 50px;
-	border: 1.5px solid; font-size: 0.78rem; font-weight: 500;
+	display: inline-flex; align-items: center;
+	padding: 0.3rem 0.75rem; border-radius: 50px;
+	font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em;
 	cursor: pointer; transition: all 0.2s;
-	background: transparent;
-	&:hover { transform: scale(1.04); background: rgba(255, 255, 255, 0.39);}
-	.chip-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+	border: none; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+	&:hover { transform: translateY(-1px) scale(1.04); box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2); }
+	&:active { transform: scale(0.97); }
 }
 
 // ==================== 统计 ====================
@@ -638,6 +671,24 @@ onUnmounted(() => { if (nowTimer) clearInterval(nowTimer); });
 	}
 }
 .chart-wrap { margin-top: 0.25rem; }
+
+// ==================== 主题切换 ====================
+.theme-switcher {
+	display: flex; gap: 0.35rem; margin-bottom: 0.5rem;
+}
+.theme-tag {
+	padding: 0.18rem 0.6rem; border-radius: 50px; font-size: 0.73rem;
+	font-weight: 500; cursor: pointer; transition: all 0.2s;
+	color: var(--grey-6, #64748b); background: rgba(0, 0, 0, 0.04);
+	border: 1.5px solid transparent;
+	&.active {
+		background: var(--todo-primary, #10b981); color: #fff;
+		border-color: var(--todo-primary, #10b981);
+	}
+	&:hover:not(.active) {
+		background: rgba(var(--todo-primary-rgb, 16,185,129), 0.1);
+	}
+}
 
 // ==================== 表单 ====================
 .form-group { margin-bottom: 0.85rem; }

@@ -3,11 +3,12 @@ import { ref, watch, onMounted } from 'vue';
 export type ThemeMode = 'light' | 'dark' | 'gradient';
 
 const THEME_KEY = 'theme';
+const VALID_THEMES: ThemeMode[] = ['light', 'dark', 'gradient'];
 
 function getStoredTheme(): ThemeMode {
   if (typeof window === 'undefined') return 'light';
   const stored = localStorage.getItem(THEME_KEY) as ThemeMode | null;
-  if (stored === 'light' || stored === 'dark' || stored === 'gradient') return stored;
+  if (stored && VALID_THEMES.includes(stored)) return stored;
   return 'gradient';
 }
 

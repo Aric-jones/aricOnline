@@ -1,4 +1,4 @@
-﻿package com.ican.mapper;
+package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.TimeBlock;
@@ -17,7 +17,10 @@ import java.util.Map;
 @Repository
 public interface TimeBlockMapper extends BaseMapper<TimeBlock> {
 
-    @Select("SELECT DISTINCT name, category, color FROM t_time_block WHERE user_id = #{userId} ORDER BY name")
+    @Select("SELECT name, category, color, COUNT(*) AS cnt " +
+            "FROM t_time_block WHERE user_id = #{userId} " +
+            "GROUP BY name, category, color HAVING COUNT(*) > 3 " +
+            "ORDER BY cnt DESC")
     List<Map<String, Object>> selectDistinctEvents(@Param("userId") Integer userId);
 
     @Select("SELECT category, SUM( " +

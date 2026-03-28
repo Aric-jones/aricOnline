@@ -1,4 +1,4 @@
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 export type AccentColor = 'purple' | 'blue' | 'green';
 
@@ -9,7 +9,6 @@ interface AccentConfig {
   label: string;
 }
 
-// 在此添加/修改主题色
 const ACCENT_MAP: Record<AccentColor, AccentConfig> = {
   purple: { primary: '#6366f1', primaryLight: '#818cf8', rgb: '99,102,241', label: '紫色' },
   blue:   { primary: '#3b82f6', primaryLight: '#60a5fa', rgb: '59,130,246', label: '蓝色' },
@@ -34,26 +33,24 @@ function applyToDOM(color: AccentColor) {
   root.style.setProperty('--todo-primary-rgb', cfg.rgb);
 }
 
-let accentRef: ReturnType<typeof ref<AccentColor>> | null = null;
+const accentRef = ref<AccentColor>(getStored());
+applyToDOM(accentRef.value);
 
 export function useAccentColor() {
-  if (!accentRef) {
-    accentRef = ref<AccentColor>(getStored());
-    watch(accentRef, (val) => {
-      localStorage.setItem(STORAGE_KEY, val);
-      applyToDOM(val);
-    }, { immediate: true });
-  }
-
   const accent = accentRef;
 
   function setAccent(color: AccentColor) {
     accent.value = color;
+    localStorage.setItem(STORAGE_KEY, color);
+    applyToDOM(color);
   }
 
   function cycleAccent() {
     const idx = CYCLE_ORDER.indexOf(accent.value);
-    accent.value = CYCLE_ORDER[(idx + 1) % CYCLE_ORDER.length];
+    const next = CYCLE_ORDER[(idx + 1) % CYCLE_ORDER.length];
+    accent.value = next;
+    localStorage.setItem(STORAGE_KEY, next);
+    applyToDOM(next);
   }
 
   const currentAccentColor = computed(() => ACCENT_MAP[accent.value].primary);
