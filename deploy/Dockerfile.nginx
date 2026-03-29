@@ -2,13 +2,26 @@
 #  博客前端 Dockerfile — 多阶段构建
 #  Stage 1: Node 构建博客前台 + 后台
 #  Stage 2: Nginx 托管静态文件
+#  dockerfile是用于构建可以一键运行的docker镜像的文件，用于将博客前端打包成一个镜像，然后通过docker run命令运行
+#  1. 构建阶段：使用node构建博客前台和后台
+#  2. 运行阶段：使用Nginx托管静态文件
+#  3. 健康检查：使用curl命令检查博客前端是否健康
+#  4. 暴露端口：暴露博客前端端口
+#  5. 入口点：使用nginx命令运行nginx
+#  6. 时区：设置时区为Asia/Shanghai
+#  7. 安装curl：安装curl命令用于健康检查
 # ============================================================
 
 # ---- 构建博客前台 ----
+# 从官方拉一个 Node18 的镜像，起名blog-builder
 FROM node:18-alpine AS blog-builder
+# 切换到/build/blog目录
 WORKDIR /build/blog
+# 先拷贝 package.json 和 package-lock.json 到当前目录
 COPY blog-vue/shoka-blog/package.json blog-vue/shoka-blog/package-lock.json* ./
+# 使用npm命令安装依赖，--registry=https://registry.npmmirror.com表示使用国内镜像源
 RUN npm install --registry=https://registry.npmmirror.com
+# 再拷贝shoka-blog目录到当前目录
 COPY blog-vue/shoka-blog/ .
 # 确保 .env.prod 文件存在且包含所有必需的环境变量
 RUN if [ ! -f .env.prod ] || ! grep -q "VITE_ICON_PREFIX" .env.prod; then \
@@ -25,24 +38,34 @@ RUN if [ ! -f .env.prod ] || ! grep -q "VITE_ICON_PREFIX" .env.prod; then \
 RUN npm run build
 
 # ---- 构建后台管理 ----
+# 从官方拉一个 Node18 的镜像，起名admin-builder
 FROM node:18-alpine AS admin-builder
+# 切换到/build/admin目录
 WORKDIR /build/admin
+# 先拷贝 package.json 和 package-lock.json 到当前目录
 COPY blog-vue/shoka-admin/package.json blog-vue/shoka-admin/package-lock.json* ./
+# 使用npm命令安装依赖，--registry=https://registry.npmmirror.com表示使用国内镜像源
 RUN npm install --registry=https://registry.npmmirror.com
+# 再拷贝shoka-admin目录到当前目录
 COPY blog-vue/shoka-admin/ .
+# 使用npm命令构建，build:prod表示构建生产环境
 # 跳过类型检查，直接构建
 # vite build 默认 production mode，vite.config.ts 中根据 mode 自动设置 base: /admin/
 RUN npm run build:prod
 
 # ---- Nginx 运行阶段 ----
+# 从官方拉一个 Nginx1.25 的镜像，起名nginx
 FROM nginx:1.25-alpine
-# 时区
+# 切换到/build/admin目录
+WORKDIR /build/admin
+# 使用apk命令安装tzdata，并设置时区为Asia/Shanghai
 RUN apk add --no-cache tzdata && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
     apk del tzdata
 # 拷贝构建产物
 COPY --from=blog-builder /build/blog/blog /usr/share/nginx/blog
+# 拷贝构建产物
 COPY --from=admin-builder /build/admin/dist /usr/share/nginx/admin
 # 拷贝静态资源（表情包等）
 COPY --from=admin-builder /build/admin/static /usr/share/nginx/static
