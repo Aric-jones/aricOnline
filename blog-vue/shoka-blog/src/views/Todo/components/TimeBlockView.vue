@@ -586,9 +586,14 @@ onUnmounted(() => { if (nowTimer) clearInterval(nowTimer); });
 		border-radius: 50%; background: var(--todo-primary, #10b981);
 	}
 	.now-time {
-		position: absolute; left: -52px; top: -7px;
+		position: absolute; left: 8px; top: -14px;
 		font-size: 0.7rem; font-weight: 700;
 		color: var(--todo-primary, #10b981);
+		background: var(--glass-bg-heavy, rgba(255, 255, 255, 0.85));
+		padding: 0.06rem 0.3rem;
+		border-radius: 6px;
+		line-height: 1.1;
+		font-variant-numeric: tabular-nums;
 	}
 }
 
@@ -741,7 +746,7 @@ onUnmounted(() => { if (nowTimer) clearInterval(nowTimer); });
 	}
 	.now-line {
 		left: 38px; right: 4px;
-		.now-time { left: -42px; font-size: 0.65rem; }
+		.now-time { left: 6px; font-size: 0.65rem; }
 	}
 	.event-block {
 		left: 46px; right: 4px;
@@ -773,7 +778,7 @@ onUnmounted(() => { if (nowTimer) clearInterval(nowTimer); });
 	}
 	.now-line {
 		left: 32px; right: 3px;
-		.now-time { left: -36px; font-size: 0.6rem; }
+		.now-time { left: 4px; font-size: 0.6rem; }
 	}
 	.event-block {
 		left: 40px; right: 3px;
