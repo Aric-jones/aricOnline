@@ -29,6 +29,8 @@ public class Thinking {
 
     private String topic;
 
+    private String category;
+
     private String harvest;
 
     private String remark;

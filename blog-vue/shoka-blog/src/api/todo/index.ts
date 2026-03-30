@@ -53,8 +53,12 @@ export function getDiaryRange(startDate: string, endDate: string): AxiosPromise<
 
 // ================= 思考沉淀 =================
 
-export function getThinkingList(keyword?: string): AxiosPromise<Result<ThinkingItem[]>> {
-  return request({ url: "/user/thinking/list", method: "get", params: { keyword } });
+export function getThinkingList(keyword?: string, category?: string): AxiosPromise<Result<ThinkingItem[]>> {
+  return request({ url: "/user/thinking/list", method: "get", params: { keyword, category } });
+}
+
+export function getThinkingCategories(): AxiosPromise<Result<string[]>> {
+  return request({ url: "/user/thinking/categories", method: "get" });
 }
 
 export function addThinking(data: ThinkingReq): AxiosPromise<Result<null>> {

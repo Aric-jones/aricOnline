@@ -143,7 +143,7 @@ export const routes: RouteRecordRaw[] = [
 		path: "/todo",
 		component: () => import("@/views/Todo/index.vue"),
 		meta: {
-			title: "我的代办",
+			title: "效率工具",
 		},
 	},
 	{ path: "/:catchAll(.*)", redirect: "/404" },

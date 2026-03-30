@@ -3670,13 +3670,15 @@ CREATE TABLE IF NOT EXISTS `t_thinking` (
                                             `id`          INT          NOT NULL AUTO_INCREMENT,
                                             `user_id`     INT          NOT NULL COMMENT '用户ID',
                                             `topic`       VARCHAR(200) NOT NULL COMMENT '思考主题',
+                                            `category`    VARCHAR(50)  DEFAULT '' COMMENT '分类',
                                             `harvest`     TEXT         NOT NULL COMMENT '收获',
                                             `remark`      VARCHAR(500) DEFAULT '' COMMENT '备注',
                                             `create_time` DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                             `update_time` DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                             PRIMARY KEY (`id`),
                                             INDEX `idx_user_id` (`user_id`),
-                                            INDEX `idx_create_time` (`create_time`)
+                                            INDEX `idx_create_time` (`create_time`),
+                                            INDEX `idx_category` (`category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='思考沉淀表';
 
 

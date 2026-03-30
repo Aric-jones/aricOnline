@@ -133,7 +133,7 @@
 	/* --- 全局语义变量 --- */
 	--text-color: #b4c2e0;
 	--header-text-color: #eaf0ff;
-	--page-header-text-calor: #eaf0ff;
+	--page-header-text-calor: #34d399;
 	--typewriter-text-color: #eaf0ff;
 	--primary-color: #34d399;
 	--body-bg-shadow: #070d1c;
@@ -351,6 +351,35 @@
 	&:nth-child(2) { fill: rgba(233, 84, 107, 0.45); }
 	&:nth-child(3) { fill: rgba(56, 161, 219, 0.4); }
 	&:nth-child(4) { fill: rgba(35, 213, 171, 0.55); }
+}
+
+/* ==================== dark 主题 page-header ==================== */
+
+/* dark：页面标题使用极光主题色 */
+[theme="dark"] .page-title {
+	color: #34d399;
+	text-shadow: 0 0 24px rgba(52, 211, 153, 0.4), 0 0 64px rgba(96, 165, 250, 0.15);
+}
+
+/* dark：留言板标题（不在 .page-header 内，需单独覆盖） */
+[theme="dark"] .message-container {
+	color: #34d399;
+	text-shadow: 0 0 24px rgba(52, 211, 153, 0.4), 0 0 64px rgba(96, 165, 250, 0.15);
+}
+
+/* ==================== gradient 主题 page-header ==================== */
+
+/* gradient：页面标题渐变文字（红蓝绿）
+   .page-title 是 100%×50vh 的大容器，直接用 background 会让文字只显示中间的蓝色
+   用 background-size 把渐变压缩到文字所在的中心区域 */
+[theme="gradient"] .page-title,
+[theme="gradient"] .todo-page-title,
+[theme="gradient"] .message-title {
+	background: linear-gradient(90deg, #49b1f5, #23d5ab,#e9546b, #49b1f5,#49b1f5, #23d5ab) center 100% no-repeat;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	filter: drop-shadow(0 2px 6px rgba(233, 84, 107, 0.35));
 }
 
 /* ==================== dark 主题结构覆盖 ==================== */

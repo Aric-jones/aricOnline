@@ -76,12 +76,13 @@ const send = () => {
   max-width: calc(100vw - 2rem);
   margin: 0 auto;
   text-align: center;
-  color: #fff;
+  color: var(--page-header-text-calor, #fff);
   z-index: 5;
 }
 
 .message-title {
   animation: titleScale 1s;
+  text-shadow: inherit;
 }
 
 .message-input {

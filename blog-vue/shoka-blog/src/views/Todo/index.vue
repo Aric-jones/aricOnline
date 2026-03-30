@@ -1,7 +1,7 @@
 <template>
 	<div class="page-header">
 		<div class="page-title">
-			<h1 class="todo-page-title">我的代办</h1>
+			<h1 class="todo-page-title">效率工具</h1>
 		</div>
 		<img
 			class="page-cover"
@@ -77,7 +77,7 @@ $radius-sm: 10px;
 	font-weight: 500;
 	font-size: 2rem;
 	text-align: center;
-	color: var(--header-text-color);
+	color: var(--page-header-text-calor);
 }
 .todo-wrapper {
 	max-width: 72.5rem;

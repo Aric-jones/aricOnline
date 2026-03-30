@@ -22,6 +22,9 @@ public class ThinkingReq {
     @ApiModelProperty(value = "思考主题", required = true)
     private String topic;
 
+    @ApiModelProperty(value = "分类")
+    private String category;
+
     @NotBlank(message = "收获不能为空")
     @ApiModelProperty(value = "收获", required = true)
     private String harvest;

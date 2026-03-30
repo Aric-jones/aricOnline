@@ -26,8 +26,16 @@ public class ThinkingController {
 
     @ApiOperation(value = "查询思考列表")
     @GetMapping("/user/thinking/list")
-    public Result<List<Thinking>> listThinking(@RequestParam(required = false) String keyword) {
-        return Result.success(thinkingService.listThinking(keyword));
+    public Result<List<Thinking>> listThinking(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String category) {
+        return Result.success(thinkingService.listThinking(keyword, category));
+    }
+
+    @ApiOperation(value = "查询分类列表")
+    @GetMapping("/user/thinking/categories")
+    public Result<List<String>> listCategories() {
+        return Result.success(thinkingService.listCategories());
     }
 
     @ApiOperation(value = "新增思考")

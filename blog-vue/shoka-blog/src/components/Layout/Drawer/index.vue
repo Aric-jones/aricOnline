@@ -76,7 +76,7 @@
 				</li>
 				<li class="item" :class="{ active: route.path === '/todo' }">
 					<router-link to="/todo">
-						<svg-icon icon-class="calendar"></svg-icon> 我的代办
+						<svg-icon icon-class="calendar"></svg-icon> 效率工具
 					</router-link>
 				</li>
 				<li class="item">

@@ -58,6 +58,7 @@ export interface ThinkingItem {
 	id: number;
 	userId: number;
 	topic: string;
+	category: string;
 	harvest: string;
 	remark: string;
 	createTime: string;
@@ -67,6 +68,7 @@ export interface ThinkingItem {
 export interface ThinkingReq {
 	id?: number;
 	topic: string;
+	category?: string;
 	harvest: string;
 	remark?: string;
 }
