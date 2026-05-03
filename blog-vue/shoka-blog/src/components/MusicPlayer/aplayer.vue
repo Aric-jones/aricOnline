@@ -3,14 +3,17 @@
 </template>
 
 <script setup lang="ts">
-import request from "@/utils/request";
 import type { PropType } from "@vue/runtime-core";
+import axios from "axios";
 import APlayer from "aplayer";
 import "aplayer/dist/APlayer.min.css";
-import { AxiosPromise } from "axios";
 
 const playerRef = ref();
 let instance: any;
+const metingApiBaseUrls = [
+	"https://meting.qjqq.cn/",
+	"https://api.i-meto.com/meting/api",
+];
 
 // APlayer歌曲信息
 class Audio {
@@ -126,14 +129,36 @@ const props = defineProps({
 });
 
 // 初始化
+const getMetingApiUrl = (apiBaseUrl: string) => {
+	const url = new URL(apiBaseUrl);
+	url.searchParams.set("server", props.server);
+	url.searchParams.set("type", props.type);
+	url.searchParams.set("id", props.id);
+	url.searchParams.set("r", Math.random().toString());
+	return url.toString();
+};
+
+const getAudioList = async () => {
+	let lastError: unknown;
+	for (const apiBaseUrl of metingApiBaseUrls) {
+		try {
+			const { data } = await axios.get<Audio[]>(getMetingApiUrl(apiBaseUrl), {
+				timeout: 20000,
+			});
+			if (Array.isArray(data) && data.length > 0) {
+				return data;
+			}
+		} catch (error) {
+			lastError = error;
+		}
+	}
+	throw lastError;
+};
+
 onMounted(() => {
-	nextTick(() => {
-		request<AxiosPromise<Audio[]>>({
-			url: `https://api.i-meto.com/meting/api?server=${props.server}&type=${
-				props.type
-			}&id=${props.id}&r=${Math.random()}`,
-			method: "get",
-		}).then(({ data }) => {
+	nextTick(async () => {
+		try {
+			const audio = await getAudioList();
 			instance = new APlayer({
 				container: playerRef.value,
 				fixed: props.fixed,
@@ -149,14 +174,17 @@ onMounted(() => {
 				listFolded: props.listFolded,
 				listMaxHeight: props.listMaxHeight,
 				storageName: props.storageName,
-				audio: data,
+				audio,
 			});
-		});
+		} catch (error) {
+			console.error("Music player load failed", error);
+			window.$message?.error("Music player load failed, please retry later");
+		}
 	});
 });
 // 销毁
 onBeforeUnmount(() => {
-	instance.destroy();
+	instance?.destroy?.();
 });
 </script>
 

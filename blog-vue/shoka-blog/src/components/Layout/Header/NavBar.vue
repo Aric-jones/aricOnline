@@ -59,11 +59,11 @@
 						<svg-icon icon-class="edit"></svg-icon> 发布文章
 					</a>
 				</li>
-				<li class="subitem" :class="{ active: route.path === '/todo' }">
+				<!-- <li class="subitem" :class="{ active: route.path === '/todo' }">
 					<router-link to="/todo" class="link">
 						<svg-icon icon-class="calendar"></svg-icon> 效率工具
 					</router-link>
-				</li>
+				</li> -->
 				<li class="subitem">
 					<a class="link" @click="logout"
 						><svg-icon icon-class="logout"></svg-icon> 退出
@@ -210,27 +210,27 @@ const menuList = [
 			},
 		],
 	},
-	{
-		name: "娱乐",
-		icon: "fun",
-		children: [
-			{
-				name: "说说",
-				icon: "talk",
-				path: "/talk",
-			},
-			{
-				name: "相册",
-				icon: "album",
-				path: "/album",
-			},
-			{
-				name: "图床",
-				icon: "upload",
-				path: "/picture",
-			},
-		],
-	},
+	// {
+	// 	name: "娱乐",
+	// 	icon: "fun",
+	// 	children: [
+	// 		{
+	// 			name: "说说",
+	// 			icon: "talk",
+	// 			path: "/talk",
+	// 		},
+	// 		{
+	// 			name: "相册",
+	// 			icon: "album",
+	// 			path: "/album",
+	// 		},
+	// 		{
+	// 			name: "图床",
+	// 			icon: "upload",
+	// 			path: "/picture",
+	// 		},
+	// 	],
+	// },
 	{
 		name: "友链",
 		icon: "friend",
