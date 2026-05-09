@@ -119,7 +119,7 @@ public class LoginService {
         MailDTO mailDTO = MailDTO.builder()
                 .toEmail(username)
                 .subject(CommonConstant.CAPTCHA)
-                .content("您的验证码为 " + code + " 有效期为" + RedisConstant.CODE_EXPIRE_TIME + "分钟")
+                .content("您的验证码为：" + code + " 有效期为" + RedisConstant.CODE_EXPIRE_TIME + "分钟")
                 .build();
         // 验证码存入消息队列
 //        rabbitTemplate.convertAndSend(MqConstant.EMAIL_EXCHANGE, MqConstant.EMAIL_SIMPLE_KEY, mailDTO);

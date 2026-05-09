@@ -7,7 +7,6 @@ import { RouteRecordRaw } from "vue-router";
 import { PermissionState } from "../interface";
 
 const modules = import.meta.glob("../../views/**/**.vue");
-const hiddenAdminMenuPaths = new Set(["/log", "/monitor"]);
 
 export const ParentView = () => import("../../components/ParentView/index.vue");
 export const Layout = () => import("../../layouts/index.vue");
@@ -16,12 +15,6 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
   const res: RouteRecordRaw[] = [];
   routes.forEach((route) => {
     const tmp = { ...route } as any;
-    if (hiddenAdminMenuPaths.has(tmp.path)) {
-      tmp.meta = {
-        ...(tmp.meta || {}),
-        hidden: true,
-      };
-    }
     if (tmp.component === "Layout") {
       tmp.component = Layout;
     } else if (tmp.component === "ParentView") {
