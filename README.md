@@ -1,131 +1,137 @@
 # Aric's Blog
 
-基于 **Spring Boot 2.6** 与 **Vue 3** 的前后端分离博客系统，前台参考 Hexo Shoka 主题风格，后台基于若依改造。支持 **Docker Compose 一键部署**，内置多主题切换、效率工具、AI 助手等特色功能。
+## 文档入口
+n- [项目文档中心](docs/README.md)
+- [项目功能总览](docs/project-overview.md)
+- [模块功能说明](docs/modules.md)
+- [开发流程规范](docs/standards/development-process.md)
 
-## 项目结构
+鍩轰簬 **Spring Boot 2.6** 涓?**Vue 3** 鐨勫墠鍚庣鍒嗙鍗氬绯荤粺锛屽墠鍙板弬鑰?Hexo Shoka 涓婚椋庢牸锛屽悗鍙板熀浜庤嫢渚濇敼閫犮€傛敮鎸?**Docker Compose 涓€閿儴缃?*锛屽唴缃涓婚鍒囨崲銆佹晥鐜囧伐鍏枫€丄I 鍔╂墜绛夌壒鑹插姛鑳姐€?
+
+## 椤圭洰缁撴瀯
 
 ```
 blog/
-├── blog-springboot/          # 后端 Spring Boot 项目
-│   ├── src/main/java/        # Java 源码
-│   ├── src/main/resources/   # 配置文件
-│   └── pom.xml               # Maven 依赖
-├── blog-vue/
-│   ├── shoka-blog/           # 前台博客（Vue 3 + Naive UI + Vite 5）
-│   └── shoka-admin/          # 后台管理（Vue 3 + Element Plus + Vite）
-├── deploy/                   # Docker 部署相关
-│   ├── docker-compose.yml    # 容器编排（MySQL + Redis + 后端 + Nginx）
-│   ├── Dockerfile            # 后端多阶段构建
-│   ├── Dockerfile.nginx      # 前端多阶段构建
-│   ├── nginx.conf            # Nginx 配置（反向代理 + SSL）
-│   ├── deploy.sh             # 一键部署脚本（含 Docker 安装）
-│   ├── update.sh             # 热更新脚本（独立更新前后端）
-│   ├── blog.sql              # 数据库初始化脚本
-│   └── .env.example          # 环境变量模板
-└── README.md
+鈹溾攢鈹€ blog-springboot/          # 鍚庣 Spring Boot 椤圭洰
+鈹?  鈹溾攢鈹€ src/main/java/        # Java 婧愮爜
+鈹?  鈹溾攢鈹€ src/main/resources/   # 閰嶇疆鏂囦欢
+鈹?  鈹斺攢鈹€ pom.xml               # Maven 渚濊禆
+鈹溾攢鈹€ blog-vue/
+鈹?  鈹溾攢鈹€ shoka-blog/           # 鍓嶅彴鍗氬锛圴ue 3 + Naive UI + Vite 5锛?
+鈹?  鈹斺攢鈹€ shoka-admin/          # 鍚庡彴绠＄悊锛圴ue 3 + Element Plus + Vite锛?
+鈹溾攢鈹€ deploy/                   # Docker 閮ㄧ讲鐩稿叧
+鈹?  鈹溾攢鈹€ docker-compose.yml    # 瀹瑰櫒缂栨帓锛圡ySQL + Redis + 鍚庣 + Nginx锛?
+鈹?  鈹溾攢鈹€ Dockerfile            # 鍚庣澶氶樁娈垫瀯寤?
+鈹?  鈹溾攢鈹€ Dockerfile.nginx      # 鍓嶇澶氶樁娈垫瀯寤?
+鈹?  鈹溾攢鈹€ nginx.conf            # Nginx 閰嶇疆锛堝弽鍚戜唬鐞?+ SSL锛?
+鈹?  鈹溾攢鈹€ deploy.sh             # 涓€閿儴缃茶剼鏈紙鍚?Docker 瀹夎锛?
+鈹?  鈹溾攢鈹€ update.sh             # 鐑洿鏂拌剼鏈紙鐙珛鏇存柊鍓嶅悗绔級
+鈹?  鈹溾攢鈹€ blog.sql              # 鏁版嵁搴撳垵濮嬪寲鑴氭湰
+鈹?  鈹斺攢鈹€ .env.example          # 鐜鍙橀噺妯℃澘
+鈹斺攢鈹€ README.md
 ```
 
-## 技术栈
+## 鎶€鏈爤
 
-| 层级 | 技术 | 版本 |
+| 灞傜骇 | 鎶€鏈?| 鐗堟湰 |
 |------|------|------|
-| **前台** | Vue 3、Pinia、Vue Router 4、TypeScript、Vite 5、Naive UI、ECharts、Swiper | Vue 3.4、Vite 5.2 |
-| **后台管理** | Vue 3、Element Plus、Vite、TypeScript、Pinia | Vue 3.2、Element Plus 2.3 |
-| **后端** | Spring Boot、MyBatis-Plus、MySQL、Redis、Sa-Token、Knife4j (Swagger) | Spring Boot 2.6.14、Java 11 |
-| **存储** | 阿里云 OSS / 腾讯 COS / 七牛云 / 本地存储 | 可选 |
-| **搜索** | MySQL LIKE / Elasticsearch | ES 7.x 可选 |
-| **部署** | Docker Compose、Nginx、多阶段构建 | — |
-| **AI** | DeepSeek / 兼容 OpenAI API 的大模型 | 可选 |
+| **鍓嶅彴** | Vue 3銆丳inia銆乂ue Router 4銆乀ypeScript銆乂ite 5銆丯aive UI銆丒Charts銆丼wiper | Vue 3.4銆乂ite 5.2 |
+| **鍚庡彴绠＄悊** | Vue 3銆丒lement Plus銆乂ite銆乀ypeScript銆丳inia | Vue 3.2銆丒lement Plus 2.3 |
+| **鍚庣** | Spring Boot銆丮yBatis-Plus銆丮ySQL銆丷edis銆丼a-Token銆並nife4j (Swagger) | Spring Boot 2.6.14銆丣ava 11 |
+| **瀛樺偍** | 闃块噷浜?OSS / 鑵捐 COS / 涓冪墰浜?/ 鏈湴瀛樺偍 | 鍙€?|
+| **鎼滅储** | MySQL LIKE / Elasticsearch | ES 7.x 鍙€?|
+| **閮ㄧ讲** | Docker Compose銆丯ginx銆佸闃舵鏋勫缓 | 鈥?|
+| **AI** | DeepSeek / 鍏煎 OpenAI API 鐨勫ぇ妯″瀷 | 鍙€?|
 
-## 功能介绍
+## 鍔熻兘浠嬬粛
 
-### 博客前台
+### 鍗氬鍓嶅彴
 
-| 模块 | 功能说明 |
+| 妯″潡 | 鍔熻兘璇存槑 |
 |------|---------|
-| **首页** | 按分类分组展示文章（每类最多 6 篇），打字机效果，轮播图 |
-| **文章** | Markdown 渲染、代码高亮、目录导航、上下篇、阅读量统计 |
-| **归档** | 时间线展示全部文章 |
-| **分类 / 标签** | 可视化图表展示，点击跳转对应文章列表 |
-| **搜索** | 关键词搜索文章（支持 MySQL / Elasticsearch），搜索历史记录 |
-| **说说** | 朋友圈式动态，支持图片、点赞、评论 |
-| **相册 / 图床** | 相册浏览，图片上传管理 |
-| **友链** | 友情链接展示与申请 |
-| **留言板** | 弹幕式留言展示 |
-| **评论** | 多级评论、表情包、@提及 |
-| **用户** | 注册登录、第三方登录（QQ / Gitee / GitHub）、个人中心 |
-| **主题切换** | 三套主题：白天（Light）、黑夜（Dark / 极光风格）、渐变（Gradient），各页面标题跟随主题变色 |
-| **音乐播放器** | 全局 APlayer，支持歌单 |
-| **关于** | 站长介绍页 |
+| **棣栭〉** | 鎸夊垎绫诲垎缁勫睍绀烘枃绔狅紙姣忕被鏈€澶?6 绡囷級锛屾墦瀛楁満鏁堟灉锛岃疆鎾浘 |
+| **鏂囩珷** | Markdown 娓叉煋銆佷唬鐮侀珮浜€佺洰褰曞鑸€佷笂涓嬬瘒銆侀槄璇婚噺缁熻 |
+| **褰掓。** | 鏃堕棿绾垮睍绀哄叏閮ㄦ枃绔?|
+| **鍒嗙被 / 鏍囩** | 鍙鍖栧浘琛ㄥ睍绀猴紝鐐瑰嚮璺宠浆瀵瑰簲鏂囩珷鍒楄〃 |
+| **鎼滅储** | 鍏抽敭璇嶆悳绱㈡枃绔狅紙鏀寔 MySQL / Elasticsearch锛夛紝鎼滅储鍘嗗彶璁板綍 |
+| **璇磋** | 鏈嬪弸鍦堝紡鍔ㄦ€侊紝鏀寔鍥剧墖銆佺偣璧炪€佽瘎璁?|
+| **鐩稿唽 / 鍥惧簥** | 鐩稿唽娴忚锛屽浘鐗囦笂浼犵鐞?|
+| **鍙嬮摼** | 鍙嬫儏閾炬帴灞曠ず涓庣敵璇?|
+| **鐣欒█鏉?* | 寮瑰箷寮忕暀瑷€灞曠ず |
+| **璇勮** | 澶氱骇璇勮銆佽〃鎯呭寘銆丂鎻愬強 |
+| **鐢ㄦ埛** | 娉ㄥ唽鐧诲綍銆佺涓夋柟鐧诲綍锛圦Q / Gitee / GitHub锛夈€佷釜浜轰腑蹇?|
+| **涓婚鍒囨崲** | 涓夊涓婚锛氱櫧澶╋紙Light锛夈€侀粦澶滐紙Dark / 鏋佸厜椋庢牸锛夈€佹笎鍙橈紙Gradient锛夛紝鍚勯〉闈㈡爣棰樿窡闅忎富棰樺彉鑹?|
+| **闊充箰鎾斁鍣?* | 鍏ㄥ眬 APlayer锛屾敮鎸佹瓕鍗?|
+| **鍏充簬** | 绔欓暱浠嬬粛椤?|
 
-### 效率工具（登录后可用）
+### 鏁堢巼宸ュ叿锛堢櫥褰曞悗鍙敤锛?
 
-| 模块 | 功能说明 |
+| 妯″潡 | 鍔熻兘璇存槑 |
 |------|---------|
-| **代办列表** | 任务增删改查、优先级、分类、状态切换、分页 |
-| **任务池** | 未分配任务管理，拖拽分配到周计划 |
-| **日历视图** | 日历展示待办，按日期查看和管理 |
-| **甘特图** | 任务时间跨度可视化 |
-| **日记** | 每日日记记录，支持心情标签 |
-| **思考沉淀** | 思考笔记管理，**支持分类筛选**，按分类快速定位 |
-| **时间管理** | 时间块记录，常用事件快速填充，分类统计图表 |
-| **习惯追踪** | 习惯打卡，可视化追踪 |
-| **AI 助手** | 基于大模型的智能总结、建议、对话 |
-| **主题色切换** | 紫 / 蓝 / 绿三套主题色，一键切换 |
+| **浠ｅ姙鍒楄〃** | 浠诲姟澧炲垹鏀规煡銆佷紭鍏堢骇銆佸垎绫汇€佺姸鎬佸垏鎹€佸垎椤?|
+| **浠诲姟姹?* | 鏈垎閰嶄换鍔＄鐞嗭紝鎷栨嫿鍒嗛厤鍒板懆璁″垝 |
+| **鏃ュ巻瑙嗗浘** | 鏃ュ巻灞曠ず寰呭姙锛屾寜鏃ユ湡鏌ョ湅鍜岀鐞?|
+| **鐢樼壒鍥?* | 浠诲姟鏃堕棿璺ㄥ害鍙鍖?|
+| **鏃ヨ** | 姣忔棩鏃ヨ璁板綍锛屾敮鎸佸績鎯呮爣绛?|
+| **鎬濊€冩矇娣€** | 鎬濊€冪瑪璁扮鐞嗭紝**鏀寔鍒嗙被绛涢€?*锛屾寜鍒嗙被蹇€熷畾浣?|
+| **鏃堕棿绠＄悊** | 鏃堕棿鍧楄褰曪紝甯哥敤浜嬩欢蹇€熷～鍏咃紝鍒嗙被缁熻鍥捐〃 |
+| **涔犳儻杩借釜** | 涔犳儻鎵撳崱锛屽彲瑙嗗寲杩借釜 |
+| **AI 鍔╂墜** | 鍩轰簬澶фā鍨嬬殑鏅鸿兘鎬荤粨銆佸缓璁€佸璇?|
+| **涓婚鑹插垏鎹?* | 绱?/ 钃?/ 缁夸笁濂椾富棰樿壊锛屼竴閿垏鎹?|
 
-### 后台管理
+### 鍚庡彴绠＄悊
 
-| 模块 | 功能说明 |
+| 妯″潡 | 鍔熻兘璇存槑 |
 |------|---------|
-| **文章管理** | 新增 / 编辑 / 删除 / 置顶 / 推荐，Markdown 编辑器 |
-| **分类 / 标签** | 增删改查 |
-| **评论 / 留言** | 审核、删除、回复 |
-| **用户管理** | 用户列表、角色、权限分配 |
-| **友链管理** | 审核友链申请 |
-| **说说管理** | 发布、编辑、删除 |
-| **相册管理** | 相册与照片管理 |
-| **站点配置** | 站点名称、公告、社交链接、SEO 等 |
-| **日志** | 操作日志、登录日志、定时任务日志 |
-| **定时任务** | Quartz 调度，支持 CRON 表达式 |
+| **鏂囩珷绠＄悊** | 鏂板 / 缂栬緫 / 鍒犻櫎 / 缃《 / 鎺ㄨ崘锛孧arkdown 缂栬緫鍣?|
+| **鍒嗙被 / 鏍囩** | 澧炲垹鏀规煡 |
+| **璇勮 / 鐣欒█** | 瀹℃牳銆佸垹闄ゃ€佸洖澶?|
+| **鐢ㄦ埛绠＄悊** | 鐢ㄦ埛鍒楄〃銆佽鑹层€佹潈闄愬垎閰?|
+| **鍙嬮摼绠＄悊** | 瀹℃牳鍙嬮摼鐢宠 |
+| **璇磋绠＄悊** | 鍙戝竷銆佺紪杈戙€佸垹闄?|
+| **鐩稿唽绠＄悊** | 鐩稿唽涓庣収鐗囩鐞?|
+| **绔欑偣閰嶇疆** | 绔欑偣鍚嶇О銆佸叕鍛娿€佺ぞ浜ら摼鎺ャ€丼EO 绛?|
+| **鏃ュ織** | 鎿嶄綔鏃ュ織銆佺櫥褰曟棩蹇椼€佸畾鏃朵换鍔℃棩蹇?|
+| **瀹氭椂浠诲姟** | Quartz 璋冨害锛屾敮鎸?CRON 琛ㄨ揪寮?|
 
-## 环境要求
+## 鐜瑕佹眰
 
-| 软件 | 版本要求 | 说明 |
+| 杞欢 | 鐗堟湰瑕佹眰 | 璇存槑 |
 |------|---------|------|
-| JDK | 11+ | 后端编译运行 |
-| Node.js | 16+（推荐 18） | 前端构建 |
-| MySQL | 8.0+ | 数据库 |
-| Redis | 6+ | 缓存 / 会话 |
-| Docker | 20.10+ | 部署（可选） |
-| Elasticsearch | 7.x | 搜索（可选，默认用 MySQL） |
+| JDK | 11+ | 鍚庣缂栬瘧杩愯 |
+| Node.js | 16+锛堟帹鑽?18锛?| 鍓嶇鏋勫缓 |
+| MySQL | 8.0+ | 鏁版嵁搴?|
+| Redis | 6+ | 缂撳瓨 / 浼氳瘽 |
+| Docker | 20.10+ | 閮ㄧ讲锛堝彲閫夛級 |
+| Elasticsearch | 7.x | 鎼滅储锛堝彲閫夛紝榛樿鐢?MySQL锛?|
 
-## 本地开发
+## 鏈湴寮€鍙?
 
-### 1. 数据库初始化
+### 1. 鏁版嵁搴撳垵濮嬪寲
 
 ```bash
-# 创建数据库并导入初始数据
+# 鍒涘缓鏁版嵁搴撳苟瀵煎叆鍒濆鏁版嵁
 mysql -u root -p -e "CREATE DATABASE blog CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
 mysql -u root -p blog < deploy/blog.sql
 ```
 
-### 2. 启动后端
+### 2. 鍚姩鍚庣
 
 ```bash
 cd blog-springboot
-# 方式一：使用 .env 文件（推荐，项目已配置读取 .env）
+# 鏂瑰紡涓€锛氫娇鐢?.env 鏂囦欢锛堟帹鑽愶紝椤圭洰宸查厤缃鍙?.env锛?
 cp .env.example .env
-# 编辑 .env 填写 MySQL、Redis 密码等
-# 然后启动
+# 缂栬緫 .env 濉啓 MySQL銆丷edis 瀵嗙爜绛?
+# 鐒跺悗鍚姩
 mvn spring-boot:run
 
-# 方式二：直接修改 application-dev.yml
+# 鏂瑰紡浜岋細鐩存帴淇敼 application-dev.yml
 mvn spring-boot:run
 ```
 
-启动后访问 API 文档：`http://localhost:9000/doc.html`
+鍚姩鍚庤闂?API 鏂囨。锛歚http://localhost:9000/doc.html`
 
-### 3. 启动前台
+### 3. 鍚姩鍓嶅彴
 
 ```bash
 cd blog-vue/shoka-blog
@@ -133,7 +139,7 @@ npm install
 npm run dev
 ```
 
-### 4. 启动后台管理
+### 4. 鍚姩鍚庡彴绠＄悊
 
 ```bash
 cd blog-vue/shoka-admin
@@ -141,42 +147,42 @@ npm install
 npm run dev
 ```
 
-### 5. 注意事项
+### 5. 娉ㄦ剰浜嬮」
 
-- 本地开发时，前台默认代理 API 到 `localhost:9000`，无需额外配置
-- 第三方登录（QQ / Gitee / GitHub）需在后台系统配置中填写 Key/Secret
-- 文件上传默认为本地存储，如需 OSS 请在 `.env` 或后台配置中设置
+- 鏈湴寮€鍙戞椂锛屽墠鍙伴粯璁や唬鐞?API 鍒?`localhost:9000`锛屾棤闇€棰濆閰嶇疆
+- 绗笁鏂圭櫥褰曪紙QQ / Gitee / GitHub锛夐渶鍦ㄥ悗鍙扮郴缁熼厤缃腑濉啓 Key/Secret
+- 鏂囦欢涓婁紶榛樿涓烘湰鍦板瓨鍌紝濡傞渶 OSS 璇峰湪 `.env` 鎴栧悗鍙伴厤缃腑璁剧疆
 
-## Docker 一键部署
+## Docker 涓€閿儴缃?
 
-### 架构说明
+### 鏋舵瀯璇存槑
 
 ```
-用户浏览器 → Nginx(:80/:443)
-               ├── /       → 博客前台（静态文件）
-               ├── /admin  → 后台管理（静态文件）
-               └── /api    → Spring Boot(:9000) 反向代理
-                                ├── MySQL(:3306)
-                                └── Redis(:6379)
+鐢ㄦ埛娴忚鍣?鈫?Nginx(:80/:443)
+               鈹溾攢鈹€ /       鈫?鍗氬鍓嶅彴锛堥潤鎬佹枃浠讹級
+               鈹溾攢鈹€ /admin  鈫?鍚庡彴绠＄悊锛堥潤鎬佹枃浠讹級
+               鈹斺攢鈹€ /api    鈫?Spring Boot(:9000) 鍙嶅悜浠ｇ悊
+                                鈹溾攢鈹€ MySQL(:3306)
+                                鈹斺攢鈹€ Redis(:6379)
 ```
 
-四个容器：`blog-mysql`、`blog-redis`、`blog-server`（后端）、`blog-nginx`（前端 + 反向代理）
+鍥涗釜瀹瑰櫒锛歚blog-mysql`銆乣blog-redis`銆乣blog-server`锛堝悗绔級銆乣blog-nginx`锛堝墠绔?+ 鍙嶅悜浠ｇ悊锛?
 
-### 部署步骤
+### 閮ㄧ讲姝ラ
 
-#### 1. 上传项目到服务器
+#### 1. 涓婁紶椤圭洰鍒版湇鍔″櫒
 
 ```bash
-# Git 克隆
-cd /opt && git clone <仓库地址> aricOnline
+# Git 鍏嬮殕
+cd /opt && git clone <浠撳簱鍦板潃> aricOnline
 
-# 或打包上传
+# 鎴栨墦鍖呬笂浼?
 tar --exclude='node_modules' --exclude='target' -czf blog.tar.gz blog/
-scp blog.tar.gz root@你的服务器:/opt/
-ssh root@你的服务器 "cd /opt && tar xzf blog.tar.gz && mv blog aricOnline"
+scp blog.tar.gz root@浣犵殑鏈嶅姟鍣?/opt/
+ssh root@浣犵殑鏈嶅姟鍣?"cd /opt && tar xzf blog.tar.gz && mv blog aricOnline"
 ```
 
-#### 2. 配置环境变量
+#### 2. 閰嶇疆鐜鍙橀噺
 
 ```bash
 cd /opt/aricOnline/deploy
@@ -184,100 +190,100 @@ cp .env.example .env
 vim .env
 ```
 
-**必须配置的项：**
+**蹇呴』閰嶇疆鐨勯」锛?*
 
 ```env
-MYSQL_PASSWORD=你的MySQL密码    # 必改
-REDIS_PASSWORD=你的Redis密码    # 必改
-BLOG_URL=https://你的域名/      # 必改
+MYSQL_PASSWORD=浣犵殑MySQL瀵嗙爜    # 蹇呮敼
+REDIS_PASSWORD=浣犵殑Redis瀵嗙爜    # 蹇呮敼
+BLOG_URL=https://浣犵殑鍩熷悕/      # 蹇呮敼
 UPLOAD_STRATEGY=local           # local / oss / cos
 ```
 
-#### 3. 放置 SSL 证书（HTTPS）
+#### 3. 鏀剧疆 SSL 璇佷功锛圚TTPS锛?
 
 ```bash
-cp /你的证书路径/域名.pem  /opt/aricOnline/deploy/
-cp /你的证书路径/域名.key  /opt/aricOnline/deploy/
+cp /浣犵殑璇佷功璺緞/鍩熷悕.pem  /opt/aricOnline/deploy/
+cp /浣犵殑璇佷功璺緞/鍩熷悕.key  /opt/aricOnline/deploy/
 ```
 
-> 如不需要 HTTPS，修改 `nginx.conf` 去掉 SSL 相关配置即可。
+> 濡備笉闇€瑕?HTTPS锛屼慨鏀?`nginx.conf` 鍘绘帀 SSL 鐩稿叧閰嶇疆鍗冲彲銆?
 
-#### 4. 一键部署
+#### 4. 涓€閿儴缃?
 
 ```bash
 cd /opt/aricOnline/deploy
 
-# 方式一：使用部署脚本（首次推荐，自动安装 Docker）
+# 鏂瑰紡涓€锛氫娇鐢ㄩ儴缃茶剼鏈紙棣栨鎺ㄨ崘锛岃嚜鍔ㄥ畨瑁?Docker锛?
 chmod +x deploy.sh
 ./deploy.sh
 
-# 方式二：已有 Docker，直接启动
+# 鏂瑰紡浜岋細宸叉湁 Docker锛岀洿鎺ュ惎鍔?
 docker compose up -d --build
 ```
 
-首次构建约 **5-10 分钟**（下载依赖 + 编译），后续有缓存会快很多。
+棣栨鏋勫缓绾?**5-10 鍒嗛挓**锛堜笅杞戒緷璧?+ 缂栬瘧锛夛紝鍚庣画鏈夌紦瀛樹細蹇緢澶氥€?
 
-#### 5. 验证
+#### 5. 楠岃瘉
 
 ```bash
-docker compose ps              # 4 个容器都应为 Up
-docker compose logs -f         # 查看全部日志
+docker compose ps              # 4 涓鍣ㄩ兘搴斾负 Up
+docker compose logs -f         # 鏌ョ湅鍏ㄩ儴鏃ュ織
 ```
 
-访问地址：
-- 博客前台：`https://你的域名/`
-- 后台管理：`https://你的域名/admin`
-- API 文档：`https://你的域名/api/doc.html`
+璁块棶鍦板潃锛?
+- 鍗氬鍓嶅彴锛歚https://浣犵殑鍩熷悕/`
+- 鍚庡彴绠＄悊锛歚https://浣犵殑鍩熷悕/admin`
+- API 鏂囨。锛歚https://浣犵殑鍩熷悕/api/doc.html`
 
-## 日常更新
+## 鏃ュ父鏇存柊
 
-初始化部署后，**日常更新代码不需要重启数据库**，使用 `--no-deps` 独立更新：
+鍒濆鍖栭儴缃插悗锛?*鏃ュ父鏇存柊浠ｇ爜涓嶉渶瑕侀噸鍚暟鎹簱**锛屼娇鐢?`--no-deps` 鐙珛鏇存柊锛?
 
 ```bash
 cd /opt/aricOnline/deploy
 
-# 仅更新后端（MySQL/Redis 不受影响，停机约 30s）
+# 浠呮洿鏂板悗绔紙MySQL/Redis 涓嶅彈褰卞搷锛屽仠鏈虹害 30s锛?
 git pull && docker compose up -d --build --no-deps blog-server
 
-# 仅更新前端（后端/数据库不受影响，停机约 10s）
+# 浠呮洿鏂板墠绔紙鍚庣/鏁版嵁搴撲笉鍙楀奖鍝嶏紝鍋滄満绾?10s锛?
 git pull && docker compose up -d --build --no-deps nginx
 
-# 前后端一起更新（数据库不受影响）
+# 鍓嶅悗绔竴璧锋洿鏂帮紙鏁版嵁搴撲笉鍙楀奖鍝嶏級
 git pull && docker compose up -d --build --no-deps blog-server nginx
 ```
 
-也可以使用交互式热更新脚本：
+涔熷彲浠ヤ娇鐢ㄤ氦浜掑紡鐑洿鏂拌剼鏈細
 
 ```bash
 chmod +x update.sh
-./update.sh          # 交互式菜单
-./update.sh backend  # 仅更新后端
-./update.sh frontend # 仅更新前端
-./update.sh all      # 前后端一起
+./update.sh          # 浜や簰寮忚彍鍗?
+./update.sh backend  # 浠呮洿鏂板悗绔?
+./update.sh frontend # 浠呮洿鏂板墠绔?
+./update.sh all      # 鍓嶅悗绔竴璧?
 ```
 
-## 常用运维命令
+## 甯哥敤杩愮淮鍛戒护
 
 ```bash
-# 状态查看
-docker compose ps                    # 容器状态
-docker compose logs -f blog-server   # 后端日志
-docker compose logs -f nginx         # Nginx 日志
+# 鐘舵€佹煡鐪?
+docker compose ps                    # 瀹瑰櫒鐘舵€?
+docker compose logs -f blog-server   # 鍚庣鏃ュ織
+docker compose logs -f nginx         # Nginx 鏃ュ織
 
-# 启停
-docker compose restart blog-server   # 重启后端（改了 .env 后用）
-docker compose restart nginx         # 重启 Nginx
-docker compose down                  # 停止全部（数据卷保留）
+# 鍚仠
+docker compose restart blog-server   # 閲嶅惎鍚庣锛堟敼浜?.env 鍚庣敤锛?
+docker compose restart nginx         # 閲嶅惎 Nginx
+docker compose down                  # 鍋滄鍏ㄩ儴锛堟暟鎹嵎淇濈暀锛?
 
-# 进入容器
-docker exec -it blog-mysql mysql -uroot -p   # 进入 MySQL
-docker exec -it blog-redis redis-cli          # 进入 Redis
-docker exec -it blog-server /bin/bash         # 进入后端
+# 杩涘叆瀹瑰櫒
+docker exec -it blog-mysql mysql -uroot -p   # 杩涘叆 MySQL
+docker exec -it blog-redis redis-cli          # 杩涘叆 Redis
+docker exec -it blog-server /bin/bash         # 杩涘叆鍚庣
 
-# 清理
-docker image prune -f                # 清理旧镜像释放磁盘
+# 娓呯悊
+docker image prune -f                # 娓呯悊鏃ч暅鍍忛噴鏀剧鐩?
 ```
 
 ## License
 
-见项目根目录 `LICENSE` 文件。
+瑙侀」鐩牴鐩綍 `LICENSE` 鏂囦欢銆?
