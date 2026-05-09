@@ -100,11 +100,14 @@
 						@click="handleHistoryClick(item)"
 					>
 						<span class="history-text">{{ item }}</span>
-						<svg-icon
-							icon-class="close"
-							class="delete-icon"
+						<button
+							type="button"
+							class="delete-btn"
 							@click.stop="deleteHistory(index)"
-						></svg-icon>
+							aria-label="删除历史记录"
+						>
+							<svg-icon icon-class="close" class="delete-icon"></svg-icon>
+						</button>
 					</li>
 					<li class="subitem clear-history" @click="clearHistory">
 						<span>清空历史</span>
@@ -371,10 +374,22 @@ const logout = () => {
 	left: 0;
 	top: 115%;
 	border-radius: 8px;
+	text-align: left;
+
+	.subitem {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 0.35rem;
+		padding: 0.3rem 0.7rem 0.3rem 0.9rem;
+	}
 }
 
 .history-text {
 	flex: 1;
+	min-width: 0;
+	display: block;
+	text-align: left;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -382,17 +397,41 @@ const logout = () => {
 
 .delete-icon {
 	font-size: 0.8rem;
-	margin-left: 5px;
-	float: right;
-	margin-top: 5px;
+	flex-shrink: 0;
+	color: inherit;
 
 	&:hover {
 		color: red;
 	}
 }
 
+.delete-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 1.6rem;
+	width: 1.6rem;
+	height: 1.6rem;
+	margin: 0 0.25rem 0 0.15rem;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	border-radius: 50%;
+
+	&:hover {
+		background: rgba(0, 0, 0, 0.06);
+	}
+}
+
 .clear-history {
-	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	padding: 0.3rem 0.7rem 0.3rem 0.9rem;
+	text-align: left;
 	font-size: 0.8rem;
 	color: #999;
 	cursor: pointer;
