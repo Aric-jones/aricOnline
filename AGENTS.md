@@ -1,10 +1,10 @@
-# AGENT.md
+# AGENTS.md
 
 本仓库采用文档驱动开发。
 
 ## 优先级
 
-1. `AGENT.md`
+1. `AGENTS.md`
 2. `docs/README.md`
 3. `docs/project-overview.md`
 4. `docs/modules.md`
@@ -70,3 +70,11 @@
 - 不要重写无关文件。
 - 保留当前未完成的工作，除非请求明确要求替换。
 - 如果请求有歧义，先通过仓库内容确认，再把采用的假设写清楚。
+
+## 交付要求
+
+- 每次任务完成后，除了正常总结外，都要额外给出一条中文的 Git 提交文案。
+- 提交文案采用 Conventional Commits 风格：`type(scope): 中文摘要`。
+- 类型优先使用：`init`、`feat`、`fix`、`docs`、`refactor`、`perf`、`test`、`chore`、`build`、`ci`、`revert`。
+- 摘要要简洁、明确、可直接用于提交，不写空话。
+- 如果本次变更包含多个方面，优先给出一条主提交文案，必要时再补一条备选文案。

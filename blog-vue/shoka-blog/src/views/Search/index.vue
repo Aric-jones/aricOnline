@@ -334,7 +334,7 @@ onMounted(() => {
 		flex-direction: row-reverse;
 		.article-cover {
 			margin-right: auto;
-			margin-left: 2.5rem;
+			margin-left: 3rem;
 			-webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%);
 			clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%);
 			border-radius: 0 0.625rem 0.625rem 0;
