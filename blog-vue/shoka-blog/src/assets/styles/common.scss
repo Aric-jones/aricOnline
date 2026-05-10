@@ -2,7 +2,7 @@
 
 /* 背景色 */
 .bg {
-	background-color: var(--grey-0);
+	background-color: var(--page-bg);
 }
 
 /* 页面布局 */
@@ -55,6 +55,7 @@
 	margin: 1.5rem auto;
 	padding: 1.75rem 2.25rem;
 	border-radius: 0.75rem;
+	background: var(--card-bg);
 	box-shadow: var(--card-shadow);
 	animation: slideUpIn 2s;
 }
@@ -127,6 +128,8 @@
 .side-card {
 	padding: 1rem;
 	border-radius: 0.5rem;
+	background: var(--card-bg);
+	border: 1px solid var(--panel-border);
 	box-shadow: var(--card-shadow);
 	transition: all 0.2s ease-in-out 0s;
 

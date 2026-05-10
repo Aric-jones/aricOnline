@@ -44,10 +44,15 @@
 	--page-header-text-calor: var(--grey-0);
 	--typewriter-text-color: var(--grey-0);
 	--primary-color: var(--color-red);          /* 强调色：按钮/链接/进度条等 */
+	--page-bg: #f4f7fb;
+	--surface-bg: #ffffff;
+	--panel-bg: #ffffff;
+	--panel-bg-soft: #fbfdff;
+	--panel-border: rgba(15, 23, 42, 0.08);
 	--body-bg-shadow: #e2e8f0;
-	--box-bg-shadow: rgba(15, 23, 42, 0.06);
-	--card-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(233, 84, 107, 0.05);
-	--card-shadow-hover: 0 2px 8px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(233, 84, 107, 0.08);
+	--box-bg-shadow: rgba(15, 23, 42, 0.08);
+	--card-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 10px 28px rgba(15, 23, 42, 0.06);
+	--card-shadow-hover: 0 3px 8px rgba(15, 23, 42, 0.08), 0 14px 34px rgba(15, 23, 42, 0.1);
 	--card-bg: #ffffff;
 	--nav-bg: linear-gradient(-225deg, var(--color-cyan-light) 0, var(--color-pink-light) 100%);
 	--footer-bg: linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab);
@@ -63,20 +68,20 @@
 	--article-tag-color: #5a6578;               /* 文章标签文字 */
 	--article-tag-hover: var(--color-red);      /* 文章标签 hover */
 	--sidebar-card-bg: #ffffff;                 /* 侧边栏卡片 */
-	--markdown-body-bg: transparent;            /* Markdown 正文背景 */
-	--article-container-bg: transparent;        /* 文章容器背景 */
+	--markdown-body-bg: #f8fafc;                /* Markdown 正文背景 */
+	--article-container-bg: #ffffff;            /* 文章容器背景 */
 	--table-stripe-bg: rgba(233, 84, 107, 0.03);/* 表格斑马纹 */
 	--category-section-title: var(--primary-color);
 
 	/* --- 毛玻璃 --- */
-	--glass-bg: rgba(255, 255, 255, 0.72);
-	--glass-bg-heavy: rgba(255, 255, 255, 0.9);
-	--glass-border: rgba(233, 84, 107, 0.08);
-	--glass-shadow: 0 4px 24px rgba(233, 84, 107, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+	--glass-bg: rgba(255, 255, 255, 0.88);
+	--glass-bg-heavy: rgba(255, 255, 255, 0.96);
+	--glass-border: rgba(15, 23, 42, 0.08);
+	--glass-shadow: 0 8px 28px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
 
 	/* --- 待办卡片 --- */
-	--todo-card-bg: rgba(255, 255, 255, 0.82);
-	--todo-card-glow: 0 0 24px rgba(233, 84, 107, 0.06);
+	--todo-card-bg: rgba(255, 255, 255, 0.92);
+	--todo-card-glow: 0 8px 28px rgba(15, 23, 42, 0.06);
 
 	/* --- 其他 --- */
 	--comment-color: #f1f5f9;
@@ -136,10 +141,15 @@
 	--page-header-text-calor: #34d399;
 	--typewriter-text-color: #eaf0ff;
 	--primary-color: #34d399;
+	--page-bg: #070d1c;
+	--surface-bg: #0f1729;
+	--panel-bg: #131d33;
+	--panel-bg-soft: #16213a;
+	--panel-border: rgba(148, 163, 184, 0.12);
 	--body-bg-shadow: #070d1c;
-	--box-bg-shadow: rgba(0, 0, 0, 0.4);
-	--card-shadow: 0 0.25rem 1.5rem rgba(52, 211, 153, 0.06), 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
-	--card-shadow-hover: 0 0.35rem 2rem rgba(52, 211, 153, 0.12), 0 0.75rem 2.5rem rgba(0, 0, 0, 0.35);
+	--box-bg-shadow: rgba(0, 0, 0, 0.48);
+	--card-shadow: 0 0.4rem 1.6rem rgba(0, 0, 0, 0.34), 0 0.8rem 2.4rem rgba(15, 23, 41, 0.28);
+	--card-shadow-hover: 0 0.6rem 2rem rgba(0, 0, 0, 0.42), 0 1rem 3rem rgba(15, 23, 41, 0.35);
 	--card-bg: #131d33;
 	--nav-bg: linear-gradient(135deg, #0f1729 0%, #1a2744 50%, #0f1729 100%);
 	--footer-bg: linear-gradient(-45deg, #34d399, #a78bfa, #60a5fa, #2dd4bf);
@@ -155,20 +165,20 @@
 	--article-tag-color: #8b9cc0;
 	--article-tag-hover: #34d399;
 	--sidebar-card-bg: #131d33;
-	--markdown-body-bg: rgba(15, 23, 41, 0.4);
-	--article-container-bg: rgba(19, 29, 51, 0.6);
+	--markdown-body-bg: rgba(13, 20, 36, 0.72);
+	--article-container-bg: rgba(19, 29, 51, 0.88);
 	--table-stripe-bg: rgba(52, 211, 153, 0.04);
 	--category-section-title: var(--primary-color);
 
 	/* --- 毛玻璃（带极光微光） --- */
-	--glass-bg: rgba(19, 29, 51, 0.7);
-	--glass-bg-heavy: rgba(15, 23, 41, 0.88);
-	--glass-border: rgba(52, 211, 153, 0.12);
-	--glass-shadow: 0 4px 32px rgba(52, 211, 153, 0.06), 0 1px 4px rgba(0, 0, 0, 0.3);
+	--glass-bg: rgba(19, 29, 51, 0.84);
+	--glass-bg-heavy: rgba(13, 20, 36, 0.94);
+	--glass-border: rgba(148, 163, 184, 0.14);
+	--glass-shadow: 0 12px 34px rgba(0, 0, 0, 0.34), 0 2px 8px rgba(52, 211, 153, 0.08);
 
 	/* --- 待办卡片 --- */
-	--todo-card-bg: rgba(19, 29, 51, 0.85);
-	--todo-card-glow: 0 0 32px rgba(52, 211, 153, 0.1), 0 0 64px rgba(167, 139, 250, 0.06);
+	--todo-card-bg: rgba(19, 29, 51, 0.92);
+	--todo-card-glow: 0 10px 32px rgba(0, 0, 0, 0.34), 0 0 64px rgba(52, 211, 153, 0.06);
 
 	/* --- 其他 --- */
 	--comment-color: #1a2744;
@@ -226,6 +236,11 @@
 	--typewriter-text-color: var(--grey-0);
 	--page-header-text-calor: var(--grey-0);
 	--primary-color: var(--color-red);
+	--page-bg: rgba(255, 255, 255, 0.9);
+	--surface-bg: rgba(255, 255, 255, 0.76);
+	--panel-bg: rgba(255, 255, 255, 0.2);
+	--panel-bg-soft: rgba(255, 255, 255, 0.3);
+	--panel-border: rgba(255, 255, 255, 0.25);
 	--body-bg-shadow: rgba(0, 0, 0, 0.15);
 	--box-bg-shadow: rgba(0, 0, 0, 0.1);
 	--card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.18), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
@@ -245,20 +260,20 @@
 	--article-tag-color: #fff;
 	--article-tag-hover: rgba(255, 255, 255, 0.95);
 	--sidebar-card-bg: rgba(255, 255, 255, 0.2);
-	--markdown-body-bg: rgba(255, 255, 255, 0.05);
+	--markdown-body-bg: rgba(255, 255, 255, 0.12);
 	--article-container-bg: rgba(255, 255, 255, 0.2);
 	--table-stripe-bg: rgba(255, 255, 255, 0.18);
 	--category-section-title: var(--grey-9);
 
 	/* --- 毛玻璃 --- */
-	--glass-bg: rgba(255, 255, 255, 0.25);
-	--glass-bg-heavy: rgba(255, 255, 255, 0.45);
-	--glass-border: rgba(255, 255, 255, 0.3);
-	--glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+	--glass-bg: rgba(255, 255, 255, 0.35);
+	--glass-bg-heavy: rgba(255, 255, 255, 0.52);
+	--glass-border: rgba(255, 255, 255, 0.38);
+	--glass-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
 
 	/* --- 待办卡片 --- */
-	--todo-card-bg: rgba(255, 255, 255, 0.38);
-	--todo-card-glow: 0 0 28px rgba(99, 102, 241, 0.14), 0 0 56px rgba(226, 113, 74, 0.06);
+	--todo-card-bg: rgba(255, 255, 255, 0.48);
+	--todo-card-glow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 56px rgba(99, 102, 241, 0.08);
 
 	/* --- 其他 --- */
 	--comment-color: rgba(241, 171, 171, 0.2);
@@ -304,6 +319,53 @@
 }
 [theme="gradient"] .bg:has(.article-container) .side-card {
 	background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 统一容器底色与卡片层次 */
+body {
+	background: var(--page-bg);
+}
+
+.bg {
+	background-color: var(--page-bg);
+}
+
+.page-container,
+.side-card,
+.article-card,
+.talk-swiper,
+.swiper-container,
+.daily-card,
+.ai-chat-box,
+.article-item,
+.tp-card,
+.thinking-card,
+.task-panel,
+.calendar-panel,
+.gantt-panel,
+.habit-card,
+.time-block-card {
+	background: var(--card-bg);
+	box-shadow: var(--card-shadow);
+	border: 1px solid var(--panel-border);
+}
+
+.page-container:hover,
+.side-card:hover,
+.article-card:hover,
+.talk-swiper:hover,
+.swiper-container:hover,
+.daily-card:hover,
+.ai-chat-box:hover,
+.article-item:hover,
+.tp-card:hover,
+.thinking-card:hover,
+.task-panel:hover,
+.calendar-panel:hover,
+.gantt-panel:hover,
+.habit-card:hover,
+.time-block-card:hover {
+	box-shadow: var(--card-shadow-hover);
 }
 
 
