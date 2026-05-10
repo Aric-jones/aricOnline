@@ -227,11 +227,10 @@ onUnmounted(() => {
 	margin-bottom: 1.5rem;
 	border-radius: 0.75rem;
 	box-shadow: var(--card-shadow);
-	border: 1px solid var(--panel-border);
 	overflow: hidden;
 	animation-duration: 0.5s;
 	visibility: hidden;
-	background: var(--card-bg);
+	background: var(--grey-0);
 }
 
 .ai-header {
@@ -301,7 +300,7 @@ onUnmounted(() => {
 
 	&.assistant {
 		.msg-text {
-			background: var(--panel-bg-soft);
+			background: var(--grey-1);
 			color: var(--text-color);
 			border-radius: 1rem 1rem 1rem 0.25rem;
 		}
@@ -317,7 +316,7 @@ onUnmounted(() => {
 	justify-content: center;
 	border-radius: 50%;
 	font-size: 1.2rem;
-	background: var(--panel-bg-soft);
+	background: var(--grey-1);
 }
 
 .msg-content {
@@ -387,11 +386,11 @@ onUnmounted(() => {
 		margin: 0.5rem 0;
 		th,
 		td {
-			border: 1px solid var(--panel-border);
+			border: 1px solid var(--grey-3);
 			padding: 0.3rem 0.6rem;
 		}
 		th {
-			background: var(--panel-bg-soft);
+			background: var(--grey-1);
 		}
 	}
 }
@@ -439,18 +438,18 @@ onUnmounted(() => {
 	display: flex;
 	gap: 0.5rem;
 	padding: 0.75rem 1.25rem;
-	border-top: 1px solid var(--panel-border);
-	background: var(--surface-bg);
+	border-top: 1px solid var(--grey-2);
+	background: var(--grey-0);
 }
 
 .ai-input {
 	flex: 1;
 	padding: 0.5rem 0.9rem;
-	border: 1px solid var(--panel-border);
+	border: 1px solid var(--grey-3);
 	border-radius: 1.5rem;
 	font-size: 0.9rem;
 	outline: none;
-	background: var(--panel-bg-soft);
+	background: var(--grey-0);
 	color: var(--text-color);
 	transition: border-color 0.2s;
 
@@ -459,7 +458,7 @@ onUnmounted(() => {
 	}
 
 	&::placeholder {
-		color: var(--article-meta-color);
+		color: var(--grey-5);
 	}
 }
 

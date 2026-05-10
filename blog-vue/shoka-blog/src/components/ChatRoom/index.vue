@@ -376,10 +376,9 @@ onUpdated(() => {
 
 <style lang="scss" scoped>
 .chat-container {
-	box-shadow: var(--card-shadow);
+	box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
 	font-size: 14px;
-	background: var(--card-bg);
-	border: 1px solid var(--panel-border);
+	background: var(--grey-1);
 	animation: bounceInUp 1s;
 	animation-fill-mode: both;
 	z-index: 1200;
@@ -422,7 +421,7 @@ onUpdated(() => {
 	align-items: center;
 	padding: 20px 24px;
 	border-radius: 1rem 1rem 0 0;
-	background-color: var(--surface-bg);
+	background-color: var(--grey-0);
 }
 
 .unread {
@@ -443,7 +442,7 @@ onUpdated(() => {
 	bottom: 46px;
 	width: 100%;
 	padding: 20px 16px 0 16px;
-	background-color: var(--surface-bg);
+	background-color: var(--chat-bg);
 	overflow-y: auto;
 	overflow-x: hidden;
 }
@@ -480,7 +479,7 @@ onUpdated(() => {
 		position: relative;
 		padding: 10px;
 		border-radius: 5px 20px 20px 20px;
-		background: var(--panel-bg-soft);
+		background: var(--grey-0);
 		width: fit-content;
 		white-space: pre-line;
 		word-wrap: break-word;
@@ -502,8 +501,8 @@ onUpdated(() => {
 	line-height: 35px;
 	font-size: 13px;
 	border-radius: 2px;
-	background: var(--card-bg);
-	color: var(--text-color);
+	background: rgba(255, 255, 255, 0.9);
+	color: #000;
 	text-align: center;
 	display: none;
 }
@@ -543,7 +542,7 @@ onUpdated(() => {
 	align-items: center;
 	width: 100%;
 	padding: 8px 16px;
-	background: var(--surface-bg);
+	background: var(--grey-2);
 	border-radius: 0 0 1rem 1rem;
 
 	.chat-input {
@@ -553,7 +552,7 @@ onUpdated(() => {
 		margin-right: 0.5rem;
 		font-size: 13px;
 		color: var(--text-color);
-		background-color: var(--panel-bg-soft);
+		background-color: var(--grey-1);
 		outline: none;
 		resize: none;
 	}

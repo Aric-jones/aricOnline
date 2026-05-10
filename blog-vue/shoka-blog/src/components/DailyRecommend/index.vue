@@ -107,11 +107,10 @@ const close = () => {
 	position: relative;
 	width: 380px;
 	max-width: 90vw;
-	background: var(--card-bg);
+	background: var(--grey-0);
 	border-radius: 1rem;
 	overflow: hidden;
-	border: 1px solid var(--panel-border);
-	box-shadow: var(--card-shadow);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 	animation: slideUp 0.4s ease;
 }
 
@@ -202,13 +201,13 @@ const close = () => {
 	display: flex;
 	align-items: center;
 	font-size: 0.8rem;
-	color: var(--article-meta-color);
+	color: var(--grey-5);
 }
 
 .daily-loading {
 	padding: 2rem;
 	text-align: center;
-	color: var(--article-meta-color);
+	color: var(--grey-5);
 }
 
 .daily-footer {

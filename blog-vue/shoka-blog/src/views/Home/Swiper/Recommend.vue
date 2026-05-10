@@ -57,8 +57,6 @@ onMounted(() => {
 	margin: 1rem 0.5rem;
 	border-radius: 0.75rem;
 	box-shadow: var(--card-shadow);
-	border: 1px solid var(--panel-border);
-	background: var(--card-bg);
 
 	&::before {
 		content: "推荐";
@@ -99,7 +97,7 @@ onMounted(() => {
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.12);
+		background-color: rgba(0, 0, 0, 0.08);
 		left: 0;
 		top: 0;
 	}
@@ -120,7 +118,7 @@ onMounted(() => {
 	height: 0.6875rem;
 	margin: 0 0.25rem;
 	border-radius: 6.1875rem;
-	background: var(--card-bg);
+	background: var(--grey-0);
 	opacity: 0.8;
 	transition: all 0.3s;
 }
