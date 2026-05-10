@@ -635,7 +635,7 @@ onMounted(() => {
 
 // ===== 统计面板 =====
 .stats-panel {
-	background: var(--todo-card-bg-soft, rgba(255, 255, 255, 0.34));
+	background: var(--todo-card-bg, var(--glass-bg, rgba(255, 255, 255, 0.6)));
 	backdrop-filter: blur(20px) saturate(1.12);
 	-webkit-backdrop-filter: blur(20px) saturate(1.12);
 	border: 1.5px solid var(--glass-border, rgba(255, 255, 255, 0.32));
@@ -697,7 +697,7 @@ onMounted(() => {
 	gap: 0.65rem;
 }
 .stats-chip {
-	background: var(--todo-card-bg-soft,rgba(255, 255, 255, 0.34));
+	background: var(--todo-card-bg);
 	border-radius: 16px;
 	padding: 0.75rem 0.65rem;
 	text-align: center;
@@ -746,7 +746,7 @@ onMounted(() => {
 }
 
 .habit-card {
-	background: var(--todo-card-bg-soft, rgba(255, 255, 255, 0.34));
+	background: var(--todo-card-bg, var(--glass-bg, rgba(255, 255, 255, 0.6)));
 	border-radius: 16px;
 	padding: 1rem;
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 24px rgba(var(--todo-primary-rgb, 99,102,241), 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);

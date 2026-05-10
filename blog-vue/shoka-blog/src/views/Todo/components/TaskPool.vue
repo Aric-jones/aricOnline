@@ -748,7 +748,7 @@ onMounted(async () => {
 	padding: 2px;
 }
 .tp-card {
-	background: var(--todo-card-bg-soft, rgba(255, 255, 255, 0.34));
+	background: var(--todo-card-bg);
 	backdrop-filter: blur(18px) saturate(1.12);
 	-webkit-backdrop-filter: blur(18px) saturate(1.12);
 	border: 1.5px solid var(--glass-border, rgba(255, 255, 255, 0.32));
