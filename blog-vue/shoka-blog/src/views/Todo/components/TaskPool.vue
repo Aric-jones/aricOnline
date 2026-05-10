@@ -748,10 +748,10 @@ onMounted(async () => {
 	padding: 2px;
 }
 .tp-card {
-	background: var(--todo-card-bg, var(--glass-bg, rgba(255, 255, 255, 0.6)));
-	backdrop-filter: blur(12px);
-	-webkit-backdrop-filter: blur(12px);
-	border: 1.5px solid var(--glass-border, rgba(255, 255, 255, 0.5));
+	background: var(--todo-card-bg-soft, rgba(255, 255, 255, 0.34));
+	backdrop-filter: blur(18px) saturate(1.12);
+	-webkit-backdrop-filter: blur(18px) saturate(1.12);
+	border: 1.5px solid var(--glass-border, rgba(255, 255, 255, 0.32));
 	border-radius: 14px;
 	padding: 0.85rem;
 	cursor: grab;
@@ -759,6 +759,7 @@ onMounted(async () => {
 	display: flex;
 	flex-direction: column;
 	gap: 0.4rem;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), var(--todo-card-glow, 0 8px 24px rgba(0, 0, 0, 0.08));
 
 	&:hover {
 		transform: translateY(-2px);

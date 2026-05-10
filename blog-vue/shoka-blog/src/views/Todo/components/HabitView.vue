@@ -110,17 +110,24 @@
 		<div v-if="viewRange === 'year'" class="heatmap-section">
 			<h3 class="section-title">年度热力图</h3>
 			<div class="heatmap-wrapper">
-				<div class="heatmap-months">
-					<span v-for="m in monthLabels" :key="m">{{ m }}</span>
+				<div class="heatmap-months" :style="heatmapMonthGridStyle">
+					<span
+						v-for="m in monthMarkers"
+						:key="m.label"
+						:style="{ gridColumn: `${m.column} / span 4` }"
+					>{{ m.label }}</span>
 				</div>
 				<div class="heatmap-grid">
 					<div
 						v-for="(day, idx) in heatmapDays"
 						:key="idx"
 						class="heatmap-cell"
-						:class="{ 'heatmap-cell--empty': !day.color }"
+						:class="{
+							'heatmap-cell--empty': !day.color,
+							'heatmap-cell--placeholder': day.isPlaceholder
+						}"
 						:style="day.color ? { background: day.color } : {}"
-						:title="`${day.date}: ${day.count} 条记录`"
+						:title="day.date ? `${day.date}: ${day.count} 条记录` : ''"
 					></div>
 				</div>
 				<div class="heatmap-legend">
@@ -348,16 +355,39 @@ const rangeLabel = computed(() => {
 	}
 });
 
-const monthLabels = computed(() => {
+type HeatmapDay = {
+	date: string;
+	count: number;
+	color: string;
+	isPlaceholder?: boolean;
+};
+
+const heatmapYear = computed(() => dayjs().add(rangeOffset.value, "year").year());
+
+const monthMarkers = computed(() => {
 	const yr = dayjs().add(rangeOffset.value, "year").year();
-	return Array.from({ length: 12 }, (_, i) => `${i + 1}月`);
+	const yearStart = dayjs(`${yr}-01-01`);
+	const startOffset = yearStart.day();
+	return Array.from({ length: 12 }, (_, i) => {
+		const monthStart = dayjs(`${yr}-${String(i + 1).padStart(2, "0")}-01`);
+		const dayOffset = monthStart.diff(yearStart, "day") + startOffset;
+		return {
+			label: `${i + 1}月`,
+			column: Math.floor(dayOffset / 7) + 1,
+		};
+	});
 });
 
 const heatmapDays = computed(() => {
-	const yr = dayjs().add(rangeOffset.value, "year").year();
+	const yr = heatmapYear.value;
 	const start = dayjs(`${yr}-01-01`);
 	const end = dayjs(`${yr}-12-31`);
-	const days: { date: string; count: number; color: string }[] = [];
+	const days: HeatmapDay[] = Array.from({ length: start.day() }, () => ({
+		date: "",
+		count: 0,
+		color: "",
+		isPlaceholder: true,
+	}));
 	const countMap = new Map<string, number>();
 	records.value.forEach(r => {
 		if (visibleHabitIds.value.has(r.habitId)) {
@@ -375,8 +405,17 @@ const heatmapDays = computed(() => {
 		days.push({ date: dateStr, count, color });
 		d = d.add(1, "day");
 	}
+	while (days.length % 7 !== 0) {
+		days.push({ date: "", count: 0, color: "", isPlaceholder: true });
+	}
 	return days;
 });
+
+const heatmapWeekCount = computed(() => Math.ceil(heatmapDays.value.length / 7));
+
+const heatmapMonthGridStyle = computed(() => ({
+	gridTemplateColumns: `repeat(${heatmapWeekCount.value}, var(--heatmap-cell-size))`,
+}));
 
 // ========== 习惯弹窗 ==========
 const habitDialogVisible = ref(false);
@@ -596,14 +635,14 @@ onMounted(() => {
 
 // ===== 统计面板 =====
 .stats-panel {
-	background: var(--card-bg, rgba(255, 255, 255, 0.65));
-	backdrop-filter: blur(16px);
-	-webkit-backdrop-filter: blur(16px);
-	border: 1.5px solid var(--card-border, rgba(255, 255, 255, 0.5));
+	background: var(--todo-card-bg-soft, rgba(255, 255, 255, 0.34));
+	backdrop-filter: blur(20px) saturate(1.12);
+	-webkit-backdrop-filter: blur(20px) saturate(1.12);
+	border: 1.5px solid var(--glass-border, rgba(255, 255, 255, 0.32));
 	border-radius: 16px;
 	padding: 1rem 1.25rem;
 	margin-bottom: 1.25rem;
-	box-shadow: 0 4px 24px rgba(var(--todo-primary-rgb, 99,102,241), 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 4px 24px rgba(var(--todo-primary-rgb, 99,102,241), 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 .stats-header {
 	display: flex;
@@ -658,13 +697,15 @@ onMounted(() => {
 	gap: 0.65rem;
 }
 .stats-chip {
-	background: rgba(255, 255, 255, 0.5);
+	background: var(--todo-card-bg-soft,rgba(255, 255, 255, 0.34));
 	border-radius: 16px;
 	padding: 0.75rem 0.65rem;
 	text-align: center;
 	transition: all 0.25s ease;
-	border: 1.5px solid rgba(var(--todo-primary-rgb, 99,102,241), 0.08);
-	backdrop-filter: blur(8px);
+	border: 1.5px solid rgba(255, 255, 255, 0.24);
+	backdrop-filter: blur(14px) saturate(1.1);
+	-webkit-backdrop-filter: blur(14px) saturate(1.1);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
 	&:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 4px 16px rgba(var(--todo-primary-rgb, 99,102,241), 0.1);
@@ -687,7 +728,6 @@ onMounted(() => {
 }
 .chip-rate {
 	font-size: 0.65rem;
-	color: var(--grey-4, #bbb);
 	margin-top: 0.1rem;
 }
 .stats-empty {
@@ -706,11 +746,11 @@ onMounted(() => {
 }
 
 .habit-card {
-	background: var(--card-bg, rgba(255, 255, 255, 0.65));
+	background: var(--todo-card-bg-soft, rgba(255, 255, 255, 0.34));
 	border-radius: 16px;
 	padding: 1rem;
-	box-shadow: 0 4px 24px rgba(var(--todo-primary-rgb, 99,102,241), 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
-	border: 1.5px solid var(--card-border, rgba(255, 255, 255, 0.5));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 24px rgba(var(--todo-primary-rgb, 99,102,241), 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+	border: 1.5px solid var(--glass-border, rgba(255, 255, 255, 0.32));
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
@@ -785,35 +825,38 @@ onMounted(() => {
 }
 
 .heatmap-wrapper {
+	--heatmap-cell-size: 12px;
+	--heatmap-cell-gap: 2px;
 	overflow-x: auto;
 	-webkit-overflow-scrolling: touch;
 	padding-bottom: 0.5rem;
 }
 
 .heatmap-months {
-	display: flex;
-	gap: 0;
+	display: grid;
+	gap: var(--heatmap-cell-gap);
+	width: max-content;
 	margin-bottom: 4px;
 	span {
-		flex: 1;
 		font-size: 0.7rem;
 		color: var(--grey-5, #999);
-		text-align: center;
+		text-align: left;
+		white-space: nowrap;
 	}
 }
 
 .heatmap-grid {
 	display: grid;
-	grid-template-rows: repeat(7, 12px);
+	grid-template-rows: repeat(7, var(--heatmap-cell-size));
 	grid-auto-flow: column;
-	grid-auto-columns: 12px;
-	gap: 2px;
-	min-width: 680px;
+	grid-auto-columns: var(--heatmap-cell-size);
+	gap: var(--heatmap-cell-gap);
+	width: max-content;
 }
 
 .heatmap-cell {
-	width: 12px;
-	height: 12px;
+	width: var(--heatmap-cell-size);
+	height: var(--heatmap-cell-size);
 	border-radius: 3px;
 	cursor: pointer;
 	transition: transform 0.15s;
@@ -821,6 +864,10 @@ onMounted(() => {
 	&--empty {
 		background: var(--grey-4, #ccc);
 		opacity: 0.45;
+	}
+	&--placeholder {
+		visibility: hidden;
+		pointer-events: none;
 	}
 }
 
@@ -1004,13 +1051,10 @@ onMounted(() => {
 	.heatmap-section {
 		padding: 0.6rem;
 	}
-	.heatmap-grid {
-		grid-template-rows: repeat(7, 10px);
-		grid-auto-columns: 10px;
-		gap: 1px;
-		min-width: 540px;
+	.heatmap-wrapper {
+		--heatmap-cell-size: 10px;
+		--heatmap-cell-gap: 1px;
 	}
-	.heatmap-cell { width: 10px; height: 10px; }
 	.heatmap-months span { font-size: 0.6rem; }
 	.timeline-section { padding: 0.6rem; }
 	.timeline-header {

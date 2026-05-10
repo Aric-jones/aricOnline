@@ -39,6 +39,7 @@
 | --- | --- |
 | 前台页面 | 首页、搜索页、文章页、归档页、分类页、标签页、效率工具页、留言等共用前台页面 |
 | 前台组件 | 首页推荐/最新文章/说说、搜索页 AI 卡、侧边栏、每日推荐弹窗、通用卡片组件 |
+| 效率工具 | Todo 未分配任务卡片、习惯统计卡片、习惯年度热力图 |
 | 样式变量 | `theme-shoka.scss` 中的全局背景、卡片、阴影、边框变量 |
 | 公共样式 | `common.scss`、`index.scss` 中的页面底色和卡片基础样式 |
 
@@ -54,6 +55,8 @@
 - `blog-vue/shoka-blog/src/views/Home/LatestArticlesSection.vue`
 - `blog-vue/shoka-blog/src/views/Home/CategorySections.vue`
 - `blog-vue/shoka-blog/src/views/Todo/index.vue`
+- `blog-vue/shoka-blog/src/views/Todo/components/TaskPool.vue`
+- `blog-vue/shoka-blog/src/views/Todo/components/HabitView.vue`
 
 ## 验收标准
 
@@ -61,15 +64,19 @@
 - dark 主题下卡片从背景中能清楚浮起。
 - 首页、搜索页、效率工具页的卡片风格一致。
 - 没有出现过亮卡片、过重阴影或脏边。
+- Todo 未分配任务卡片和习惯统计卡片具备透明磨砂感，不再出现过白底色。
+- 习惯追踪年度热力图的月份文本与日期小方块在桌面端和移动端均保持对齐。
 
 ## 测试计划
 
 - 分别检查 light / dark 两套主题下的首页、搜索页、效率工具页。
 - 检查侧边栏、推荐卡、AI 卡、Todo 卡片的背景与阴影一致性。
 - 检查移动端和桌面端的层次表现。
+- 检查 Todo 工具未分配任务卡片、习惯统计卡片、年度热力图的桌面端和移动端表现。
 
 ## 风险与回滚
 
 - 风险：背景和卡片变量改动过大可能影响整站视觉统一性。
 - 风险：少量硬编码背景未覆盖时，局部仍会出现层次不一致。
+- 风险：热力图补齐空白日期格后，悬浮提示和月份定位需要避免作用到占位格。
 - 回滚：恢复主题变量、公共样式和共用组件的改动前版本。
