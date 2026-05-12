@@ -56,8 +56,8 @@ deploy/.env
 # 保留 .env.example 模板
 !.env.example
 !deploy/.env.example
-*.top.key
-*.top.pem
+*.key
+*.pem
 
 # ===================== 构建/部署产物 =====================
 *.tar.gz
