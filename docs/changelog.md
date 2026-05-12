@@ -15,6 +15,15 @@
 
 ## 未归档变更
 
+## 2026-05-12 - 补充 VS Code Maven 调试配置
+
+- 类型：开发工具 / 配置
+- 需求文档：`docs/requirements/2026-05-12-vscode-maven-debug.md`
+- 影响范围：VS Code 调试、Maven 依赖下载、本地后端启动参数
+- 主要改动：新增 `.vscode/tasks.json`，固定使用 `D:\app\tool\maven\apache-maven-3.9.14\conf\settings.xml` 和 `D:\app\tool\maven\mvn_repo` 进行编译预热；新增 `.vscode/launch.json`，直接调试 `com.ican.BlogApplication`，并通过 JVM 参数覆盖 `deploy/.env` 中用于 Docker 的主机名，让本地调试改连远端 `212.64.28.65:4000/5000`
+- 验证方式：已执行指定 Maven 配置下的 `clean compile -DskipTests`，编译通过；`spring-boot:run` 当前报错已定位为 `deploy/.env` 里的 Docker 内部主机名未被本地调试环境正确覆盖
+- 回滚说明：删除 `.vscode/launch.json`、`.vscode/tasks.json`，并移除本条日志
+
 ## 2026-05-10 - 统一 Todo 效率工具卡片底色透明度
 
 - 类型：视觉 / 修复
