@@ -35,24 +35,27 @@
 						<router-link :to="`/article/${article.id}`">
 							<img class="cover" v-lazy="article.articleCover" alt="" />
 						</router-link>
+						<span class="top-badge" v-if="article.isTop == 1">
+							<svg-icon
+								icon-class="top"
+								size="0.75rem"
+								style="margin-right: 0.2rem"
+							></svg-icon>
+							置顶
+						</span>
 						<span class="card-date"
 							>发布于 {{ formatDate(article.createTime) }}</span
 						>
 					</div>
 					<div class="article-info">
 						<h3 class="article-title">
-							<span class="top-badge" v-if="article.isTop == 1">
-								<svg-icon
-									icon-class="top"
-									size="0.75rem"
-									style="margin-right: 0.2rem"
-								></svg-icon>
-								置顶
-							</span>
 							<router-link :to="`/article/${article.id}`">
 								{{ article.articleTitle }}
 							</router-link>
 						</h3>
+						<div class="article-desc" v-if="article.articleDesc">
+							{{ article.articleDesc }}
+						</div>
 						<div class="article-meta">
 							<router-link
 								:to="`/category/${article.category?.id}`"
@@ -280,6 +283,21 @@ const loadMore = () => {
 	border-radius: 0.25rem;
 }
 
+.top-badge {
+	position: absolute;
+	top: 0.5rem;
+	left: 0.5rem;
+	display: inline-flex;
+	align-items: center;
+	font-size: 0.75rem;
+	color: var(--color-orange);
+	font-weight: 500;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+	background: rgba(0, 0, 0, 0.25);
+	padding: 0.2rem 0.5rem;
+	border-radius: 0.25rem;
+}
+
 .article-info {
 	padding: 0.875rem 1rem;
 	flex: 1;
@@ -288,24 +306,18 @@ const loadMore = () => {
 }
 
 .article-title {
-	font-size: 1.0625rem;
+	font-size: 1rem;
 	font-weight: 600;
 	line-height: 1.4;
 	margin: 0 0 0.5rem;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	display: flex;
-	align-items: center;
-	gap: 0.4rem;
-	flex-wrap: wrap;
 
 	a {
 		color: var(--article-title-color);
-		flex: 1;
-		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
 
 		&:hover {
 			color: var(--article-title-hover);
@@ -313,13 +325,16 @@ const loadMore = () => {
 	}
 }
 
-.top-badge {
-	display: inline-flex;
-	align-items: center;
-	font-size: 0.75rem;
-	color: var(--color-orange);
-	font-weight: 500;
-	flex-shrink: 0;
+.article-desc {
+	margin-bottom: 0.75rem;
+	font-size: 0.8125rem;
+	line-height: 1.6;
+	color: var(--article-meta-color);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
 }
 
 .article-meta {
@@ -327,10 +342,9 @@ const loadMore = () => {
 	font-size: 0.8125rem;
 	color: var(--article-meta-color);
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	gap: 0.35rem;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.45rem;
 }
 
 .meta-category {
@@ -348,6 +362,7 @@ const loadMore = () => {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.25rem;
+	width: 100%;
 }
 
 .article-tag {
