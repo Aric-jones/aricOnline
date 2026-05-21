@@ -1,4 +1,4 @@
-# 2026-05-12 VS Code Maven 调试配置
+﻿# 2026-05-12 VS Code Maven 调试配置
 
 ## 背景
 

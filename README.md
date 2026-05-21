@@ -1,4 +1,4 @@
-# Aric's Blog
+﻿# Aric's Blog
 
 ## 文档入口
 n- [项目文档中心](docs/README.md)
